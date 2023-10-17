@@ -10,9 +10,12 @@ import { PostShortComponent } from './post-short/post-short.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
+import { NavbarHorizontallyComponent } from './navbar-horizontally/navbar-horizontally.component';
+import { NavbarHorizontallyItemComponent } from './navbar-horizontally-item/navbar-horizontally-item.component';
 
 const routes: Routes = [
-  { path: 'navbar-logged', component: NavbarLoggendComponent }  /*Pentru teste*/
+  { path: 'home', component: HomeComponent }  ,
+  { path: '', component: HomeComponent }  
 ];
 
 @NgModule({
@@ -23,7 +26,9 @@ const routes: Routes = [
     PostShortComponent,
     HomeComponent,
     AboutComponent,
-    ContactComponent
+    ContactComponent,
+    NavbarHorizontallyComponent,
+    NavbarHorizontallyItemComponent,
   ],
   imports: [
     BrowserModule,
