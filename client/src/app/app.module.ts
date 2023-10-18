@@ -12,6 +12,7 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { NavbarHorizontallyComponent } from './navbar-horizontally/navbar-horizontally.component';
 import { NavbarHorizontallyItemComponent } from './navbar-horizontally-item/navbar-horizontally-item.component';
+import { ShortPostComponent } from './short-post/short-post.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
@@ -29,6 +30,7 @@ const routes: Routes = [
     ContactComponent,
     NavbarHorizontallyComponent,
     NavbarHorizontallyItemComponent,
+    ShortPostComponent,
   ],
   imports: [
     BrowserModule,
