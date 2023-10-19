@@ -3,31 +3,38 @@
 
     <div class="container-flex row m-0 mx-4 p-0">
         <p class="col-8 title p-0 pointer-cursor" (click)="hideTopics()">Categorii</p>
-        <p class="col-4 title text-left p-0 pointer-cursor" (click)="hideTopics()" id="topics-arrow">⮝</p>
+        <p class="col-4 title text-left p-0 pointer-cursor" (click)="hideTopics()" id="topics-arrow">{{ isTopicsVisible
+            ? '⮝' : '⮟' }}</p>
     </div>
 
-    <div id="topics-list" [style.display]="isVisibleFull ? 'none' : 'block'">
-        <div *ngFor="let item of itemsToDisplay.slice(0, 5)">
-            <app-navbar-horizontally-item [data]="item"></app-navbar-horizontally-item>
+    <div id="listTopics" [style.display]="(isTopicsVisible) ? 'block' : 'none'">
+        <div id="topics-list">
+            <div *ngFor="let item of itemsToDisplay?.slice(0, 5)">
+                <app-navbar-horizontally-item class="pointer-cursor" [data]="item"></app-navbar-horizontally-item>
+            </div>
         </div>
-    </div>
-    <div id="topics-list" [style.display]="isVisibleFull ? 'block' : 'none'">
-        <div *ngFor="let item of itemsToDisplay">
-            <app-navbar-horizontally-item [data]="item"></app-navbar-horizontally-item>
+        <div id="topics-list-2" [style.display]="(isVisibleFull ) ? 'block' : 'none'">
+            <div *ngFor="let item of itemsToDisplay?.slice( 5)">
+                <app-navbar-horizontally-item class="pointer-cursor" [data]="item"></app-navbar-horizontally-item>
+            </div>
         </div>
+        <p class="text-secondary m-3 pointer-cursor"  (click)="selectViewFull()" id="messageViewMore">{{ isVisibleFull ? 'Vezi mai
+            puține...' : 'Vezi mai multe...' }}</p>
     </div>
-
-    <p class="text-secondary m-3" (click)="selectViewFull()" id="messageViewMore">{{ isVisibleFull ? 'Vezi mai
-        puține...' : 'Vezi mai multe...' }}</p>
 
     <hr class="col-10 mx-auto">
-
-    <button class="btn category-nav  m-0 mx-4 p-0">Resurse</button>
-    <div class="resources m-0 mx-5 p-0">
-        <a class="m-2">Despre</a>
-        <a class="m-2">Notificări</a>
-        <a class="m-2">Ajutor</a>
-        <a class="m-2">Comunități</a>
-        <a class="m-2">Contact</a>
+    <div class="container-flex row m-0 mx-4 p-0 mt-3">
+        <p class="col-8 title p-0 pointer-cursor" (click)="hideResources()">Resurse</p>
+        <p class="col-4 title text-left p-0 pointer-cursor" (click)="hideResources()" id="resource-arrow">{{
+            isResourcesVisible ? '⮝' : '⮟' }}</p>
+    </div>
+    <div id="listResources" [style.display]="(isResourcesVisible) ? 'block' : 'none'">
+        <div class="resources m-0 mx-5 p-0">
+            <a class="m-2">Despre</a>
+            <a class="m-2">Notificări</a>
+            <a class="m-2">Ajutor</a>
+            <a class="m-2">Comunități</a>
+            <a class="m-2">Contact</a>
+        </div>
     </div>
 </div>

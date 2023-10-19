@@ -33,4 +33,10 @@ a{
 a:hover{
     cursor: pointer;
     color: #FF4433;
+    text-decoration: underline;
 }
+
+.text-secondary:hover{
+    text-decoration: underline;
+}
+

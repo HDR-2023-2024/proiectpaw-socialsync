@@ -1,3 +1,11 @@
 p{
     font-size: 1.25em;
 }
+
+.subitem:hover{
+    color: #FF4433;  
+}
+
+.subitem{
+    font-size: 1em;
+}
