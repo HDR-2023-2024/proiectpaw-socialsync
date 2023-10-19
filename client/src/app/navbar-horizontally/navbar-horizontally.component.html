@@ -1,16 +1,27 @@
 <div class="container-flex p-0 navbar-horizontally">
     <button class="btn category-nav m-0 mx-4 p-0">🡵 Popular</button>
+
     <div class="container-flex row m-0 mx-4 p-0">
-        <p class="col-8 title p-0 pointer-cursor"  (click)="hideTopics()">Categorii</p>
+        <p class="col-8 title p-0 pointer-cursor" (click)="hideTopics()">Categorii</p>
         <p class="col-4 title text-left p-0 pointer-cursor" (click)="hideTopics()" id="topics-arrow">⮝</p>
     </div>
-    <div  id="topics-list">
+
+    <div id="topics-list" [style.display]="isVisibleFull ? 'none' : 'block'">
+        <div *ngFor="let item of itemsToDisplay.slice(0, 5)">
+            <app-navbar-horizontally-item [data]="item"></app-navbar-horizontally-item>
+        </div>
+    </div>
+    <div id="topics-list" [style.display]="isVisibleFull ? 'block' : 'none'">
         <div *ngFor="let item of itemsToDisplay">
             <app-navbar-horizontally-item [data]="item"></app-navbar-horizontally-item>
         </div>
     </div>
-    <p class="text-secondary m-3">Vezi mai multe...</p>
+
+    <p class="text-secondary m-3" (click)="selectViewFull()" id="messageViewMore">{{ isVisibleFull ? 'Vezi mai
+        puține...' : 'Vezi mai multe...' }}</p>
+
     <hr class="col-10 mx-auto">
+
     <button class="btn category-nav  m-0 mx-4 p-0">Resurse</button>
     <div class="resources m-0 mx-5 p-0">
         <a class="m-2">Despre</a>

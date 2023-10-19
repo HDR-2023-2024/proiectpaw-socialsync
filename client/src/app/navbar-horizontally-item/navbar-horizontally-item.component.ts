@@ -7,4 +7,13 @@ import { Component ,Input} from '@angular/core';
 })
 export class NavbarHorizontallyItemComponent {
   @Input() data: any;
+
+  isVisible = false;
+
+  toggleTopics() {
+    this.isVisible = !this.isVisible;
+  }  
+  
+
+  
 }
