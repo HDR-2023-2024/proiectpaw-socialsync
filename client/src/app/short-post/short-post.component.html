@@ -1,1 +1,26 @@
-<p>short-post works!</p>
+<div class="container-flex chart col-10 mx-auto my-5 pt-2 px-4">
+    <div class="d-flex ">
+        <img class="avatar-short-post ms-2" src="{{data.img}}">
+        <p class="my-auto ms-2"> {{data.username}} • {{data.time}}</p>
+    </div>
+    <br>
+    <h4 class="ms-2  ">{{data.title}}</h4>
+    <p class="ms-2  "> {{data.content.substring(0, 1000)}}</p>
+
+    <div class="d-flex m-auto ms-2   ">
+        <div class="d-flex reaction-box-like mb-2">
+            <p class="my-auto reaction reaction-arrow ms-2">🡅&nbsp;</p>
+            <p class="my-auto reaction">{{data.points}}</p>
+            <p class="my-auto reaction reaction-arrow me-2">&nbsp;🡇</p>
+        </div>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <div class="d-flex reaction-box-like  mb-2">
+            <p class="my-auto reaction ms-2">💬</p>
+            <p class="reaction my-auto me-2 ">&nbsp;{{data.comments}}</p>
+        </div>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <div class="d-flex reaction-box-like  mb-2">
+            <p class="reaction my-auto mx-2">🏴</p>
+        </div>
+    </div>
+</div>
