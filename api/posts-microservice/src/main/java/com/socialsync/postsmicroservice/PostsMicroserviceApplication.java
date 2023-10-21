@@ -1,4 +1,4 @@
-package com.example.postsmicroservice;
+package com.socialsync.postsmicroservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
