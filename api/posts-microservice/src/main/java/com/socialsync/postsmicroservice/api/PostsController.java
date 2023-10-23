@@ -13,7 +13,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("api/v1/posts")
 @AllArgsConstructor
-public class ApiController {
+public class PostsController {
 
     private final PostsService postsService;
 
