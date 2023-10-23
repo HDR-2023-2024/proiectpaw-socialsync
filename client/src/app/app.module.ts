@@ -18,6 +18,7 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
@@ -39,6 +40,7 @@ const routes: Routes = [
     CarouselComponent,
     PostComponent,
     CreatePostComponent,
+    TestComponent,
   ],
   imports: [
     BrowserModule,
