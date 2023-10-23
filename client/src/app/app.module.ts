@@ -13,10 +13,16 @@ import { NavbarHorizontallyComponent } from './navbar-horizontally/navbar-horizo
 import { NavbarHorizontallyItemComponent } from './navbar-horizontally-item/navbar-horizontally-item.component';
 import { ShortPostComponent } from './short-post/short-post.component';
 import { CarouselComponent } from './carousel/carousel.component';
+import { PostComponent } from './post/post.component';
+import { CreatePostComponent } from './create-post/create-post.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
   { path: '', component: HomeComponent }  ,
+  { path: 'post', component: PostComponent }  ,
 ];
 
 @NgModule({
@@ -31,11 +37,16 @@ const routes: Routes = [
     NavbarHorizontallyItemComponent,
     ShortPostComponent,
     CarouselComponent,
+    PostComponent,
+    CreatePostComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    AngularEditorModule,
+    HttpClientModule,
+    FormsModule
   ],
   exports: [RouterModule],
   providers: [],
