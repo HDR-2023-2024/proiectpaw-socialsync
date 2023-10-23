@@ -1,0 +1,46 @@
+.next-prev:hover {
+    color: #FF4433;
+    cursor: pointer;
+}
+
+.next-prev {
+    font-size: 4em;
+}
+
+img {
+    width: 360px;
+    height: 240px;
+    border-radius: 20px;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+.image-container:hover {
+    transform: scale(1.02);
+}
+
+.image-container img {
+    display: block;
+}
+
+.image-text {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    color: #fff;
+    padding: 5px;
+
+}
+
+.image-text-author {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    padding: 5px;
+    font-style: italic;
+}

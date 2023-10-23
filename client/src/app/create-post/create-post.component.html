@@ -1,0 +1,17 @@
+<div class="container d-flex justify-content-center mt-5">
+    <div class="col-md-6">
+      <div class="create-post-container p-3">
+         <form class="post-form">
+             <h1 class="text-center">Create post</h1>
+             <input type="text" class="form-control mb-3" placeholder="Title">
+             <input type="text" class="form-control mb-3" placeholder="URL">
+             <angular-editor [config]="editorConfig"></angular-editor>
+          </form>
+          <div class="d-flex justify-content-end mt-3">
+             <button class="btn btn-outline-dark postButton">Post</button> 
+             <button class="btn btn-outline-dark discardButton">Discard</button>
+          </div>
+       </div>
+    </div>
+</div>
+
