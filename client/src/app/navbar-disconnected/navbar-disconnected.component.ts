@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar-disconnected',
@@ -18,5 +19,18 @@ export class NavbarDisconnectedComponent implements OnInit {
       });
     }
   }
-  
+  isHomeLink: boolean = false;
+
+  constructor(private router: Router) {}
+
+
+  navigateMobileMenu() {
+    this.isHomeLink = !this.isHomeLink; 
+
+    if (this.isHomeLink) {
+      this.router.navigate(['/home']); 
+    } else {
+      this.router.navigate(['/home-menu']); 
+    }
+  }
 }
