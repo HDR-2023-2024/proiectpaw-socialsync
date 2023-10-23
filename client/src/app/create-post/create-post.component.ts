@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 
 @Component({
