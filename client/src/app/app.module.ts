@@ -20,12 +20,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TestComponent } from './test/test.component';
 import { HomeMenuComponent } from './home-menu/home-menu.component';
-import {MatIconModule} from '@angular/material/icon';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-
-library.add(fas);
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
@@ -59,7 +53,6 @@ const routes: Routes = [
     AngularEditorModule,
     HttpClientModule,
     FormsModule,
-    FontAwesomeModule
   ],
   exports: [RouterModule],
   providers: [],

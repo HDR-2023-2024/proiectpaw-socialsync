@@ -1,18 +1,30 @@
-<app-navbar-disconnected ></app-navbar-disconnected>
-<div class="container-fluid m-0 p-0">
+<app-navbar-disconnected></app-navbar-disconnected>
+<div class="container-fluid d-flex m-0 p-0">
     <div class="row m-0 p-0">
 
-        <div class="full-div col-lg-2 col-sm-0 m-0 p-0 d-none d-sm-block">
+        <div class="full-div d-flex col-lg-2 col-0  m-0 p-0 d-none d-lg-block">
             <app-navbar-horizontally></app-navbar-horizontally>
         </div>
 
-        <div class=" col-lg-10 col-sm-12 m-0 p-0 content">
-            <div class=" m-0 p-0 d-none d-sm-block" id="carousel">
+        <div class=" col-lg-10 col-12 m-0 p-0 content">
+            <div class=" m-0 p-0 d-none d-lg-block col-0 col-lg-12" id="carousel">
                 <app-carousel></app-carousel>
             </div>
 
-            <div class="container-flex d-flex col-lg-10 col-sm-12   mx-auto p-0">
+            <div class="container-flex d-flex col-lg-10 col-12  row  mx-auto p-0">
+
                 <div class="listPosts mx-auto">
+                    <div class="d-flex justify-content-end ">
+                        <div class="d-flex justify-content-center sort-category p-2">
+                            <label  class="sort-category">Sortează după:</label>
+                            <select class="sort-category">
+                                <option value="nume-asc">Nume (Ascendent)</option>
+                                <option value="nume-desc">Nume (Descendent)</option>
+                                <option value="data-asc">Data (Ascendent)</option>
+                                <option value="data-desc">Data (Descendent)</option>
+                            </select>
+                        </div>
+                    </div>
                     <div *ngFor="let item of myArr ">
                         <app-short-post class="mx-auto " [data]="item"></app-short-post>
                     </div>
