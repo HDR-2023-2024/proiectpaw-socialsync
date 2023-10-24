@@ -7,7 +7,8 @@ import { Component, Input } from '@angular/core';
 })
 export class CarouselComponent {
   start = 1;
-
+  numElementsToShow = 3;
+  
   myArr: any[] = [
     { id: 1, name: 'Nume1',author:"author1", img: "assets/images/1.jpg", url: "/home" },
     { id: 2, name: 'Nume2',author:"author2",  img: "assets/images/2.jpg", url: "/home" },

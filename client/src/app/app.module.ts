@@ -19,11 +19,20 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TestComponent } from './test/test.component';
+import { HomeMenuComponent } from './home-menu/home-menu.component';
+import {MatIconModule} from '@angular/material/icon';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+
+library.add(fas);
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
+  { path: 'home-menu', component: HomeMenuComponent }  ,
   { path: '', component: HomeComponent }  ,
   { path: 'post', component: PostComponent }  ,
+  { path: 'test', component: TestComponent }  ,
 ];
 
 @NgModule({
@@ -41,6 +50,7 @@ const routes: Routes = [
     PostComponent,
     CreatePostComponent,
     TestComponent,
+    HomeMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +58,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     AngularEditorModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   exports: [RouterModule],
   providers: [],
