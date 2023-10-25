@@ -19,7 +19,7 @@ public class PostsService implements PostsServiceMethods {
 
     @Override
     public HashMap<String, Post> fetchAllPosts() {
-        HashMap<String, Post> lista = new HashMap<String, Post>();
+        HashMap<String, Post> lista = new HashMap<>();
 
         List<Post> posts =  repository.findAll();
 
@@ -37,6 +37,7 @@ public class PostsService implements PostsServiceMethods {
 
     @Override
     public void addPost(Post post)  {
+        post.setTimestampCreated(Instant.now().getEpochSecond());
         repository.insert(post);
     }
 

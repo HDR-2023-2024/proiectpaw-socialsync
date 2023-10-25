@@ -1,14 +1,13 @@
 package com.socialsync.postsmicroservice.pojo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
-
 @Data
 @Document
+@NoArgsConstructor
 public class Post {
     @Id
     private String id;
@@ -25,6 +24,5 @@ public class Post {
         this.topicId = topicId;
         this.title = title;
         this.content = content;
-        this.timestampCreated = Instant.now().getEpochSecond();
     }
 }
