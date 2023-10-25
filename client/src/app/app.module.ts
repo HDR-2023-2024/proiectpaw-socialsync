@@ -18,11 +18,15 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { TestComponent } from './test/test.component';
+import { HomeMenuComponent } from './home-menu/home-menu.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
+  { path: 'home-menu', component: HomeMenuComponent }  ,
   { path: '', component: HomeComponent }  ,
   { path: 'post', component: PostComponent }  ,
+  { path: 'test', component: TestComponent }  ,
 ];
 
 @NgModule({
@@ -39,6 +43,8 @@ const routes: Routes = [
     CarouselComponent,
     PostComponent,
     CreatePostComponent,
+    TestComponent,
+    HomeMenuComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     AngularEditorModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
   exports: [RouterModule],
   providers: [],
