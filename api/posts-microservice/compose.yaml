@@ -1,5 +1,6 @@
 services:
   mongodb:
+    container_name: 'mongodb_posts'
     image: 'mongo:latest'
     environment:
       - 'MONGO_INITDB_DATABASE=posts_ms_db'
