@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarLoggendComponent } from './navbar-loggend/navbar-loggend.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NavbarDisconnectedComponent } from './navbar-disconnected/navbar-disconnected.component';
 import { HomeComponent } from './home/home.component';
@@ -18,9 +17,7 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { TestComponent } from './test/test.component';
 import { HomeMenuComponent } from './home-menu/home-menu.component';
-import { Test1Component } from './test1/test1.component';
 import { SavedPostsComponent } from './saved-posts/saved-posts.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RegistrationSuccessfulComponent } from './registration-successful/registration-successful.component';
@@ -32,7 +29,6 @@ const routes: Routes = [
   { path: 'home-menu', component: HomeMenuComponent }  ,
   { path: '', component: HomeComponent }  ,
   { path: 'post', component: PostComponent }  ,
-  { path: 'test', component: TestComponent }  ,
   { path: 'about', component: AboutComponent }  ,
   { path: 'contact', component: ContactComponent }  ,
   { path: 'saved-posts', component: SavedPostsComponent }  ,
@@ -45,7 +41,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarLoggendComponent,
     NavbarDisconnectedComponent,
     HomeComponent,
     AboutComponent,
@@ -56,9 +51,7 @@ const routes: Routes = [
     CarouselComponent,
     PostComponent,
     CreatePostComponent,
-    TestComponent,
     HomeMenuComponent,
-    Test1Component,
     SavedPostsComponent,
     NotFoundComponent,
     RegistrationSuccessfulComponent,
