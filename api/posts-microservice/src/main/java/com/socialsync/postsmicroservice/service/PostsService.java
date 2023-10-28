@@ -1,6 +1,6 @@
 package com.socialsync.postsmicroservice.service;
 
-import com.socialsync.postsmicroservice.interfaces.PostRepository;
+import com.socialsync.postsmicroservice.repository.PostRepository;
 import com.socialsync.postsmicroservice.interfaces.PostsServiceMethods;
 import com.socialsync.postsmicroservice.pojo.Post;
 import com.socialsync.postsmicroservice.util.exceptions.PostNotFound;

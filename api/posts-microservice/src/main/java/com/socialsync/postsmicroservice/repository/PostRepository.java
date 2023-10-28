@@ -1,4 +1,4 @@
-package com.socialsync.postsmicroservice.interfaces;
+package com.socialsync.postsmicroservice.repository;
 
 import com.socialsync.postsmicroservice.pojo.Post;
 import org.springframework.data.mongodb.repository.MongoRepository;
