@@ -10,23 +10,19 @@
             <div class=" m-0 p-0 d-none d-lg-block col-0 col-lg-12" id="carousel">
                 <app-carousel></app-carousel>
             </div>
-
             <div class="container-flex d-flex col-lg-10 col-12  row  mx-auto p-0">
-
-                <div class="listPosts mx-auto">
-                    <div class="d-flex justify-content-end ">
-                        <div class="d-flex justify-content-center sort-category p-2">
-                            <label  class="sort-category">Sortează după:</label>
-                            <select class="sort-category">
-                                <option value="nume-asc">Nume (Ascendent)</option>
-                                <option value="nume-desc">Nume (Descendent)</option>
-                                <option value="data-asc">Data (Ascendent)</option>
-                                <option value="data-desc">Data (Descendent)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div *ngFor="let item of myArr ">
-                        <app-short-post class="mx-auto " [data]="item"></app-short-post>
+                <div class="listPosts mx-auto" >
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn" id="create-btn">Creează o postare</button>
+                        <select class="sort-category">
+                          <option value="nume-asc">Nume (Ascendent)</option>
+                          <option value="nume-desc">Nume (Descendent)</option>
+                          <option value="data-asc">Data (Ascendent)</option>
+                          <option value="data-desc">Data (Descendent)</option>
+                        </select>
+                      </div>                   
+                    <div *ngFor="let item of myArr">
+                        <app-short-post class="mx-auto" [data]="item" (click)="navigateToPost(item.id)"></app-short-post>  
                     </div>
                 </div>
             </div>

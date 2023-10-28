@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -81,7 +82,10 @@ export class HomeComponent {
       , points: 1,
       comments: 9
     }
-
-
   ]
+  constructor(private router: Router) {}
+
+  navigateToPost(postId: number) {
+    this.router.navigate(['/full-post', postId]);
+  }
 }
