@@ -20,6 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TestComponent } from './test/test.component';
 import { HomeMenuComponent } from './home-menu/home-menu.component';
+import { FullPostComponent } from './full-post/full-post.component';
+import { FullPostPageComponent } from './full-post-page/full-post-page.component';
+import { CommentsComponent } from './comments/comments.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
@@ -27,7 +30,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent }  ,
   { path: 'post', component: PostComponent }  ,
   { path: 'test', component: TestComponent }  ,
-];
+  { path: "full-post/:id", component:FullPostPageComponent}];
 
 @NgModule({
   declarations: [
@@ -45,6 +48,9 @@ const routes: Routes = [
     CreatePostComponent,
     TestComponent,
     HomeMenuComponent,
+    FullPostComponent,
+    FullPostPageComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,
