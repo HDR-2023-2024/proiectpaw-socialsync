@@ -20,6 +20,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TestComponent } from './test/test.component';
 import { HomeMenuComponent } from './home-menu/home-menu.component';
+import { Test1Component } from './test1/test1.component';
+import { SavedPostsComponent } from './saved-posts/saved-posts.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { RegistrationSuccessfulComponent } from './registration-successful/registration-successful.component';
+import { InternalServerErrorComponent } from './internal-server-error/internal-server-error.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }  ,
@@ -27,6 +33,13 @@ const routes: Routes = [
   { path: '', component: HomeComponent }  ,
   { path: 'post', component: PostComponent }  ,
   { path: 'test', component: TestComponent }  ,
+  { path: 'about', component: AboutComponent }  ,
+  { path: 'contact', component: ContactComponent }  ,
+  { path: 'saved-posts', component: SavedPostsComponent }  ,
+  { path: 'not-found', component: NotFoundComponent }  ,
+  { path: 'registration-successful', component: RegistrationSuccessfulComponent }  ,
+  { path: 'internal-server-error', component: InternalServerErrorComponent }  ,
+  { path: 'unauthorized', component: UnauthorizedComponent }  ,
 ];
 
 @NgModule({
@@ -45,6 +58,12 @@ const routes: Routes = [
     CreatePostComponent,
     TestComponent,
     HomeMenuComponent,
+    Test1Component,
+    SavedPostsComponent,
+    NotFoundComponent,
+    RegistrationSuccessfulComponent,
+    InternalServerErrorComponent,
+    UnauthorizedComponent,
   ],
   imports: [
     BrowserModule,

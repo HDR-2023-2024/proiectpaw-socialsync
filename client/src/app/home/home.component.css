@@ -2,15 +2,18 @@ app-short-post {
     margin-left: 5px;
 }
 
-.content {
-    border-left: 2px solid rgba(0, 0, 0, 1);
-}
-
-
 
 .sort-category{
     color: #000000;
     background-color: #fff;
     border-radius: 20px;
     border: none;
+}
+
+#create-post-btn{
+    background-color: #de1738;
+    border-radius: 24px;
+    margin-right: 16px;
+    color: #fff;
+    height: 40px;
 }

@@ -1,4 +1,5 @@
 import { Component,Input } from '@angular/core';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-short-post',
@@ -7,4 +8,6 @@ import { Component,Input } from '@angular/core';
 })
 export class ShortPostComponent {
   @Input() data: any;
+
+  constructor(public authService : AuthService){}
 }

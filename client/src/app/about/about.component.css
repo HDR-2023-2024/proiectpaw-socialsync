@@ -1,0 +1,21 @@
+.content {
+    background-color: blueviolet;
+}
+
+.description {
+    padding-top: 15%;
+}
+
+p{
+    font-size: 1.5em;
+}
+
+#imgAbout{
+    padding-top: 20%;
+    width: 90%;
+    height: 70%;
+}
+
+p {
+    font-family: Arial, sans-serif;
+  }

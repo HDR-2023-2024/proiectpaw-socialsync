@@ -1,6 +1,5 @@
 #navbar-disconnected {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-    background-color: #F0F2F5;
+    background-color:  #ffd0cf	 ;
     height: 60px;
 }
 
@@ -13,10 +12,10 @@
 }
 
 #login-btn {
-    background-color: #FF4433;
+    background-color: #de1738;
     border-radius: 24px;
     margin-right: 16px;
-    color: #ffffff;
+    color: #fff;
     height: 40px;
 }
 
@@ -25,13 +24,13 @@
     border: 1px solid rgba(0, 0, 0, 0.3);
     color: #000000b4;
     border-radius: 24px;
-    background-color: #e5eaf0;
+    background-color: #fff;
 }
 
 #search-input {
     padding-right: 16px;
     border: none;
-    background-color: #e5eaf0;
+    background-color: #fff;
 }
 
 #search-icon {
@@ -49,3 +48,29 @@
 .submenu{
     font-size: 2em;
 }
+
+.navbar-ico{
+    font-size: 1.5em;
+    width: 32px;
+    height: 32px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 20px;
+  }
+
+  #userMenu{
+    position: fixed;
+    top: 60px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    box-shadow: 1px 2px #8888885d;
+    background-color: #fff;
+  }
+
+  a{
+    color: #000;
+    text-decoration: none;
+  }
