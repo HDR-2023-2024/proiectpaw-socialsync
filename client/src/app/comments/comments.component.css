@@ -1,0 +1,23 @@
+.post-container{
+    background-color: #FFFF;
+}
+
+.avatar-short-post {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .reaction{
+    font-size: 1.2em;
+    color: #000;
+  }
+  
+  .reaction-arrow:hover {
+    color: #FF4433;  
+    cursor: pointer;
+  }
+  
+  .reaction-box-like{
+    background-color: #8888883f;
+    border-radius: 20px;
+  }
