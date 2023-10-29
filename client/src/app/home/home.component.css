@@ -14,3 +14,11 @@ app-short-post {
     border-radius: 20px;
     border: none;
 }
+
+#create-btn{
+    background-color: #FF4433;
+    border-radius: 24px;
+    margin-right: 16px;
+    color: #ffffff;
+    height: 40px;
+}

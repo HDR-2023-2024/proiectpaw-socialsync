@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component,Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-full-post',
+  templateUrl: './full-post.component.html',
+  styleUrls: ['./full-post.component.css']
 })
+export class FullPostComponent {
+  
+  @Input() data: any;
+  
+  postId:number=0;
 
-export class HomeComponent {
   myArr: any[] = [
     {
       id: 1,
@@ -83,9 +87,17 @@ export class HomeComponent {
       comments: 9
     }
   ]
-  constructor(private router: Router) {}
 
-  navigateToPost(postId: number) {
-    this.router.navigate(['/full-post', postId]);
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.postId = +params['id'];
+      this.data = this.findPostById(this.postId);
+    });
+  }
+
+  findPostById(postId: number) {
+    return this.myArr.find(data => data.id === postId);
   }
 }
