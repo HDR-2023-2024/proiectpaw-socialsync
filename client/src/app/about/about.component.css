@@ -7,15 +7,29 @@
 }
 
 p{
-    font-size: 1.5em;
+    font-size: 1em;
 }
 
 #imgAbout{
-    padding-top: 20%;
-    width: 90%;
-    height: 70%;
+    padding-top: 5%;
+    width: 100%;
+    height: 100%;
 }
 
 p {
     font-family: Arial, sans-serif;
+  }
+
+  @media (min-width: 992px) {
+   
+    p{
+        font-size: 1.5em;
+    }
+
+    #imgAbout{
+        padding-top: 25%;
+        width: 90%;
+        height: 70%;
+    }
+  
   }

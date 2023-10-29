@@ -31,7 +31,7 @@ p {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; 
+
   }
 
   .formContact{
@@ -54,4 +54,15 @@ p {
     border-radius: 20px;
     height: 6%;
     background-color: #de1738;
+  }
+
+  .formContact{
+    width: 100%;
+  }
+  @media (min-width: 992px) {
+   
+    .formContact{
+      width: 60%;
+    }
+  
   }

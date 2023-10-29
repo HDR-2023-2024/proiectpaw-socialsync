@@ -25,17 +25,17 @@ import { InternalServerErrorComponent } from './internal-server-error/internal-s
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent }  ,
-  { path: 'home-menu', component: HomeMenuComponent }  ,
-  { path: '', component: HomeComponent }  ,
-  { path: 'post', component: PostComponent }  ,
-  { path: 'about', component: AboutComponent }  ,
-  { path: 'contact', component: ContactComponent }  ,
-  { path: 'saved-posts', component: SavedPostsComponent }  ,
-  { path: 'not-found', component: NotFoundComponent }  ,
-  { path: 'registration-successful', component: RegistrationSuccessfulComponent }  ,
-  { path: 'internal-server-error', component: InternalServerErrorComponent }  ,
-  { path: 'unauthorized', component: UnauthorizedComponent }  ,
+  { path: 'home', component: HomeComponent }  , // ok
+  { path: 'home-menu', component: HomeMenuComponent }  , // ok
+  { path: '', component: HomeComponent }  , // ok 
+  { path: 'post', component: PostComponent }  , // ok
+  { path: 'about', component: AboutComponent }  , // ok
+  { path: 'contact', component: ContactComponent }  , // ok
+  { path: 'saved-posts', component: SavedPostsComponent }  , // ok
+  { path: 'not-found', component: NotFoundComponent }  ,  // OK
+  { path: 'registration-successful', component: RegistrationSuccessfulComponent }  ,  // ok
+  { path: 'internal-server-error', component: InternalServerErrorComponent }  , // ok
+  { path: 'unauthorized', component: UnauthorizedComponent }  ,  // ok 
 ];
 
 @NgModule({
