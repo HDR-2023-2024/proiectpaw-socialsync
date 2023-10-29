@@ -1,0 +1,42 @@
+services:
+  mongodb-posts:
+    container_name: 'mongodb_posts'
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=posts_ms_db'
+      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+    ports:
+      - '27017:27017'
+    expose:
+      - '27017'
+    volumes:
+      - 'data:/data'
+  mongodb-comments:
+    container_name: 'mongodb_comments'
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=comments_ms_db'
+      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+    ports:
+      - '27018:27017'
+    expose:
+      - '27018'
+    volumes:
+      - 'data2:/data2'
+  rabbitmq:
+    image: 'rabbitmq:3.12.7-management-alpine'
+    container_name: 'rabbitmq'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    expose:
+      - '5672'
+      - '15672'
+volumes:
+  data: {}
+  data2: {}
+networks:
+  default:
+    name: 'socialsync_network'

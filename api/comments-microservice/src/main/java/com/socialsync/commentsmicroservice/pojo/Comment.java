@@ -15,7 +15,7 @@ public class Comment {
     private String postId;
     private String content;
     private Integer score = 0;
-    private Long timestampCreate;
+    private Long timestampCreated;
     private Long timestampUpdated;
 
     public Comment(String creatorId, String postId, String content) {

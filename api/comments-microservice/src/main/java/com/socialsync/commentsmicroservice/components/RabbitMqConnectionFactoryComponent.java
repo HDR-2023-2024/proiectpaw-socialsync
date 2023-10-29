@@ -1,4 +1,4 @@
-package com.socialsync.postsmicroservice.component;
+package com.socialsync.commentsmicroservice.components;
 
 import lombok.Getter;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;

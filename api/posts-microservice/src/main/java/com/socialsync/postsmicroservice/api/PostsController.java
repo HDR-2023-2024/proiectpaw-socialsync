@@ -1,7 +1,7 @@
 package com.socialsync.postsmicroservice.api;
 
 import com.google.gson.Gson;
-import com.socialsync.postsmicroservice.component.RabbitMqConnectionFactoryComponent;
+import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponent;
 import com.socialsync.postsmicroservice.pojo.Post;
 import com.socialsync.postsmicroservice.pojo.PostQueueMessage;
 import com.socialsync.postsmicroservice.pojo.enums.QueueMessageType;
@@ -63,22 +63,22 @@ public class PostsController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addPost(@RequestBody Post post) {
+    public ResponseEntity<Post> addPost(@RequestBody Post post) {
         postsService.addPost(post);
         sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
 
-        return new ResponseEntity<>("Added post: " + post.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePost(@PathVariable String id, @RequestBody Post post) {
+    public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody Post post) {
         try {
             postsService.updatePost(id, post);
             sendMessage(new PostQueueMessage(QueueMessageType.UPDATE, post));
-            return new ResponseEntity<>("Updated post: " + id , HttpStatus.OK);
+            return new ResponseEntity<>(post, HttpStatus.OK);
         } catch (PostNotFound ex) {
             sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
-            return new ResponseEntity<>(ex.getMessage() + " " + post.getId(), HttpStatus.CREATED);
+            return new ResponseEntity<>(post, HttpStatus.CREATED);
         }
     }
 
@@ -88,6 +88,6 @@ public class PostsController {
         Post dummyPost = new Post();
         dummyPost.setId(id);
         sendMessage(new PostQueueMessage(QueueMessageType.DELETE, dummyPost));
-        return new ResponseEntity<>("Post deleted: " + id, HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
     }
 }

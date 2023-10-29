@@ -23,9 +23,8 @@ public class PostsService implements PostsServiceMethods {
 
         List<Post> posts =  repository.findAll();
 
-        for (Post post : posts) {
+        for (Post post : posts)
             lista.put(post.getId(), post);
-        }
 
         return lista;
     }
@@ -52,7 +51,8 @@ public class PostsService implements PostsServiceMethods {
                 repository.save(elem);
                 return elem;
         }).orElseThrow(() -> {
-            repository.save(post);
+            post.setTimestampCreated(Instant.now().getEpochSecond());
+            repository.insert(post);
             return new PostNotFound("Post not found. Created one instead.");
         });
     }
