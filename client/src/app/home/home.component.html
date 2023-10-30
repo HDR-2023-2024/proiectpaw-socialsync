@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div *ngFor="let item of myArr ">
-                        <app-short-post class="mx-0 " [data]="item"></app-short-post>
+                        <app-short-post class="mx-0 " [data]="item" (click)="navigateToPost(item.id)"></app-short-post>
                     </div>
                 </div>
             </div>
