@@ -1,5 +1,5 @@
 app-short-post {
-    margin: 0px;
+    margin-left: 5px;
 }
 
 
@@ -9,7 +9,6 @@ app-short-post {
     border-radius: 20px;
     border: none;
 }
-
 
 #create-post-btn{
     background-color: #de1738;

@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarLoggendComponent } from './navbar-loggend/navbar-loggend.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NavbarDisconnectedComponent } from './navbar-disconnected/navbar-disconnected.component';
 import { HomeComponent } from './home/home.component';
@@ -18,24 +17,38 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { TestComponent } from './test/test.component';
 import { HomeMenuComponent } from './home-menu/home-menu.component';
 import { FullPostComponent } from './full-post/full-post.component';
 import { FullPostPageComponent } from './full-post-page/full-post-page.component';
 import { CommentsComponent } from './comments/comments.component';
+import { SavedPostsComponent } from './saved-posts/saved-posts.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { RegistrationSuccessfulComponent } from './registration-successful/registration-successful.component';
+import { InternalServerErrorComponent } from './internal-server-error/internal-server-error.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { LinksComponent } from './links/links.component';
+
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent }  ,
-  { path: 'home-menu', component: HomeMenuComponent }  ,
-  { path: '', component: HomeComponent }  ,
-  { path: 'post', component: PostComponent }  ,
-  { path: 'test', component: TestComponent }  ,
-  { path: "full-post/:id", component:FullPostPageComponent}];
+  { path: 'home', component: HomeComponent }, // ok
+  { path: 'home-menu', component: HomeMenuComponent }, // ok
+  { path: '', component: HomeComponent }, // ok 
+  { path: 'post', component: PostComponent }, // ok
+  { path: 'about', component: AboutComponent }, // ok
+  { path: 'contact', component: ContactComponent }, // ok
+  { path: 'saved-posts', component: SavedPostsComponent }, // ok
+  { path: 'not-found', component: NotFoundComponent },  // OK
+  { path: 'registration-successful', component: RegistrationSuccessfulComponent },  // ok
+  { path: 'internal-server-error', component: InternalServerErrorComponent }, // ok
+  { path: 'unauthorized', component: UnauthorizedComponent },  // ok 
+  { path: "full-post/:id", component: FullPostPageComponent },
+  { path: "links", component: LinksComponent }
+];
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarLoggendComponent,
     NavbarDisconnectedComponent,
     HomeComponent,
     AboutComponent,
@@ -46,11 +59,16 @@ const routes: Routes = [
     CarouselComponent,
     PostComponent,
     CreatePostComponent,
-    TestComponent,
     HomeMenuComponent,
     FullPostComponent,
     FullPostPageComponent,
-    CommentsComponent
+    CommentsComponent,
+    SavedPostsComponent,
+    NotFoundComponent,
+    RegistrationSuccessfulComponent,
+    InternalServerErrorComponent,
+    UnauthorizedComponent,
+    LinksComponent,
   ],
   imports: [
     BrowserModule,

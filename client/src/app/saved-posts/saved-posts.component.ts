@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-saved-posts',
+  templateUrl: './saved-posts.component.html',
+  styleUrls: ['./saved-posts.component.css']
 })
-
-export class HomeComponent {
-
-  constructor(public authService: AuthService,private router: Router) { }
+export class SavedPostsComponent {
+ constructor(public authService: AuthService) { }
 
   myArr: any[] = [
     {
@@ -22,7 +19,7 @@ export class HomeComponent {
       content: "În era rapidă a tehnologiei, noul smartphone de la XYZ Corp a stârnit interesul pasionaților de gadgeturi din întreaga lume. Cu promisiunea de a redefine experiența utilizatorului, acest dispozitiv aduce o serie de caracteristici deosebite care îl disting de competiție.\n\nUnul dintre punctele forte ale acestui smartphone este noul său procesor cu arhitectură avansată, care promite performanțe excepționale. Cu acest procesor puternic la bază, sarcinile multitasking devin o joacă de copii, iar jocurile și aplicațiile rulează neted.\n\nÎn plus, telefonul dispune de o cameră foto inovatoare cu multiple lentile, oferind imagini clare și detaliate în orice condiții de iluminare. Fotografii, selfie-uri și videoclipuri de calitate superioară sunt la îndemâna utilizatorilor.\n\nNoul smartphone vine cu un ecran OLED uimitor, care oferă culori vibrante și neguri profunde, transformând experiența de vizionare a conținutului multimedia într-o adevărată plăcere. Fie că urmăriți filme, jocuri sau navigați pe internet, calitatea imaginii este uimitoare.\n\nÎn ceea ce privește securitatea, acest dispozitiv integrează tehnologii avansate de recunoaștere facială și senzori de amprentă, garantând confidențialitatea datelor dumneavoastră.\n\nÎn concluzie, noul smartphone de la XYZ Corp este cu adevărat revoluționar, aducând tehnologie de vârf la îndemâna utilizatorilor obișnuiți. Cu caracteristici de top, performanțe superioare și un design elegant, acest telefon promite să devină preferatul pasionaților de tehnologie din întreaga lume.",
       points: 10,
       comments: 2,
-      saved: false
+      saved: true
     },
     {
       id: 2,
@@ -45,7 +42,7 @@ export class HomeComponent {
       content: "Parisul este cunoscut nu doar pentru frumusețea sa arhitecturală și cultura sa bogată, ci și pentru gastronomia sa rafinată. Orașul este plin de restaurante de top, fiecare oferind o experiență culinară de neuitat. Iată o listă cu cele mai renumite restaurante din capitala Franței, unde poți savura bucate delicioase și vinuri excepționale.\n\n1. Le Jules Verne: Aflat în Turnul Eiffel, acest restaurant cu o vedere panoramică uimitoare oferă preparate gourmet și vinuri fine. Este locul perfect pentru o cină romantică cu vedere la Parisul iluminat.\n\n2. Le Bernardin: Cu o stea Michelin, acest restaurant de fructe de mare renumit servește preparate proaspete și delicioase. Specialitățile lor de pește sunt cu adevărat remarcabile.\n\n3. L'Ambroisie: Acest restaurant cu trei stele Michelin oferă o experiență culinară de excepție. Bucătăria lor franceză tradițională este la superlativ.\n\n4. Guy Savoy: Cu trei stele Michelin, Guy Savoy este celebru pentru mâncarea sa sofisticată și atmosfera elegantă. Aici vei găsi cele mai bune mâncăruri franțuzești.\n\n5. Le Comptoir du Relais: Acest restaurant tradițional parizian oferă preparate autentice și un ambient autentic. Este locul ideal pentru a experimenta bucatele clasice franceze.\n\nIndiferent de restaurantul pe care îl alegi, vei fi răsfățat cu arome și gusturi extraordinare. Parisul este cu siguranță un paradis pentru gurmanzi, oferind o gamă variată de opțiuni culinare, de la mâncăruri tradiționale la cele mai sofisticate preparate. Așadar, pregătește-ți papilele gustative pentru o aventură culinară memorabilă în capitala Franței."
       , points: 23,
       comments: 0,
-      saved: false
+      saved: true
     }
     ,
     {
@@ -80,7 +77,7 @@ export class HomeComponent {
       content: "Învață cum să capturezi imagini uluitoare ale peisajelor naturale cu ajutorul acestui ghid de fotografie de peisaj, care include sfaturi și tehnici de la un fotograf profesionist."
       , points: 5500,
       comments: 402,
-      saved: false
+      saved: true
     },
     {
       id: 7,
@@ -93,9 +90,7 @@ export class HomeComponent {
       comments: 9,
       saved: true
     }
-  ]
 
-  navigateToPost(postId: number) {
-    this.router.navigate(['/full-post', postId]);
-  }
+
+  ]
 }

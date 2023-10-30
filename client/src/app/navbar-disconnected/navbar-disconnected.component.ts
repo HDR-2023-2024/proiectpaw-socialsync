@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-navbar-disconnected',
@@ -20,8 +21,9 @@ export class NavbarDisconnectedComponent implements OnInit {
     }
   }
   isHomeLink: boolean = false;
+  isShowUserMenu = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,public authService : AuthService) {}
 
 
   navigateMobileMenu() {
@@ -32,5 +34,18 @@ export class NavbarDisconnectedComponent implements OnInit {
     } else {
       this.router.navigate(['/home-menu']); 
     }
+  }
+
+  onLoginClick() {
+    this.authService.login();
+  }
+
+  showUserMenu(){
+    this.isShowUserMenu = !this.isShowUserMenu;
+  }
+
+  onLogOutClick(){
+    this.authService.logout();
+    this.isShowUserMenu = false;
   }
 }

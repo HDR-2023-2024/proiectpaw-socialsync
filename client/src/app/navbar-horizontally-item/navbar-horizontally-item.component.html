@@ -1,6 +1,7 @@
 <div class="container-flex row mx-5 m-0 p-0 item-menu">
     <p class="col-8 p-0 pointer-cursor" (click)="toggleTopics()">{{ data.name }}</p>
-    <p class="col-4 ml-4 px-1 pointer-cursor" (click)="toggleTopics()" id="subgroup-arrow"><ng-container
+    <p class="col-4 ml-4 px-1 pointer-cursor" (click)="toggleTopics()" id="subgroup-arrow">
+        <ng-container
             *ngIf="isVisible; else elseBlock">
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                 <path

@@ -1,0 +1,15 @@
+img{
+    margin-top: 15%;
+    width: 40%;
+    height: 50%;
+}
+
+@media (min-width: 992px) {
+   
+    img{
+        margin-top: 5%;
+        width:  20%;
+        height: 50%;
+    }
+  
+  }
