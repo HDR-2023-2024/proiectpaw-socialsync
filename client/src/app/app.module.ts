@@ -27,6 +27,8 @@ import { RegistrationSuccessfulComponent } from './registration-successful/regis
 import { InternalServerErrorComponent } from './internal-server-error/internal-server-error.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { LinksComponent } from './links/links.component';
+import { CommunityComponent } from './community/community.component';
+import { CommunityDetailsComponent } from './community-details/community-details.component';
 
 
 const routes: Routes = [
@@ -42,7 +44,8 @@ const routes: Routes = [
   { path: 'internal-server-error', component: InternalServerErrorComponent }, // ok
   { path: 'unauthorized', component: UnauthorizedComponent },  // ok 
   { path: "full-post/:id", component: FullPostPageComponent },
-  { path: "links", component: LinksComponent }
+  { path: "links", component: LinksComponent },
+  { path: "community", component: CommunityComponent}
 ];
 
 
@@ -69,6 +72,8 @@ const routes: Routes = [
     InternalServerErrorComponent,
     UnauthorizedComponent,
     LinksComponent,
+    CommunityComponent,
+    CommunityDetailsComponent,
   ],
   imports: [
     BrowserModule,
