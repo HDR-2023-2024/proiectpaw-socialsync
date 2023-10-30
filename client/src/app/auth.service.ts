@@ -1,26 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable , Inject } from '@angular/core';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor() { }
-
-  private loggedIn = false;
+  constructor(@Inject(LOCAL_STORAGE) private storage : StorageService) { }
 
   login() {
-    this.loggedIn = true;
+    this.storage.set("loged",true);
     console.log("Logat");
   }
 
   logout() {
     console.log("Delogat")
-    this.loggedIn = false;
+    this.storage.set("loged",false);
   }
 
   isUserLoggedIn(): boolean {
-    return this.loggedIn;
+    return this.storage.get("loged");
   }
 
   getAvatar(){
