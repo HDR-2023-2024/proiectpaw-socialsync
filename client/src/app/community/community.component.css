@@ -1,0 +1,54 @@
+.avatar-short-post {
+    width: 100px;
+    height: 100px;
+}
+
+.container-1{
+    background-color: #F0F2F5;
+}
+
+#join-btn {
+    background-color: #F0F2F5;
+    border-radius: 24px;
+    margin-right: 16px;
+    color: black;
+    height: 30px; 
+    border-color: #FF4433;
+    padding: 5px 12px; 
+}
+
+#join-btn:hover{
+    background-color: #FF4433;
+    color: #ffffff;
+}
+
+.reaction{
+    font-size: 1.2em;
+    color: #000;
+}
+  
+.reaction-arrow:hover {
+    color: #FF4433;  
+    cursor: pointer;
+}
+  
+.reaction-box-like{
+    background-color: #F0F2F5;
+    border: 1px solid  #FF4433;
+    border-radius: 20px;
+}
+  
+.members{
+    width: 200px; 
+    border: 1px solid #ccc; 
+    background-color: #F0F2F5;
+}
+
+h3 {
+    font-size: 15px; 
+}
+  
+p {
+    font-size: 16px; 
+}
+  

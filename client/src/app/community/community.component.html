@@ -1,0 +1,43 @@
+<app-navbar-disconnected></app-navbar-disconnected>
+<div class="container-fluid">
+    <nav class="container-1 row m-0 p-0">
+        <div class="d-flex justify-content-center align-items-center">
+            <img class="avatar-short-post" src="{{community[0].img}}">
+            <h2 class="ms-3">{{community[0].nume}}</h2>
+            <button type="button" class="btn ms-3" id="join-btn" (click)="toggleJoinState()" >{{ joined ? 'Părăsește' : 'Alătură-te' }}</button>
+            <div class="d-flex reaction-box-like mb-0" (click)="toggleNotifyState()">
+                <p class="reaction my-auto mx-2 mb-1">
+                    <svg *ngIf="!isNotified" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16"> 
+                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/> </svg>
+                    <svg *ngIf="isNotified" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+                    </svg>
+                </p>
+            </div>            
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12">
+                <div class="listPosts mx-auto">
+                    <div class="d-flex justify-content-start mt-4 ms-5">
+                        <select id="sort-category">
+                            <option value="nume-asc">Voturi (Ascendent)</option>
+                            <option value="nume-desc">Voturi (Descendent)</option>
+                            <option value="data-asc">Data (Ascendent)</option>
+                            <option value="data-desc">Data (Descendent)</option>
+                            <option value="com-asc">Comentarii (Ascendent)</option>
+                            <option value="com-desc">Comentarii (Descendent)</option>
+                        </select>
+                    </div>
+                    <div *ngFor="let item of myArr">
+                        <app-short-post class="mx-auto" [data]="item"></app-short-post>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1 col-12 mt-4">
+                <app-community-details></app-community-details>
+            </div>
+        </div>
+    </div>
+</div>    
