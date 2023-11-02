@@ -29,12 +29,20 @@ import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { LinksComponent } from './links/links.component';
 import { CommunityComponent } from './community/community.component';
 import { CommunityDetailsComponent } from './community-details/community-details.component';
+import { ProfileCardComponent } from './profile-card/profile-card.component';
+import { ProfileNavComponent } from './profile-nav/profile-nav.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ProfilePostComponent } from './profile-post/profile-post.component';
+import { ProfileLinkProfileComponent } from './profile-link-profile/profile-link-profile.component';
+import { ProfileLinkPostsComponent } from './profile-link-posts/profile-link-posts.component';
+import { ProfileLinkCommentsComponent } from './profile-link-comments/profile-link-comments.component';
+import { ProfileLinkSavedComponent } from './profile-link-saved/profile-link-saved.component';
 
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
   { path: 'home-menu', component: HomeMenuComponent }, // ok
-  { path: '', component: HomeComponent }, // ok 
+  { path: '', component: HomeComponent }, // ok
   { path: 'post', component: PostComponent }, // ok
   { path: 'about', component: AboutComponent }, // ok
   { path: 'contact', component: ContactComponent }, // ok
@@ -42,10 +50,15 @@ const routes: Routes = [
   { path: 'not-found', component: NotFoundComponent },  // OK
   { path: 'registration-successful', component: RegistrationSuccessfulComponent },  // ok
   { path: 'internal-server-error', component: InternalServerErrorComponent }, // ok
-  { path: 'unauthorized', component: UnauthorizedComponent },  // ok 
+  { path: 'unauthorized', component: UnauthorizedComponent },  // ok
   { path: "full-post/:id", component: FullPostPageComponent },
   { path: "links", component: LinksComponent },
-  { path: "community", component: CommunityComponent}
+  { path: "community", component: CommunityComponent},
+  { path: "p-c", component: ProfileCardComponent},
+  { path: "p-n", component: ProfileNavComponent},
+  { path: "p", component: ProfileComponent},
+  { path: "see-profile", component: ProfileLinkProfileComponent },
+  { path: "see-posts", component: ProfileLinkPostsComponent} 
 ];
 
 
@@ -74,6 +87,14 @@ const routes: Routes = [
     LinksComponent,
     CommunityComponent,
     CommunityDetailsComponent,
+    ProfileCardComponent,
+    ProfileNavComponent,
+    ProfileComponent,
+    ProfilePostComponent,
+    ProfileLinkProfileComponent,
+    ProfileLinkPostsComponent,
+    ProfileLinkCommentsComponent,
+    ProfileLinkSavedComponent
   ],
   imports: [
     BrowserModule,

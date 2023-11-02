@@ -1,0 +1,13 @@
+<div>
+  <ul class="nav nav-tabs">
+    <li class="nav-item" *ngFor="let tab of navComponents; let i = index">
+      <a class="nav-link" (click)="setActiveTab(i)" [class.active]="i === activeTab">{{ tab.label }}</a>
+    </li>
+  </ul>
+</div>
+<div *ngFor="let tab of navComponents; let i = index">
+  <div *ngIf="i === activeTab">
+    <div *ngComponentOutlet="tab.Component"></div>
+    </div>
+</div>
+
