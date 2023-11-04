@@ -44,6 +44,7 @@ public class UsersController {
     @RabbitListener(queues = "${socialsync.rabbitmq.queue}")
     void receiveMessage(String msg) {
        UserQueueMessage user =  gson.fromJson(msg, UserQueueMessage.class);
+
         System.out.println("Result: " + user.getType() + " " +gson.toJson(user.getUser()));
     }
     //#########################
