@@ -49,7 +49,7 @@ public class UsersService implements UsersServiceMethods {
             return elem;
         }).orElseThrow(() -> {
             repository.save(user);
-            return new Exception("Post not found. Created one instead.");
+            return new Exception("User not found. Created one instead.");
         });
     }
 

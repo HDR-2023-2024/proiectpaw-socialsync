@@ -82,11 +82,11 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         usersService.deleteUser(id);
-        User dummyPost = new User();
-        dummyPost.setId(id);
-        sendMessage(new UserQueueMessage(QueueMessageType.DELETE, dummyPost));
+        User dummyUser = new User();
+        dummyUser.setId(id);
+        sendMessage(new UserQueueMessage(QueueMessageType.DELETE, dummyUser));
         return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
     }
 
