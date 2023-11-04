@@ -43,7 +43,8 @@ public class UsersController {
     //TO DO: DELETE ########## DOAR PT. DEBUG
     @RabbitListener(queues = "${socialsync.rabbitmq.queue}")
     void receiveMessage(String msg) {
-        System.out.println("RabbitMQ: " + gson.fromJson(msg, UserQueueMessage.class).toString());
+       UserQueueMessage user =  gson.fromJson(msg, UserQueueMessage.class);
+        System.out.println("Result: " + user.getType() + " " +gson.toJson(user.getUser()));
     }
     //#########################
 
