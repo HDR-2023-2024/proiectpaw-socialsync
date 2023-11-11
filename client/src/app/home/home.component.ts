@@ -98,4 +98,8 @@ export class HomeComponent {
   navigateToPost(postId: number) {
     this.router.navigate(['/full-post', postId]);
   }
+
+  redirectToPostPage(): void {
+    this.router.navigate(['/post']);
+}
 }
