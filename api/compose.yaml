@@ -1,4 +1,18 @@
 services:
+  mongodb-topics:
+    container_name: 'mongodb_topics'
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=posts_ms_db'
+      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+    ports:
+      - '27019:27017'
+    expose:
+      - '27019'
+    volumes:
+      - 'data3:/data3'
+      
   mongodb-posts:
     container_name: 'mongodb_posts'
     image: 'mongo:latest'
@@ -12,6 +26,7 @@ services:
       - '27017'
     volumes:
       - 'data:/data'
+      
   mongodb-comments:
     container_name: 'mongodb_comments'
     image: 'mongo:latest'
@@ -36,7 +51,9 @@ services:
       - '15672'
 volumes:
   data: {}
+  data1: {}
   data2: {}
+  data3: {}
 networks:
   default:
     name: 'socialsync_network'
