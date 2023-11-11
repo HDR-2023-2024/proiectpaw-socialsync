@@ -5,6 +5,7 @@ import com.socialsync.usersmicroservice.pojo.enums.RoleType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Setter
 public class UserSelect {
     @Id
-    private  Long id;
+    private Long id;
     private String  username;
     private String  email;
     private RoleType role;

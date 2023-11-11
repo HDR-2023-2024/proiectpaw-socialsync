@@ -2,33 +2,37 @@ package com.socialsync.usersmicroservice.pojo;
 
 import com.socialsync.usersmicroservice.pojo.enums.GenderType;
 import com.socialsync.usersmicroservice.pojo.enums.RoleType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "User")
-@Getter
+@Table(name = "user")
 @Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
-    private  Long id;
-    private String  username;
-    private String  email;
-    private RoleType role;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", columnDefinition = "bigint DEFAULT 0")
+    private Long id;
+
+    @Column(name = "username", length = 100, nullable = false)
+    private String username;
+
+    @Column(name = "password", length = 100, nullable = false)
+    private String password;
+
+    @Column(name = "email", length = 100, nullable = false)
+    private String email;
+
+    @Column(name = "gender", length = 1)
     private GenderType gender;
-    private String  password;
 
-    public User(Long id, String username, String email, RoleType role, GenderType gender) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.role = role;
-        this.gender = gender;
-    }
-
-    public  User(){}
+    @Column(name = "role", length = 1)
+    private RoleType role;
 }

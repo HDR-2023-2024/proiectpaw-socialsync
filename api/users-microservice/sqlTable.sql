@@ -1,4 +1,4 @@
--- mydatabase.`user` definition, generat de DBeaver
+-- mydatabase.`user` definition
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -8,4 +8,4 @@ CREATE TABLE `user` (
   `gender` varchar(1) DEFAULT NULL,
   `role` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
