@@ -1,15 +1,19 @@
 img{
     margin-top: 15%;
-    width: 40%;
-    height: 50%;
+    max-width: 40%;
+    max-height: 50%;
+    width: auto;
+    height: auto;
 }
 
 @media (min-width: 992px) {
    
     img{
         margin-top: 5%;
-        width:  20%;
-        height: 50%;
+        max-width:  20%;
+        max-height: 50%;
+        width: auto;
+        height: auto;
     }
   
   }
