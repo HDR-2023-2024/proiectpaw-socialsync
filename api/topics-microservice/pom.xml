@@ -11,8 +11,8 @@
     <groupId>com.socialsync</groupId>
     <artifactId>topics-microservice</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>comments-microservice</name>
-    <description>comments-microservice</description>
+    <name>topics-microservice</name>
+    <description>topics-microservice</description>
     <properties>
         <java.version>17</java.version>
     </properties>

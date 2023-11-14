@@ -40,6 +40,7 @@ services:
       - '27018'
     volumes:
       - 'data2:/data2'
+
   mariadb:
     image: 'mariadb:latest'
     environment:
@@ -53,6 +54,17 @@ services:
       - '3306'
     volumes:
       - 'data3:/data3'
+
+  redis-query:
+    image: 'redis:latest'
+    container_name: 'redis-query'
+    ports:
+      - '6379:6379'
+    expose:
+      - '6379'
+    volumes:
+      - 'data4:/data4'
+
   rabbitmq:
     image: 'rabbitmq:3.12.7-management-alpine'
     container_name: 'rabbitmq'
@@ -62,11 +74,60 @@ services:
     expose:
       - '5672'
       - '15672'
+
+  posts-microservice:
+    build: "./posts-microservice"
+    image: "posts-ms:v1"
+    container_name: "posts-microservice"
+    depends_on:
+      - rabbitmq
+      - mongodb-posts
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+
+  comments-microservice:
+    build: "./comments-microservice"
+    image: "comments-ms:v1"
+    container_name: "comments-microservice"
+    depends_on:
+      - rabbitmq
+      - mongodb-comments
+    ports:
+      - '8081:8081'
+    expose:
+      - '8081'
+
+  users-microservice:
+    build: "./users-microservice"
+    image: "users-ms:v1"
+    container_name: "users-microservice"
+    depends_on:
+      - rabbitmq
+      - mariadb
+    ports:
+      - '8082:8082'
+    expose:
+      - '8082'
+
+  topics-microservice:
+    build: "./topics-microservice"
+    image: "topics-ms:v1"
+    container_name: "topics-microservice"
+    depends_on:
+      - rabbitmq
+      - mongodb-topics
+    ports:
+      - '8084:8084'
+    expose:
+      - '8084'
 volumes:
   data: {}
   data1: {}
   data2: {}
   data3: {}
+  data4: {}
 networks:
   default:
     name: 'socialsync_network'
