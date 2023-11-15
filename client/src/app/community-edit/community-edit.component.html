@@ -1,0 +1,52 @@
+<app-navbar-disconnected></app-navbar-disconnected>
+<div class="container-fluid m-0 p-0">
+    <div class="row m-0 p-0">
+
+        <div class="full-div d-flex col-lg-2 col-0  m-0 p-0 d-none d-lg-block">
+            <app-navbar-horizontally></app-navbar-horizontally>
+        </div>
+
+        <div class="col-lg-10 col-12 m-0 p-5 ontent d-flex justify-content-center align-items-center">
+            <div class="edit-form col-lg-6 col-10">
+                <h2>Edit Community</h2>
+                <form (ngSubmit)="saveChanges()">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" [(ngModel)]="community.name" name="name"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" id="description" [(ngModel)]="community.description"
+                            name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ageRestriction">Age Restriction:</label>
+                        <input type="checkbox" class="form-check-input" id="ageRestriction"
+                            [(ngModel)]="community.ageRestriction" name="ageRestriction">
+                    </div>
+                    <div class="form-group">
+                        <label for="creatorId">Creator ID:</label>
+                        <input type="text" class="form-control" id="creatorId" [(ngModel)]="community.creatorId"
+                            name="creatorId" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="members">Members:</label>
+                        <ul>
+                            <li *ngFor="let memberId of community.memberIds">
+                                <span>{{ memberId }}</span>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label for="photo">Community Photo:</label>
+                        <input type="file" class="form-control-file" id="photo" name="photo"
+                            (change)="onPhotoChange($event)">
+                    </div>
+                    <button id="sub" type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
