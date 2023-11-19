@@ -11,6 +11,7 @@
 .navbar-horizontally{
    /* border-right: 2px solid rgba(0, 0, 0, 1);*/
     height: 100vh;
+    margin-top: 40px;
 }
 
 hr{
@@ -26,14 +27,15 @@ hr{
 a{
     display: block;
     text-decoration: none;
-    color: #000;
+    color: #000000;
     font-size: 1.25em;
 }
 
 a:hover{
     cursor: pointer;
-    color: #FF4433;
+
     text-decoration: underline;
+    color: #FF4433;
 }
 
 .text-secondary:hover{

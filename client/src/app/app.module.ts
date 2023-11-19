@@ -37,6 +37,8 @@ import { ProfileLinkProfileComponent } from './profile-link-profile/profile-link
 import { ProfileLinkPostsComponent } from './profile-link-posts/profile-link-posts.component';
 import { ProfileLinkCommentsComponent } from './profile-link-comments/profile-link-comments.component';
 import { ProfileLinkSavedComponent } from './profile-link-saved/profile-link-saved.component';
+import { LoginComponent } from './login/login.component';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 
 const routes: Routes = [
@@ -53,12 +55,14 @@ const routes: Routes = [
   { path: 'unauthorized', component: UnauthorizedComponent },  // ok
   { path: "full-post/:id", component: FullPostPageComponent },
   { path: "links", component: LinksComponent },
-  { path: "community", component: CommunityComponent},
-  { path: "p-c", component: ProfileCardComponent},
-  { path: "p-n", component: ProfileNavComponent},
-  { path: "p", component: ProfileComponent},
+  { path: "community", component: CommunityComponent },
+  { path: "p-c", component: ProfileCardComponent },
+  { path: "p-n", component: ProfileNavComponent },
+  { path: "p", component: ProfileComponent },
   { path: "see-profile", component: ProfileLinkProfileComponent },
-  { path: "see-posts", component: ProfileLinkPostsComponent} 
+  { path: "see-posts", component: ProfileLinkPostsComponent },
+  { path: "login", component: LoginComponent },
+  { path: "create-account", component: CreateAccountComponent }
 ];
 
 
@@ -94,7 +98,9 @@ const routes: Routes = [
     ProfileLinkProfileComponent,
     ProfileLinkPostsComponent,
     ProfileLinkCommentsComponent,
-    ProfileLinkSavedComponent
+    ProfileLinkSavedComponent,
+    LoginComponent,
+    CreateAccountComponent
   ],
   imports: [
     BrowserModule,
