@@ -1,1 +1,4 @@
-<p>profile-link-comments works!</p>
+<div *ngFor="let profileComment of Comments">
+    <app-profile-comment [data]="profileComment"></app-profile-comment>
+  </div>
+  

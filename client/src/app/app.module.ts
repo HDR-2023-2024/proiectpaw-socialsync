@@ -39,6 +39,8 @@ import { ProfileLinkCommentsComponent } from './profile-link-comments/profile-li
 import { ProfileLinkSavedComponent } from './profile-link-saved/profile-link-saved.component';
 import { LoginComponent } from './login/login.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
+import { ProfileCommentComponent } from './profile-comment/profile-comment.component';
+import { CommunityEditComponent } from './community-edit/community-edit.component';
 
 
 const routes: Routes = [
@@ -62,7 +64,10 @@ const routes: Routes = [
   { path: "see-profile", component: ProfileLinkProfileComponent },
   { path: "see-posts", component: ProfileLinkPostsComponent },
   { path: "login", component: LoginComponent },
-  { path: "create-account", component: CreateAccountComponent }
+  { path: "create-account", component: CreateAccountComponent },
+  { path: "see-posts", component: ProfileLinkPostsComponent},
+  { path: "p-com", component: ProfileCommentComponent},
+  { path: "c-e", component: CommunityEditComponent}
 ];
 
 
@@ -100,7 +105,9 @@ const routes: Routes = [
     ProfileLinkCommentsComponent,
     ProfileLinkSavedComponent,
     LoginComponent,
-    CreateAccountComponent
+    CreateAccountComponent,
+    ProfileCommentComponent,
+    CommunityEditComponent
   ],
   imports: [
     BrowserModule,
