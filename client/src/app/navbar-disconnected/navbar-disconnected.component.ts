@@ -12,10 +12,10 @@ export class NavbarDisconnectedComponent implements OnInit {
     const searchInput = document.getElementById("search-input") as HTMLInputElement;
 
     if (searchInput) {
-      searchInput.addEventListener("keyup", function(event) {
+      searchInput.addEventListener("keyup", function (event) {
         if (event.key === "Enter") {
           const inputValue = searchInput.value;
-          console.log( inputValue);
+          console.log(inputValue);
         }
       });
     }
@@ -23,29 +23,34 @@ export class NavbarDisconnectedComponent implements OnInit {
   isHomeLink: boolean = false;
   isShowUserMenu = false;
 
-  constructor(private router: Router,public authService : AuthService) {}
+  constructor(private router: Router, public authService: AuthService) { }
 
 
   navigateMobileMenu() {
-    this.isHomeLink = !this.isHomeLink; 
+    this.isHomeLink = !this.isHomeLink;
 
     if (this.isHomeLink) {
-      this.router.navigate(['/home']); 
+      this.router.navigate(['/home']);
     } else {
-      this.router.navigate(['/home-menu']); 
+      this.router.navigate(['/home-menu']);
     }
   }
 
   onLoginClick() {
-    this.authService.login();
+    this.router.navigate(['/login']);
   }
 
-  showUserMenu(){
+  showUserMenu() {
     this.isShowUserMenu = !this.isShowUserMenu;
   }
 
-  onLogOutClick(){
+  onLogOutClick() {
     this.authService.logout();
     this.isShowUserMenu = false;
   }
+
+  onSignUpClick(): void {
+    this.router.navigate(['/create-account']);
+  }
+
 }

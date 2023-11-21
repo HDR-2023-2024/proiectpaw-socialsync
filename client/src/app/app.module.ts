@@ -41,6 +41,7 @@ import { LoginComponent } from './login/login.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
 import { ProfileCommentComponent } from './profile-comment/profile-comment.component';
 import { CommunityEditComponent } from './community-edit/community-edit.component';
+import { HelpSiteComponent } from './help-site/help-site.component';
 
 
 const routes: Routes = [
@@ -67,7 +68,8 @@ const routes: Routes = [
   { path: "create-account", component: CreateAccountComponent },
   { path: "see-posts", component: ProfileLinkPostsComponent},
   { path: "p-com", component: ProfileCommentComponent},
-  { path: "c-e", component: CommunityEditComponent}
+  { path: "c-e", component: CommunityEditComponent},
+  { path: "help", component: HelpSiteComponent}
 ];
 
 
@@ -107,7 +109,8 @@ const routes: Routes = [
     LoginComponent,
     CreateAccountComponent,
     ProfileCommentComponent,
-    CommunityEditComponent
+    CommunityEditComponent,
+    HelpSiteComponent
   ],
   imports: [
     BrowserModule,

@@ -56,3 +56,9 @@ input,select {
         margin-top: -120px;
     }
 }
+
+#errorCreateAccount{
+    font-size: 1em;
+    text-align:end;
+    color: #ff0000;
+}

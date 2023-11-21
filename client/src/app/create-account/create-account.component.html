@@ -21,15 +21,21 @@
                     </select>
                     <br><br>
                     <label for="pass">Parola*</label><br>
-                    <input type="text" id="pass" name="pass" [(ngModel)]="formData.password" required><br><br>
+                    <input type="text" id="pass" name="pass" [(ngModel)]="formData.password"
+                        (ngModelChange)="onPasswordChange()" required><br><br>
 
-                    <label for="pass">Repetare parolă*</label><br>
-                    <input type="text" id="pass" name="pass" [(ngModel)]="formData.password2" required><br><br>
 
+                    <label for="pass2">Repetare parolă*</label><br>
+                    <input type="text" id="pass2" name="pass2"  [(ngModel)]="formData.password2"(ngModelChange)="onPasswordChange()" required><br><br>
+
+
+                    <p id="errorCreateAccount" class="m-0 p-0" *ngIf="!authService.isUserLoggedIn()">{{ formData.error
+                        }}</p>
                     <br>
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn contact-btn" [disabled]="!myForm.valid">Conectare</button>
+                        <button type="submit" class="btn contact-btn" [disabled]="(!myForm.valid || isValid)">Conectare</button>
                     </div>
+                    <br>
                 </form>
             </div>
             <div class="col-0 col-lg-6 div-contact m-0 p-0">

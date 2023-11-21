@@ -20,7 +20,7 @@
             <img src="assets/images/search.svg" alt="logo" id="search-icon-small" class="d-block d-sm-none">
             <button type="button" class="btn my-auto" id="login-btn" (click)=" onLoginClick()"
                 *ngIf="!authService.isUserLoggedIn()">Log in</button>
-            <button type="button" class="btn my-auto" id="login-btn" *ngIf="!authService.isUserLoggedIn()">Sign Up</button>
+            <button type="button" class="btn my-auto" id="login-btn" *ngIf="!authService.isUserLoggedIn()" (click)="onSignUpClick()">Sign Up</button>
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
                 *ngIf="authService.isUserLoggedIn()" class="navbar-ico px-2 my-auto py-0">
                 <path
