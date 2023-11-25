@@ -40,15 +40,6 @@ public class UsersController {
         this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
     }
 
-    //TO DO: DELETE ########## DOAR PT. DEBUG
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue}")
-    void receiveMessage(String msg) {
-       UserQueueMessage user =  gson.fromJson(msg, UserQueueMessage.class);
-
-        System.out.println("Result: " + user.getType() + " " +gson.toJson(user.getUser()));
-    }
-    //#########################
-
     @GetMapping
     public ResponseEntity<HashMap<Long, UserSelect>> fetchAllUsers() {
         return new ResponseEntity<>(usersService.fetchAllUsers(), HttpStatus.OK);

@@ -38,13 +38,6 @@ public class TopicController {
         this.amqpTemplate.convertAndSend(connectionFactory.getExchange(),connectionFactory.getRoutingKey(), json);
     }
 
-    //TO DO: DELETE ########## DOAR PT. DEBUG
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue}")
-    void receiveMessage(String msg) {
-        System.out.println(gson.fromJson(msg, TopicQueueMessage.class).toString());
-    }
-    //#########################
-
     @GetMapping
     public ResponseEntity<HashMap<String, Topic>> fetchAllPosts() {
         return new ResponseEntity<>(topicService.fetchAllTopics(), HttpStatus.OK);

@@ -41,13 +41,6 @@ public class CommentsController {
         this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
     }
 
-    //TO DO: DELETE ########## DOAR PT. DEBUG
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue}")
-    void receiveMessage(String msg) {
-        System.out.println(gson.fromJson(msg, CommentQueueMessage.class).toString());
-    }
-    //#########################
-
     @GetMapping
     public ResponseEntity<HashMap<String, Comment>> fetchAllComments() {
         return new ResponseEntity<>(commentsService.fetchAllComments(), HttpStatus.OK);

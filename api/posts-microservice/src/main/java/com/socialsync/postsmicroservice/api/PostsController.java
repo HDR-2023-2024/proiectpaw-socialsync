@@ -41,13 +41,6 @@ public class PostsController {
         this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
     }
 
-    //TO DO: DELETE ########## DOAR PT. DEBUG
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue}")
-    void receiveMessage(String msg) {
-        System.out.println(gson.fromJson(msg, PostQueueMessage.class).toString());
-    }
-    //#########################
-
     @GetMapping
     public ResponseEntity<HashMap<String, Post>> fetchAllPosts() {
         return new ResponseEntity<>(postsService.fetchAllPosts(), HttpStatus.OK);
