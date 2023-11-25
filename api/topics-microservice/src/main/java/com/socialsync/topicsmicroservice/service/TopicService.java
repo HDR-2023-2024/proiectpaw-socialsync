@@ -45,8 +45,6 @@ public class TopicService implements TopicServiceMethods {
             elem.setDescription(topic.getDescription());
             elem.setAgeRestriction(topic.getAgeRestriction());
             elem.setPhotoId(topic.getPhotoId());
-            elem.setMemberIds(topic.getMemberIds());
-            elem.setPostIds(topic.getPostIds());
             elem.setCreatorId(topic.getCreatorId());
             elem.setTimestampUpdated(Instant.now().getEpochSecond());
             repository.save(elem);

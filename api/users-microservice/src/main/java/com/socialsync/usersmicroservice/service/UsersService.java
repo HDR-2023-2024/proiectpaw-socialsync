@@ -15,8 +15,8 @@ public class UsersService implements UsersServiceMethods {
     private UserRepository repository;
 
     @Override
-    public HashMap<Long, UserSelect> fetchAllUsers() {
-        HashMap<Long, UserSelect> list = new HashMap<>();
+    public HashMap<String, UserSelect> fetchAllUsers() {
+        HashMap<String, UserSelect> list = new HashMap<>();
 
         List<User> users =  repository.findAll();
 
@@ -27,7 +27,7 @@ public class UsersService implements UsersServiceMethods {
     }
 
     @Override
-    public UserSelect fetchUserById(Long id)  throws  Exception {
+    public UserSelect fetchUserById(String id)  throws  Exception {
         //Long id, String username, String email, String role, GenderType gender
         User user =  repository.findById(id).orElseThrow(() -> new Exception("Not found: " + id));
         return  new UserSelect(user.getId(),user.getUsername(),user.getEmail(),user.getRole(),user.getGender());
@@ -39,7 +39,7 @@ public class UsersService implements UsersServiceMethods {
     }
 
     @Override
-    public void updateUser(Long id, User user) throws Exception {
+    public void updateUser(String id, User user) throws Exception {
         repository.findById(id).map(elem -> {
             elem.setUsername(user.getUsername());
             elem.setEmail(user.getEmail());
@@ -54,7 +54,7 @@ public class UsersService implements UsersServiceMethods {
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(String id) {
         repository.deleteById(id);
     }
 }

@@ -41,12 +41,12 @@ public class UsersController {
     }
 
     @GetMapping
-    public ResponseEntity<HashMap<Long, UserSelect>> fetchAllUsers() {
+    public ResponseEntity<HashMap<String, UserSelect>> fetchAllUsers() {
         return new ResponseEntity<>(usersService.fetchAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> fetchUserById(@PathVariable Long id) {
+    public ResponseEntity<Object> fetchUserById(@PathVariable String id) {
         try {
             return new ResponseEntity<>(usersService.fetchUserById(id), HttpStatus.OK);
         } catch (Exception ex) {
@@ -63,7 +63,7 @@ public class UsersController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
         try {
             usersService.updateUser(id, user);
             sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, user));
@@ -75,7 +75,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
         usersService.deleteUser(id);
         User dummyUser = new User();
         dummyUser.setId(id);

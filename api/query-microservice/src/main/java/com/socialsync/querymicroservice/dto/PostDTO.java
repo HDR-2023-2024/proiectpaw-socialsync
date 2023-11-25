@@ -1,12 +1,12 @@
 package com.socialsync.querymicroservice.dto;
 
+import com.redis.om.spring.annotations.Document;
 import com.socialsync.querymicroservice.pojo.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Reference;
-import org.springframework.data.redis.core.RedisHash;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +14,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash
+@Document
 public class PostDTO {
     @Id
     private String id;

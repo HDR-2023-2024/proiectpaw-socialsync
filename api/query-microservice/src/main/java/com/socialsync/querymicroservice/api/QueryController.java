@@ -6,17 +6,18 @@ import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.querymicroservice.pojo.PostQueueMessage;
 import com.socialsync.querymicroservice.pojo.TopicQueueMessage;
 import com.socialsync.querymicroservice.pojo.UserQueueMessage;
-import com.socialsync.querymicroservice.service.QueryService;
+import com.socialsync.querymicroservice.service.QueryQueryService;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/query")
@@ -30,9 +31,7 @@ public class QueryController {
 
     private Gson gson;
 
-    private RedisTemplate<String, String> template;
-
-    private QueryService queryService;
+    private QueryQueryService queryService;
 
     @Bean
     void initTemplate() {
@@ -85,29 +84,62 @@ public class QueryController {
 
     @GetMapping("/comments")
     public ResponseEntity<?> fetchComments(@NotNull @RequestParam Integer page) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllComments(page == 0 ? page : page < 0 ? 0 : page - 1));
+                .body(queryService.fetchAllComments(parsedPage));
+    }
+
+
+    @GetMapping("/post/{id}/comments")
+    public ResponseEntity<?> fetchCommentsForPost(@NotNull @PathVariable String id, @NotNull @RequestParam Integer page) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
+        return ResponseEntity
+                .ok()
+                .body(queryService.fetchAllCommentsByPostId(parsedPage, id));
     }
 
     @GetMapping("/posts")
     public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllPosts(page == 0 ? page : page < 0 ? 0 : page - 1));
+                .body(queryService.fetchAllPosts(parsedPage));
     }
 
-    @GetMapping("/users")
-    public ResponseEntity<?> fetchUsers(@NotNull @RequestParam Integer page) {
+    @GetMapping("/topic/{id}/posts")
+    public ResponseEntity<?> fetchPostsByTopicId(@NotNull @PathVariable String id, @NotNull @RequestParam Integer page) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllUsers(page == 0 ? page : page < 0 ? 0 : page - 1));
+                .body(queryService.fetchAllPostByTopicId(parsedPage, id));
     }
 
     @GetMapping("/topics")
-    public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page) {
-        return ResponseEntity
-                .ok()
-                .body(queryService.fetchAllTopics(page == 0 ? page : page < 0 ? 0 : page - 1));
+    public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page, @RequestParam Optional<String> name) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
+        if (name.isPresent())
+            return ResponseEntity
+                    .ok()
+                    .body(queryService.fetchAllTopicsByName(name.get()));
+        else
+            return ResponseEntity
+                    .ok()
+                    .body(queryService.fetchAllTopics(parsedPage));
     }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> fetchUsers(@NotNull @RequestParam Integer page, @RequestParam Optional<String> username) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
+        if (username.isPresent())
+            return ResponseEntity
+                    .ok()
+                    .body(queryService.fetchAllUsersByUsername(username.get(), parsedPage));
+        else
+            return ResponseEntity
+                    .ok()
+                    .body(queryService.fetchAllUsers(parsedPage));
+    }
+
+//    public ResponseEntity<?> fetchUserComments()
 }

@@ -56,14 +56,16 @@ services:
       - 'data3:/data3'
 
   redis-query:
-    image: 'redis:latest'
+    image: 'redis/redis-stack:latest'
+    environment:
+      - 'REDIS_ARGS=--appendonly yes'
     container_name: 'redis-query'
     ports:
       - '6379:6379'
+      - '8001:8001'
     expose:
       - '6379'
-    volumes:
-      - 'data4:/data4'
+      - '8001'
 
   rabbitmq:
     image: 'rabbitmq:3.12.7-management-alpine'
@@ -127,7 +129,6 @@ volumes:
   data1: {}
   data2: {}
   data3: {}
-  data4: {}
 networks:
   default:
     name: 'socialsync_network'

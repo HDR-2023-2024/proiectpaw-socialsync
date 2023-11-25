@@ -1,18 +1,18 @@
 package com.socialsync.querymicroservice.dto;
 
+import com.redis.om.spring.annotations.Document;
 import com.socialsync.querymicroservice.pojo.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Reference;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RedisHash
+@Document
 public class CommentDTO {
     @Id
     private String id;

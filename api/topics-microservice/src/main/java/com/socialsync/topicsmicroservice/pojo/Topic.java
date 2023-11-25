@@ -19,10 +19,7 @@ public class Topic {
 
     private Integer photoId;
 
-    private List<String> postIds;
-
     private String creatorId;
-    private List<String> memberIds;
 
     private Long timestampCreated;
     private Long timestampUpdated;

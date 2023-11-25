@@ -10,5 +10,5 @@ import lombok.ToString;
 @Getter
 public class UserQueueMessage {
     private QueueMessageType type;
-    private UserSelect user;
+    private User user;
 }
