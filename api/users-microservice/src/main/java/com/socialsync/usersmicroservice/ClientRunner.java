@@ -1,17 +1,18 @@
 package com.socialsync.usersmicroservice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.socialsync.usersmicroservice.pojo.User;
 import com.socialsync.usersmicroservice.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.core.type.TypeReference;
-import java.io.File;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+// nu mai am nevoie de client runner
 @Component
-public class ClientRunner implements CommandLineRunner {
+@EnableScheduling
+public class ClientRunner  {
 
     @Autowired
     private UserRepository userRepository;
@@ -191,17 +192,33 @@ public class ClientRunner implements CommandLineRunner {
             "    \"role\": \"user\"\n" +
             "  }\n" +
             "]";
-    @Override
-    public void run(String... args) throws Exception {
-        userRepository.deleteAll();
-        if(userRepository.findAll().isEmpty()){
-            ObjectMapper objectMapper = new ObjectMapper();
+    User[] users;
+    private int currentIndex = 0;
 
-            User[] users = objectMapper.readValue(jsonString, User[].class);
-
-            for (User user : users) {
+    @Scheduled(fixedRate = 60000)
+    public void insertData() {
+        System.out.println("M-am apelat!");
+        try {
+            if (currentIndex < users.length) {
+                User user = users[currentIndex];
                 userRepository.save(user);
+                currentIndex++;
+            } else {
+                System.out.println("Am inserat tot");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @PostConstruct
+    public void deleteData() {
+        System.out.println("Am sters continutul");
+        try {
+            userRepository.deleteAll();
+            ObjectMapper objectMapper = new ObjectMapper();
+            this.users = objectMapper.readValue(jsonString, User[].class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
