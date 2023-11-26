@@ -149,10 +149,11 @@ public class QueryController {
                 .body(queryService.fetchAllCommentsByUserId(parsedPage, id));
     }
 
+    @GetMapping("/user/{id}/posts")
     public ResponseEntity<?> fetchUserPosts(@NotNull @RequestParam Integer page, @PathVariable String id) {
         Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService);
+                .body(queryService.fetchAllPostByUserId(parsedPage, id));
     }
 }

@@ -1,21 +1,76 @@
 package com.socialsync.commentsmicroservice.service;
 
+import com.google.gson.Gson;
+import com.socialsync.commentsmicroservice.components.RabbitMqConnectionFactoryComponent;
 import com.socialsync.commentsmicroservice.interfaces.CommentsServiceMethods;
 import com.socialsync.commentsmicroservice.pojo.Comment;
+import com.socialsync.commentsmicroservice.pojo.CommentQueueMessage;
+import com.socialsync.commentsmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.commentsmicroservice.repository.CommentRepository;
 import com.socialsync.commentsmicroservice.util.exceptions.CommentNotFound;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
+@EnableScheduling
 public class CommentsService implements CommentsServiceMethods {
 
     private CommentRepository repository;
+
+    private RabbitMqConnectionFactoryComponent conectionFactory;
+
+    private AmqpTemplate amqpTemplate;
+
+    private Gson gson;
+
+    @Bean
+    void initTemplate() {
+        this.amqpTemplate = conectionFactory.rabbitTemplate();
+    }
+
+    private void sendMessage(CommentQueueMessage comment) {
+        String json = gson.toJson(comment);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
+    }
+
+    void deleteEverything() {
+        repository.findAll().forEach(x -> deleteComment(x.getId()));
+    }
+
+    @Bean
+    void populateDb() {
+        deleteEverything();
+
+        List<String> reactie = List.of("NASPA", "MEH", "BUNA");
+
+        for (int i = 0;i < 100; i++) {
+            Comment comment = new Comment("-1", "-1", "POSTARE " + reactie.get(new Random().nextInt(reactie.size())) + " UNGA BUNGA!");
+            addComment(comment);
+        }
+    }
+
+    @Bean
+    @Scheduled(fixedDelay = 5000L)
+    void newRandomComment() {
+        List<String> reactie = List.of("NASPA", "MEH", "BUNA");
+        log.info("We have " + repository.findAll().size() + " comments");
+
+        if (repository.findAll().size() > 200)
+            deleteEverything();
+
+        Comment comment = new Comment("-1", "-1", "POSTARE " + reactie.get(new Random().nextInt(reactie.size())) + " UNGA BUNGA!");
+        addComment(comment);
+    }
 
     @Override
     public HashMap<String, Comment> fetchAllComments() {
@@ -38,6 +93,7 @@ public class CommentsService implements CommentsServiceMethods {
     public void addComment(Comment comment) {
         comment.setTimestampCreated(Instant.now().getEpochSecond());
         repository.insert(comment);
+        sendMessage(new CommentQueueMessage(QueueMessageType.CREATE, comment));
     }
 
     @Override
@@ -48,16 +104,21 @@ public class CommentsService implements CommentsServiceMethods {
             elem.setPostId(comment.getPostId());
             elem.setTimestampUpdated(Instant.now().getEpochSecond());
             repository.save(elem);
+            sendMessage(new CommentQueueMessage(QueueMessageType.UPDATE, comment));
             return elem;
         }).orElseThrow(() -> {
             comment.setTimestampCreated(Instant.now().getEpochSecond());
             repository.insert(comment);
+            sendMessage(new CommentQueueMessage(QueueMessageType.CREATE, comment));
             return new CommentNotFound("Comment not found. Created one instead.");
         });
     }
 
     @Override
     public void deleteComment(String id) {
+        Comment dummyComment = new Comment();
+        dummyComment.setId(id);
+        sendMessage(new CommentQueueMessage(QueueMessageType.DELETE, dummyComment));
         repository.deleteById(id);
     }
 }
