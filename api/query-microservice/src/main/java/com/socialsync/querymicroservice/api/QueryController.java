@@ -88,76 +88,68 @@ public class QueryController {
 
     @GetMapping("/comments")
     public ResponseEntity<?> fetchComments(@NotNull @RequestParam Integer page) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllComments(parsedPage));
+                .body(queryService.fetchAllComments(parsePage(page)));
     }
 
 
     @GetMapping("/post/{id}/comments")
     public ResponseEntity<?> fetchCommentsForPost(@NotNull @PathVariable String id, @NotNull @RequestParam Integer page) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllCommentsByPostId(parsedPage, id));
+                .body(queryService.fetchAllCommentsByPostId(parsePage(page), id));
     }
 
     @GetMapping("/posts")
     public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllPosts(parsedPage));
+                .body(queryService.fetchAllPosts(parsePage(page)));
     }
 
     @GetMapping("/topic/{id}/posts")
     public ResponseEntity<?> fetchPostsByTopicId(@NotNull @PathVariable String id, @NotNull @RequestParam Integer page) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllPostByTopicId(parsedPage, id));
+                .body(queryService.fetchAllPostByTopicId(parsePage(page), id));
     }
 
     @GetMapping("/topics")
     public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page, @RequestParam Optional<String> name) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
-        if (name.isPresent())
-            return ResponseEntity
+        return name.map(s -> ResponseEntity
                     .ok()
-                    .body(queryService.fetchAllTopicsByName(name.get()));
-        else
-            return ResponseEntity
+                    .body(queryService.fetchAllTopicsByName(s, page)))
+                .orElseGet(() -> ResponseEntity
                     .ok()
-                    .body(queryService.fetchAllTopics(parsedPage));
+                    .body(queryService.fetchAllTopics(parsePage(page))));
     }
 
     @GetMapping("/users")
     public ResponseEntity<?> fetchUsers(@NotNull @RequestParam Integer page, @RequestParam Optional<String> username) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
-        if (username.isPresent())
-            return ResponseEntity
+        return username.map(s -> ResponseEntity
                     .ok()
-                    .body(queryService.fetchAllUsersByUsername(username.get(), parsedPage));
-        else
-            return ResponseEntity
+                    .body(queryService.fetchAllUsersByUsername(s, parsePage(page))))
+                .orElseGet(() -> ResponseEntity
                     .ok()
-                    .body(queryService.fetchAllUsers(parsedPage));
+                    .body(queryService.fetchAllUsers(parsePage(page))));
     }
 
     @GetMapping("/user/{id}/comments")
     public ResponseEntity<?> fetchUserComments(@NotNull @RequestParam Integer page, @PathVariable String id) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllCommentsByUserId(parsedPage, id));
+                .body(queryService.fetchAllCommentsByUserId(parsePage(page), id));
     }
 
     @GetMapping("/user/{id}/posts")
     public ResponseEntity<?> fetchUserPosts(@NotNull @RequestParam Integer page, @PathVariable String id) {
-        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
         return ResponseEntity
                 .ok()
-                .body(queryService.fetchAllPostByUserId(parsedPage, id));
+                .body(queryService.fetchAllPostByUserId(parsePage(page), id));
+    }
+
+    private static Integer parsePage(Integer page) {
+        return page == 0 ? page : page < 0 ? 0 : page - 1;
     }
 }

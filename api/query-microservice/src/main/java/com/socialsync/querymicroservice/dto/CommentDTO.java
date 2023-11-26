@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.index.Indexed;
 @Document
 public class CommentDTO {
     @Id
+    @Indexed
     private String id;
 
     @Reference

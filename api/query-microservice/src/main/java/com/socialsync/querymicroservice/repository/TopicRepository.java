@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface TopicRepository extends RedisDocumentRepository<TopicDTO, String> {
     Page<TopicDTO> findAll(Pageable pageable);
-    List<TopicDTO> searchByName(String name);
+    Page<TopicDTO> searchByName(String name, Pageable pageable);
 }

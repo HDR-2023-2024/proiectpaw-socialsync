@@ -70,7 +70,7 @@ public class QueryQueryService implements QueryServiceMethods {
 
     @Override
     public Page<PostDTO> fetchAllPostByTopicId(Integer page, String topicId) {
-        return postRepository.findAllByTopicId(PageRequest.of(page, 10), topicId);
+        return postRepository.findAllByTopicId(topicId, PageRequest.of(page, 10));
     }
 
     @Override
@@ -79,8 +79,8 @@ public class QueryQueryService implements QueryServiceMethods {
     }
 
     @Override
-    public List<TopicDTO> fetchAllTopicsByName(String topicName) {
-        return topicRepository.searchByName(topicName);
+    public Page<TopicDTO> fetchAllTopicsByName(String topicName, Integer page) {
+        return topicRepository.searchByName(topicName + "*", PageRequest.of(page, 10));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class QueryQueryService implements QueryServiceMethods {
 
     @Override
     public Page<PostDTO> fetchAllPostByUserId(Integer page, String id) {
-        return postRepository.findAllByCreator_Id(PageRequest.of(page, 10), id);
+        return postRepository.findAllByCreator_Id(id, PageRequest.of(page, 10));
     }
 
 
@@ -203,7 +203,7 @@ public class QueryQueryService implements QueryServiceMethods {
         boolean override = creator.isEmpty() && Objects.equals(msgQ.getTopic().getCreatorId(), "-1");
 
         if (creator.isPresent() || override) {
-            topicDTO.setCreatorId(!override ? creator.get() : findRandomUser());
+            topicDTO.setCreator(!override ? creator.get() : findRandomUser());
             boolean topicExists = topicRepository.existsById(topicDTO.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {

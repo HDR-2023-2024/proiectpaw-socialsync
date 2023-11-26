@@ -1,6 +1,7 @@
 package com.socialsync.querymicroservice.dto;
 
 import com.redis.om.spring.annotations.Document;
+import com.redis.om.spring.annotations.Searchable;
 import com.socialsync.querymicroservice.pojo.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,9 +21,9 @@ public class TopicDTO {
     private String id;
 
     @Reference
-    private UserDTO creatorId;
+    private UserDTO creator;
 
-    @Indexed
+    @Searchable
     private String name;
     private String description;
     private Boolean ageRestriction;
