@@ -26,4 +26,6 @@ public interface QueryServiceMethods {
     Page<PostDTO> fetchAllPostByTopicId(Integer page, String topicId);
     Page<CommentDTO> fetchAllCommentsByPostId(Integer page, String postId);
     List<TopicDTO> fetchAllTopicsByName(String topicName);
+    Page<CommentDTO> fetchAllCommentsByUserId(Integer page, String id);
+    Page<PostDTO> fetchAllPostByUserId(Integer page, String id);
 }

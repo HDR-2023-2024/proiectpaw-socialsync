@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.exceptions.JedisDataException;
 
@@ -81,6 +82,16 @@ public class QueryQueryService implements QueryServiceMethods {
         return topicRepository.searchByName(topicName);
     }
 
+    @Override
+    public Page<CommentDTO> fetchAllCommentsByUserId(Integer page, String id) {
+        return commentRepository.findAllByCreator_Id(PageRequest.of(page, 10), id);
+    }
+
+    @Override
+    public Page<PostDTO> fetchAllPostByUserId(Integer page, String id) {
+        return postRepository.findAllByCreator_Id(PageRequest.of(page, 10), id);
+    }
+
 
     @Override
     public void handleComment(CommentQueueMessage msgQ) throws RuntimeException {
@@ -138,6 +149,7 @@ public class QueryQueryService implements QueryServiceMethods {
 
         if (parentTopicExists && creator.isPresent()) {
             boolean postExists = postRepository.existsById(postDTO.getId());
+            postDTO.setCreator(creator.get());
             switch (msgQ.getType()) {
                 case CREATE -> {
                     if (!postExists) {

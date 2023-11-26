@@ -18,7 +18,7 @@ import java.util.Set;
 public class PostDTO {
     @Id
     private String id;
-    private String creatorId;
+    private UserDTO creator;
     private String topicId;
     private String title;
     private String content;
@@ -31,7 +31,6 @@ public class PostDTO {
 
     public PostDTO(Post post) {
         this.id = post.getId();
-        this.creatorId = post.getCreatorId();
         this.topicId = post.getTopicId();
         this.title = post.getTitle();
         this.content = post.getContent();

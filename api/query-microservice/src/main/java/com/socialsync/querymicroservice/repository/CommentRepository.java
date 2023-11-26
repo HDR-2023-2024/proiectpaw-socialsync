@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends RedisDocumentRepository<CommentDTO, String> {
     Page<CommentDTO> findAll(Pageable pageable);
     Page<CommentDTO> findAllByPostId(Pageable pageable, String postId);
+
+    Page<CommentDTO> findAllByCreator_Id(Pageable pageable, String id);
 }

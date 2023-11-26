@@ -141,5 +141,18 @@ public class QueryController {
                     .body(queryService.fetchAllUsers(parsedPage));
     }
 
-//    public ResponseEntity<?> fetchUserComments()
+    @GetMapping("/user/{id}/comments")
+    public ResponseEntity<?> fetchUserComments(@NotNull @RequestParam Integer page, @PathVariable String id) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
+        return ResponseEntity
+                .ok()
+                .body(queryService.fetchAllCommentsByUserId(parsedPage, id));
+    }
+
+    public ResponseEntity<?> fetchUserPosts(@NotNull @RequestParam Integer page, @PathVariable String id) {
+        Integer parsedPage = page == 0 ? page : page < 0 ? 0 : page - 1;
+        return ResponseEntity
+                .ok()
+                .body(queryService);
+    }
 }
