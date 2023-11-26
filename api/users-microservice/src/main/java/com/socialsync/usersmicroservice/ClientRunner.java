@@ -154,7 +154,7 @@ public class ClientRunner implements CommandLineRunner {
             "    \"id\": null,\n" +
             "    \"username\": \"MariusDumitrescu\",\n" +
             "    \"password\": \"MariusPass123\",\n" +
-            "    \"email\": \"marius.dumitrescu@example.com\",\n" +
+            "    \"email\": \"marius1.dumitrescu@example.com\",\n" +
             "    \"gender\": \"man\",\n" +
             "    \"role\": \"user\"\n" +
             "  },\n" +
@@ -193,6 +193,7 @@ public class ClientRunner implements CommandLineRunner {
             "]";
     @Override
     public void run(String... args) throws Exception {
+        userRepository.deleteAll();
         if(userRepository.findAll().isEmpty()){
             ObjectMapper objectMapper = new ObjectMapper();
 
