@@ -10,5 +10,5 @@ public interface PostsServiceMethods {
     Post fetchPostById(String id) throws PostNotFound;
     void addPost(Post post);
     void updatePost(String id, Post post) throws PostNotFound;
-    void deletePost(String id);
+    void deletePost(String id) throws PostNotFound;
 }

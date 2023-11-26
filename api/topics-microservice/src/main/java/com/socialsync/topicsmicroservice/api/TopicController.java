@@ -21,22 +21,7 @@ import java.util.HashMap;
 @RequestMapping("api/v1/topics")
 @AllArgsConstructor
 public class TopicController {
-    private RabbitMqConnectionFactoryComponent connectionFactory;
-
     private final TopicService topicService;
-
-    private AmqpTemplate amqpTemplate;
-
-    private Gson gson;
-
-    @Bean
-    void initTemplate() { this.amqpTemplate = connectionFactory.rabbitTemplate(); }
-
-    private void sendMessage(TopicQueueMessage topic) {
-        String json = gson.toJson(topic);
-        System.out.println(json);
-        this.amqpTemplate.convertAndSend(connectionFactory.getExchange(),connectionFactory.getRoutingKey(), json);
-    }
 
     @GetMapping
     public ResponseEntity<HashMap<String, Topic>> fetchAllPosts() {
@@ -53,31 +38,28 @@ public class TopicController {
     }
 
     @PostMapping
-    public ResponseEntity<Topic> addPost(@RequestBody Topic post) {
-        topicService.addTopic(post);
-        sendMessage(new TopicQueueMessage(QueueMessageType.CREATE, post));
-
-        return new ResponseEntity<>(post, HttpStatus.CREATED);
+    public ResponseEntity<Topic> addPost(@RequestBody Topic topic) {
+        topicService.addTopic(topic);
+        return new ResponseEntity<>(topic, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Topic> updatePost(@PathVariable String id, @RequestBody Topic topic) {
         try {
             topicService.updateTopic(id, topic);
-            sendMessage(new TopicQueueMessage(QueueMessageType.UPDATE, topic));
             return new ResponseEntity<>(topic, HttpStatus.OK);
         } catch (TopicNotFound e) {
-            sendMessage(new TopicQueueMessage(QueueMessageType.CREATE, topic));
             return new ResponseEntity<>(topic, HttpStatus.CREATED);
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable String id) {
-        topicService.deleteTopic(id);
-        Topic dummyTopic = new Topic();
-        dummyTopic.setId(id);
-        sendMessage(new TopicQueueMessage(QueueMessageType.DELETE, dummyTopic));
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        try {
+            topicService.deleteTopic(id);
+            return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        } catch (TopicNotFound ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

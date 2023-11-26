@@ -18,12 +18,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.exceptions.JedisDataException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -101,8 +102,13 @@ public class QueryQueryService implements QueryServiceMethods {
         boolean parentPostExists = postRepository.existsById(commentDTO.getPostId());
         Optional<UserDTO> creator = userRepository.findById(msgQ.getComment().getCreatorId());
 
-        if (parentPostExists && creator.isPresent()) {
-            commentDTO.setCreator(creator.get());
+        boolean override = creator.isEmpty() && !parentPostExists && (msgQ.getComment().getCreatorId().equals("-1") || msgQ.getComment().getPostId().equals("-1"));
+
+        if (parentPostExists && creator.isPresent() || override) {
+            commentDTO.setCreator(!override ? creator.get() : findRandomUser());
+            if (override)
+                commentDTO.setPostId(findRandomPostId());
+
             log.info("Post and creator found for comment " + commentDTO.getId());
             boolean commentExists = commentRepository.existsById(commentDTO.getId());
             switch (msgQ.getType()) {
@@ -112,7 +118,7 @@ public class QueryQueryService implements QueryServiceMethods {
                         commentRepository.save(commentDTO);
                     }
                     else {
-                        throw new CommentException("Comment " + commentDTO.getId() + " already exists!");
+                        throw new CommentException("CREATE: Comment " + commentDTO.getId() + " already exists!");
                     }
                 }
                 case UPDATE -> {
@@ -122,7 +128,7 @@ public class QueryQueryService implements QueryServiceMethods {
                     }
                     else {
                         commentRepository.save(commentDTO);
-                        throw new CommentException("Comment " + commentDTO.getId() + " to be updated not found! Created instead!");
+                        throw new CommentException("UPDATE: Comment " + commentDTO.getId() + " to be updated not found! Created instead!");
                     }
                 }
                 case DELETE -> {
@@ -131,7 +137,7 @@ public class QueryQueryService implements QueryServiceMethods {
                         commentRepository.delete(commentDTO);
                     }
                     else
-                        throw new CommentException("Comment " + commentDTO.getId() + " to be deleted not found!");
+                        throw new CommentException("DELETE: Comment " + commentDTO.getId() + " to be deleted not found!");
 
                 }
             }
@@ -147,9 +153,14 @@ public class QueryQueryService implements QueryServiceMethods {
         Optional<UserDTO> creator = userRepository.findById(msgQ.getPost().getCreatorId());
         boolean parentTopicExists = topicRepository.existsById(postDTO.getTopicId());
 
-        if (parentTopicExists && creator.isPresent()) {
+        boolean override = creator.isEmpty() && !parentTopicExists && (msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1"));
+
+        if (parentTopicExists && creator.isPresent() || override) {
             boolean postExists = postRepository.existsById(postDTO.getId());
-            postDTO.setCreator(creator.get());
+            postDTO.setCreator(!override ? creator.get() : findRandomUser());
+            if (override)
+                postDTO.setTopicId(findRandomTopicId());
+
             switch (msgQ.getType()) {
                 case CREATE -> {
                     if (!postExists) {
@@ -157,7 +168,7 @@ public class QueryQueryService implements QueryServiceMethods {
                         postRepository.save(postDTO);
                     }
                     else
-                        throw new PostException("Post " + postDTO.getId() + " already exists!");
+                        throw new PostException("CREATE: Post " + postDTO.getId() + " already exists!");
                 }
                 case UPDATE -> {
                     if (postExists) {
@@ -166,7 +177,7 @@ public class QueryQueryService implements QueryServiceMethods {
                     }
                     else {
                         postRepository.save(postDTO);
-                        throw new PostException("Post " + postDTO.getId() + " does not exist! Created one instead!");
+                        throw new PostException("UPDATE: Post " + postDTO.getId() + " does not exist! Created one instead!");
                     }
                 }
                 case DELETE -> {
@@ -175,7 +186,7 @@ public class QueryQueryService implements QueryServiceMethods {
                         postRepository.delete(postDTO);
                     }
                     else
-                        throw new PostException("Post " + postDTO.getId() + " to be deleted not found!");
+                        throw new PostException("DELETE: Post " + postDTO.getId() + " to be deleted not found!");
                 }
             }
         }
@@ -189,9 +200,10 @@ public class QueryQueryService implements QueryServiceMethods {
         TopicDTO topicDTO = new TopicDTO(msgQ.getTopic());
 
         Optional<UserDTO> creator = userRepository.findById(msgQ.getTopic().getCreatorId());
+        boolean override = creator.isEmpty() && Objects.equals(msgQ.getTopic().getCreatorId(), "-1");
 
-        if (creator.isPresent()) {
-            topicDTO.setCreatorId(creator.get());
+        if (creator.isPresent() || override) {
+            topicDTO.setCreatorId(!override ? creator.get() : findRandomUser());
             boolean topicExists = topicRepository.existsById(topicDTO.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {
@@ -200,7 +212,7 @@ public class QueryQueryService implements QueryServiceMethods {
                         topicRepository.save(topicDTO);
                     }
                     else
-                        throw new TopicException("Topic " + topicDTO.getId()  + " already exists!");
+                        throw new TopicException("CREATE: Topic " + topicDTO.getId()  + " already exists!");
                 }
                 case UPDATE -> {
                     if (topicExists) {
@@ -209,7 +221,7 @@ public class QueryQueryService implements QueryServiceMethods {
                     }
                     else {
                         topicRepository.save(topicDTO);
-                        throw new TopicException("Topic " + topicDTO.getId() + " does not exist! Created one instead!");
+                        throw new TopicException("UPDATE: Topic " + topicDTO.getId() + " does not exist! Created one instead!");
                     }
                 }
                 case DELETE -> {
@@ -218,7 +230,7 @@ public class QueryQueryService implements QueryServiceMethods {
                         topicRepository.delete(topicDTO);
                     }
                     else
-                        throw new TopicException("Topic " + topicDTO.getId() + " to be deleted not found!");
+                        throw new TopicException("DELETE: Topic " + topicDTO.getId() + " to be deleted not found!");
                 }
             }
         }
@@ -239,7 +251,7 @@ public class QueryQueryService implements QueryServiceMethods {
                     userRepository.save(user);
                 }
                 else
-                    throw new UserException("User " + user.getId() + " already exists!");
+                    throw new UserException("CREATE: User " + user.getId() + " already exists!");
             }
             case UPDATE -> {
                 if (userExists) {
@@ -248,7 +260,7 @@ public class QueryQueryService implements QueryServiceMethods {
                 }
                 else {
                     userRepository.save(user);
-                    throw new UserException("User " + user.getId() + " does not exist! Created one instead!");
+                    throw new UserException("UPDATE: User " + user.getId() + " does not exist! Created one instead!");
                 }
             }
             case DELETE -> {
@@ -257,8 +269,23 @@ public class QueryQueryService implements QueryServiceMethods {
                     userRepository.delete(user);
                 }
                 else
-                    throw new UserException("User " + user.getId() + " does not exist!");
+                    throw new UserException("DELETE: User " + user.getId() + " does not exist!");
             }
         }
+    }
+
+    private UserDTO findRandomUser() {
+        List<UserDTO> firstPage = userRepository.findAll(PageRequest.of(0, 10)).getContent();
+        return firstPage.get(new Random().nextInt(firstPage.size()));
+    }
+
+    private String findRandomTopicId() {
+        List<TopicDTO> firstPage = topicRepository.findAll(PageRequest.of(0, 10)).getContent();
+        return firstPage.get(new Random().nextInt(firstPage.size())).getId();
+    }
+
+    private String findRandomPostId() {
+        List<PostDTO> firstPage = postRepository.findAll(PageRequest.of(0, 10)).getContent();
+        return firstPage.get(new Random().nextInt(firstPage.size())).getId();
     }
 }

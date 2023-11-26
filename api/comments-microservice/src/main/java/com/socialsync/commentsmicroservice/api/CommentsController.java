@@ -49,7 +49,11 @@ public class CommentsController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable String id) {
-        commentsService.deleteComment(id);
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        try {
+            commentsService.deleteComment(id);
+            return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        } catch (CommentNotFound ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

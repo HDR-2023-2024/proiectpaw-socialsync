@@ -10,5 +10,5 @@ public interface CommentsServiceMethods {
     Comment fetchCommentById(String id) throws CommentNotFound;
     void addComment(Comment comment);
     void updateComment(String id, Comment comment) throws CommentNotFound;
-    void deleteComment(String id);
+    void deleteComment(String id) throws CommentNotFound;
 }

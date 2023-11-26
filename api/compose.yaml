@@ -77,30 +77,6 @@ services:
       - '5672'
       - '15672'
 
-  posts-microservice:
-    build: "./posts-microservice"
-    image: "posts-ms:v1"
-    container_name: "posts-microservice"
-    depends_on:
-      - rabbitmq
-      - mongodb-posts
-    ports:
-      - '8080:8080'
-    expose:
-      - '8080'
-
-  comments-microservice:
-    build: "./comments-microservice"
-    image: "comments-ms:v1"
-    container_name: "comments-microservice"
-    depends_on:
-      - rabbitmq
-      - mongodb-comments
-    ports:
-      - '8081:8081'
-    expose:
-      - '8081'
-
   users-microservice:
     build: "./users-microservice"
     image: "users-ms:v1"
@@ -120,10 +96,40 @@ services:
     depends_on:
       - rabbitmq
       - mongodb-topics
+      - users-microservice
     ports:
       - '8084:8084'
     expose:
       - '8084'
+
+  posts-microservice:
+    build: "./posts-microservice"
+    image: "posts-ms:v1"
+    container_name: "posts-microservice"
+    depends_on:
+      - rabbitmq
+      - mongodb-posts
+      - users-microservice
+      - topics-microservice
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+
+  comments-microservice:
+    build: "./comments-microservice"
+    image: "comments-ms:v1"
+    container_name: "comments-microservice"
+    depends_on:
+      - rabbitmq
+      - mongodb-comments
+      - users-microservice
+      - posts-microservice
+    ports:
+      - '8081:8081'
+    expose:
+      - '8081'
+
 volumes:
   data: {}
   data1: {}

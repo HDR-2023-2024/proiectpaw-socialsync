@@ -21,24 +21,8 @@ import java.util.HashMap;
 @RequestMapping("api/v1/users")
 @AllArgsConstructor
 public class UsersController {
-    private RabbitMqConnectionFactoryComponent conectionFactory;
 
     private final UsersService usersService;
-
-    private AmqpTemplate amqpTemplate;
-
-    private Gson gson;
-
-    @Bean
-    void initTemplate() {
-        this.amqpTemplate = conectionFactory.rabbitTemplate();
-    }
-
-    private void sendMessage(UserQueueMessage user) {
-        String json = gson.toJson(user);
-        System.out.println(json);
-        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
-    }
 
     @GetMapping
     public ResponseEntity<HashMap<String, UserSelect>> fetchAllUsers() {
@@ -57,7 +41,6 @@ public class UsersController {
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody User user) {
         usersService.addUser(user);
-        sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -66,10 +49,8 @@ public class UsersController {
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
         try {
             usersService.updateUser(id, user);
-            sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, user));
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception ex) {
-            sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         }
     }
@@ -77,9 +58,6 @@ public class UsersController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id) {
         usersService.deleteUser(id);
-        User dummyUser = new User();
-        dummyUser.setId(id);
-        sendMessage(new UserQueueMessage(QueueMessageType.DELETE, dummyUser));
         return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
     }
 

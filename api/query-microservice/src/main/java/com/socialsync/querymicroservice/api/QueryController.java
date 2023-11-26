@@ -41,6 +41,7 @@ public class QueryController {
     void receiveCommentMessage(String msg) {
         CommentQueueMessage msgQ = gson.fromJson(msg, CommentQueueMessage.class);
         try {
+            log.info(msgQ.getComment().toString());
             queryService.handleComment(msgQ);
         }
         catch (RuntimeException ex) {
@@ -53,6 +54,7 @@ public class QueryController {
         PostQueueMessage msgQ = gson.fromJson(msg, PostQueueMessage.class);
 
         try {
+            log.info(msgQ.getPost().toString());
             queryService.handlePost(msgQ);
         }
         catch (RuntimeException ex) {
@@ -64,6 +66,7 @@ public class QueryController {
     void receiveUserMessage(String msg) {
         UserQueueMessage msgQ =  gson.fromJson(msg, UserQueueMessage.class);
         try {
+            log.info(msgQ.getUser().toString());
             queryService.handleUser(msgQ);
         }
         catch (RuntimeException ex) {
@@ -75,6 +78,7 @@ public class QueryController {
     void receiveTopicMessage(String msg) {
         TopicQueueMessage msgQ = gson.fromJson(msg, TopicQueueMessage.class);
         try {
+            log.info(msgQ.getTopic().toString());
             queryService.handleTopic(msgQ);
         }
         catch (RuntimeException ex) {

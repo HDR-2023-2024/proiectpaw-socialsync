@@ -22,24 +22,7 @@ import java.util.HashMap;
 @AllArgsConstructor
 public class PostsController {
 
-    private RabbitMqConnectionFactoryComponent conectionFactory;
-
     private final PostsService postsService;
-
-    private AmqpTemplate amqpTemplate;
-
-    private Gson gson;
-
-    @Bean
-    void initTemplate() {
-        this.amqpTemplate = conectionFactory.rabbitTemplate();
-    }
-
-    private void sendMessage(PostQueueMessage post) {
-        String json = gson.toJson(post);
-        System.out.println(json);
-        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
-    }
 
     @GetMapping
     public ResponseEntity<HashMap<String, Post>> fetchAllPosts() {
@@ -58,7 +41,6 @@ public class PostsController {
     @PostMapping
     public ResponseEntity<Post> addPost(@RequestBody Post post) {
         postsService.addPost(post);
-        sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
 
         return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
@@ -67,20 +49,19 @@ public class PostsController {
     public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody Post post) {
         try {
             postsService.updatePost(id, post);
-            sendMessage(new PostQueueMessage(QueueMessageType.UPDATE, post));
             return new ResponseEntity<>(post, HttpStatus.OK);
         } catch (PostNotFound ex) {
-            sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
             return new ResponseEntity<>(post, HttpStatus.CREATED);
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable String id) {
-        postsService.deletePost(id);
-        Post dummyPost = new Post();
-        dummyPost.setId(id);
-        sendMessage(new PostQueueMessage(QueueMessageType.DELETE, dummyPost));
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        try {
+            postsService.deletePost(id);
+            return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        } catch (PostNotFound ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

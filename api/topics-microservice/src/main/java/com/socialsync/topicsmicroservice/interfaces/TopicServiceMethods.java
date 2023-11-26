@@ -10,5 +10,5 @@ public interface TopicServiceMethods {
     Topic fetchTopicById(String id) throws TopicNotFound;
     void addTopic(Topic topic);
     void updateTopic(String id, Topic topic) throws TopicNotFound;
-    void deleteTopic(String id);
+    void deleteTopic(String id) throws TopicNotFound;
 }

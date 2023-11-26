@@ -44,7 +44,13 @@ public class CommentsService implements CommentsServiceMethods {
     }
 
     void deleteEverything() {
-        repository.findAll().forEach(x -> deleteComment(x.getId()));
+        repository.findAll().forEach(x -> {
+            try {
+                deleteComment(x.getId());
+            } catch (CommentNotFound e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Bean
@@ -115,10 +121,14 @@ public class CommentsService implements CommentsServiceMethods {
     }
 
     @Override
-    public void deleteComment(String id) {
-        Comment dummyComment = new Comment();
-        dummyComment.setId(id);
-        sendMessage(new CommentQueueMessage(QueueMessageType.DELETE, dummyComment));
-        repository.deleteById(id);
+    public void deleteComment(String id) throws CommentNotFound {
+        Optional<Comment> comment = repository.findById(id);
+
+        if (comment.isPresent()) {
+            repository.deleteById(id);
+            sendMessage(new CommentQueueMessage(QueueMessageType.DELETE, comment.get()));
+        }
+        else
+            throw new CommentNotFound("Comment not found");
     }
 }
