@@ -1,21 +1,17 @@
 package com.socialsync.usersmicroservice.api;
 
-import com.google.gson.Gson;
-import com.socialsync.usersmicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.usersmicroservice.pojo.Credentials;
 import com.socialsync.usersmicroservice.pojo.User;
-import com.socialsync.usersmicroservice.pojo.UserQueueMessage;
 import com.socialsync.usersmicroservice.pojo.UserSelect;
-import com.socialsync.usersmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.usersmicroservice.service.UsersService;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -34,32 +30,92 @@ public class UsersController {
         try {
             return new ResponseEntity<>(usersService.fetchUserById(id), HttpStatus.OK);
         } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<UserSelect> addUser(@RequestBody User user) {
         usersService.addUser(user);
-
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        String token = usersService.generateJWT(user.getId());
+        HttpHeaders responseHeaders = new HttpHeaders();
+        //Authorization: Bearer token
+        responseHeaders.set("Authorization", "Bearer " + token);
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(new UserSelect(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getGender()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserSelect user) {
         try {
             usersService.updateUser(id, user);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id) {
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
         usersService.deleteUser(id);
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Credentials credentials) {
+        User user = usersService.login(credentials);
+        if (user != null) {
+            String token = usersService.generateJWT(user.getId());
+            HttpHeaders responseHeaders = new HttpHeaders();
+            //Authorization: Bearer token
+            responseHeaders.set("Authorization",
+                    "Bearer " + token);
 
+            return ResponseEntity.ok()
+                    .headers(responseHeaders)
+                    .body(new UserSelect(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getGender()));
+        } else {
+            return new ResponseEntity<>("Datele de autentificare nu sunt valide!", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PutMapping("/updatePassword/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable String id,@RequestBody String password) {
+        usersService.updatePassword(id,password);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/validateJWT")
+    public ResponseEntity<?> validateToken(@RequestBody String token) {
+        try {
+            String result = this.usersService.isValidJWT(token);
+            if (result != null) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/testMethod")
+    public ResponseEntity<?> testToken() {
+        try {
+            String token = usersService.generateJWT("12334");
+            //token += "a";
+            String ok = usersService.isValidJWT(token);
+            System.out.println("Id la validate: " + ok);
+            if(Objects.equals(ok, "12334")){
+                return  new ResponseEntity<>(HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

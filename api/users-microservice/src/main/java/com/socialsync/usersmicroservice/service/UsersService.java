@@ -3,6 +3,7 @@ package com.socialsync.usersmicroservice.service;
 import com.google.gson.Gson;
 import com.socialsync.usersmicroservice.components.RabbitMqConnectionFactoryComponent;
 import com.socialsync.usersmicroservice.interfaces.UsersServiceMethods;
+import com.socialsync.usersmicroservice.pojo.Credentials;
 import com.socialsync.usersmicroservice.pojo.User;
 import com.socialsync.usersmicroservice.pojo.UserQueueMessage;
 import com.socialsync.usersmicroservice.pojo.UserSelect;
@@ -19,10 +20,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+
+import io.jsonwebtoken.Claims;
 
 @AllArgsConstructor
 @Service
@@ -30,6 +34,7 @@ import java.util.Random;
 @Slf4j
 public class UsersService implements UsersServiceMethods {
     private UserRepository repository;
+    private JWTService jwtService;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
 
@@ -38,28 +43,28 @@ public class UsersService implements UsersServiceMethods {
     private Gson gson;
 
     static List<User> users = List.of(
-        new User("timofteIorgu", "myPassword", "timofteIorgu@gmail.com", GenderType.man, RoleType.admin),
-                new User("ciocoiuMatei", "imiPlacParoleleComplicate", "ciocoiuMatei@gmail.com", GenderType.man, RoleType.admin),
-                new User("tomaIon", "tomaIonPassword1234", "tomaIon@gmail.com", GenderType.man, RoleType.user),
-                new User("tomaMaria", "tomaMaria.12CatelusCuParulCret", "tomaMaria@gmail.com", GenderType.woman, RoleType.user),
-                new User( "johnDoe", "johnDoe123!Pass", "johnDoe@example.com", GenderType.man, RoleType.user),
-                new User("janeSmith", "janeSmith@456", "janeSmith@gmail.com", GenderType.woman, RoleType.user),
-                new User("alexJohnson", "alexJohnsonPass", "alexJohnson@yahoo.com", GenderType.woman, RoleType.user),
-                new User( "emilyBrown", "emilyBrownPwd", "emilyBrown@hotmail.com", GenderType.woman, RoleType.user),
-                new User( "michaelClark", "michaelClarkPass", "michaelClark@gmail.com", GenderType.man, RoleType.user),
-                new User( "sarahWhite", "sarahWhitePwd", "sarahWhite@yahoo.com", GenderType.woman, RoleType.user),
-                new User("davidTaylor", "davidTaylor123", "davidTaylor@hotmail.com", GenderType.man, RoleType.user),
-                new User("oliviaMartin", "oliviaMartinPwd", "oliviaMartin@gmail.com", GenderType.woman, RoleType.user),
-                new User("chrisMiller", "chrisMillerPwd", "chrisMiller@yahoo.com", GenderType.man, RoleType.user),
-                new User( "amandaYoung", "amandaYoungPass", "amandaYoung@hotmail.com", GenderType.woman, RoleType.user),
-                new User( "AnaPopescu", "ParolaAna123!", "ana.popescu@example.com", GenderType.woman, RoleType.user),
-                new User( "AndreiIonescu", "IonescuPass456", "andrei.ionescu@example.com", GenderType.man, RoleType.user),
-                new User( "ElenaVasilescu", "ElenaPass789", "elena.vasilescu@example.com", GenderType.woman, RoleType.user),
-                new User( "MariusDumitrescu", "MariusPass123", "marius.dumitrescu@example.com", GenderType.man, RoleType.user),
-                new User("SimonaGheorghiu", "SimonaPwd456", "simona.gheorghiu@example.com", GenderType.woman, RoleType.user),
-                new User( "CristianRadu", "Cristian123!", "cristian.radu@example.com", GenderType.man, RoleType.user),
-                new User( "AlexandraStanescu", "AlexandraPwd789", "alexandra.stanescu@example.com", GenderType.woman, RoleType.user),
-                new User( "AdrianMoldovan", "Adrian456!", "adrian.moldovan@example.com", GenderType.man, RoleType.user)
+            new User("timofteIorgu", "myPassword", "timofteIorgu@gmail.com", GenderType.man, RoleType.admin),
+            new User("ciocoiuMatei", "imiPlacParoleleComplicate", "ciocoiuMatei@gmail.com", GenderType.man, RoleType.admin),
+            new User("tomaIon", "tomaIonPassword1234", "tomaIon@gmail.com", GenderType.man, RoleType.user),
+            new User("tomaMaria", "tomaMaria.12CatelusCuParulCret", "tomaMaria@gmail.com", GenderType.woman, RoleType.user),
+            new User("johnDoe", "johnDoe123!Pass", "johnDoe@example.com", GenderType.man, RoleType.user),
+            new User("janeSmith", "janeSmith@456", "janeSmith@gmail.com", GenderType.woman, RoleType.user),
+            new User("alexJohnson", "alexJohnsonPass", "alexJohnson@yahoo.com", GenderType.woman, RoleType.user),
+            new User("emilyBrown", "emilyBrownPwd", "emilyBrown@hotmail.com", GenderType.woman, RoleType.user),
+            new User("michaelClark", "michaelClarkPass", "michaelClark@gmail.com", GenderType.man, RoleType.user),
+            new User("sarahWhite", "sarahWhitePwd", "sarahWhite@yahoo.com", GenderType.woman, RoleType.user),
+            new User("davidTaylor", "davidTaylor123", "davidTaylor@hotmail.com", GenderType.man, RoleType.user),
+            new User("oliviaMartin", "oliviaMartinPwd", "oliviaMartin@gmail.com", GenderType.woman, RoleType.user),
+            new User("chrisMiller", "chrisMillerPwd", "chrisMiller@yahoo.com", GenderType.man, RoleType.user),
+            new User("amandaYoung", "amandaYoungPass", "amandaYoung@hotmail.com", GenderType.woman, RoleType.user),
+            new User("AnaPopescu", "ParolaAna123!", "ana.popescu@example.com", GenderType.woman, RoleType.user),
+            new User("AndreiIonescu", "IonescuPass456", "andrei.ionescu@example.com", GenderType.man, RoleType.user),
+            new User("ElenaVasilescu", "ElenaPass789", "elena.vasilescu@example.com", GenderType.woman, RoleType.user),
+            new User("MariusDumitrescu", "MariusPass123", "marius.dumitrescu@example.com", GenderType.man, RoleType.user),
+            new User("SimonaGheorghiu", "SimonaPwd456", "simona.gheorghiu@example.com", GenderType.woman, RoleType.user),
+            new User("CristianRadu", "Cristian123!", "cristian.radu@example.com", GenderType.man, RoleType.user),
+            new User("AlexandraStanescu", "AlexandraPwd789", "alexandra.stanescu@example.com", GenderType.woman, RoleType.user),
+            new User("AdrianMoldovan", "Adrian456!", "adrian.moldovan@example.com", GenderType.man, RoleType.user)
     );
 
     public void deleteData() {
@@ -73,10 +78,9 @@ public class UsersService implements UsersServiceMethods {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 
     @Scheduled(fixedDelay = 30000L)
@@ -109,44 +113,42 @@ public class UsersService implements UsersServiceMethods {
     public HashMap<String, UserSelect> fetchAllUsers() {
         HashMap<String, UserSelect> list = new HashMap<>();
 
-        List<User> users =  repository.findAll();
+        List<User> users = repository.findAll();
 
         for (User user : users)
-            list.put(user.getId(), new UserSelect(user.getId(),user.getUsername(),user.getEmail(),user.getRole(),user.getGender()));
+            list.put(user.getId(), new UserSelect(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getGender()));
 
         return list;
     }
 
     @Override
-    public UserSelect fetchUserById(String id)  throws  RuntimeException {
+    public UserSelect fetchUserById(String id) throws RuntimeException {
         //Long id, String username, String email, String role, GenderType gender
-        User user =  repository.findById(id).orElseThrow(() -> new RuntimeException("Not found: " + id));
-        return  new UserSelect(user.getId(),user.getUsername(),user.getEmail(),user.getRole(),user.getGender());
+        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found: " + id));
+        return new UserSelect(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getGender());
     }
 
     @Override
-    public void addUser(User user)  {
+    public void addUser(User user) {
         user.setPassword(this.passwordEncoder().encode(user.getPassword()));
         repository.save(user);
         sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
     }
 
     @Override
-    public void updateUser(String id, User user) throws RuntimeException {
-        user.setPassword(this.passwordEncoder().encode(user.getPassword()));
+    public void updateUser(String id, UserSelect user) throws RuntimeException {
         repository.findById(id).map(elem -> {
-            elem.setUsername(user.getUsername());
-            elem.setEmail(user.getEmail());
-            elem.setGender(user.getGender());
-            elem.setPassword(user.getPassword());
-            repository.save(elem);
-            sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, user));
+            repository.updateUser(id, user.getUsername(), user.getEmail(), user.getRole(), user.getGender());
+            sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, new User(id, user.getUsername(), null, user.getEmail(), user.getGender(), user.getRole())));
             return elem;
         }).orElseThrow(() -> {
-            repository.save(user);
-            sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
-            return new RuntimeException("User not found. Created one instead.");
+            throw new RuntimeException("User not found.");
         });
+    }
+
+    @Override
+    public void updatePassword(String id, String password) throws RuntimeException {
+        this.repository.updatePassword(id,passwordEncoder().encode(password));
     }
 
     @Override
@@ -156,9 +158,34 @@ public class UsersService implements UsersServiceMethods {
         if (user.isPresent()) {
             repository.deleteById(id);
             sendMessage(new UserQueueMessage(QueueMessageType.DELETE, user.get()));
-        }
-        else
+        } else
             throw new RuntimeException("Created one instead.");
+    }
+
+    @Override
+    public User login(Credentials credentials) throws RuntimeException {
+        Optional<User> user = repository.findByUsername(credentials.getUsername());
+        if (user.isPresent()) {
+            if (this.passwordEncoder().matches(credentials.getPassword(), user.get().getPassword())) {
+                return user.get();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String isValidJWT(String jwt) throws Exception {
+        try {
+            String id = jwtService.getIdFromToken(jwt);
+            return id;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public String generateJWT(String id) {
+        return jwtService.generateAccessToken(id);
     }
 
 }

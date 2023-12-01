@@ -7,7 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}), @UniqueConstraint(columnNames = {"email"})})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,13 +17,13 @@ public class User {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "username", length = 100, nullable = false)
+    @Column(name = "username", length = 100, nullable = false, unique = true)
     private String username;
 
     @Column(name = "password", length = 100, nullable = false)
     private String password;
 
-    @Column(name = "email", length = 100, nullable = false)
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
     @Column(name = "gender", length = 1)
