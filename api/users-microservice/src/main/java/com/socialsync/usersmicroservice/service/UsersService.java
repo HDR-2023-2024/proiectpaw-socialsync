@@ -16,8 +16,9 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +72,13 @@ public class UsersService implements UsersServiceMethods {
         users.forEach(this::addUser);
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+
     @Scheduled(fixedDelay = 30000L)
     public void newRandomUser() {
         log.info("We have " + repository.findAll().size() + " users!");
@@ -118,12 +126,14 @@ public class UsersService implements UsersServiceMethods {
 
     @Override
     public void addUser(User user)  {
+        user.setPassword(this.passwordEncoder().encode(user.getPassword()));
         repository.save(user);
         sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
     }
 
     @Override
     public void updateUser(String id, User user) throws RuntimeException {
+        user.setPassword(this.passwordEncoder().encode(user.getPassword()));
         repository.findById(id).map(elem -> {
             elem.setUsername(user.getUsername());
             elem.setEmail(user.getEmail());

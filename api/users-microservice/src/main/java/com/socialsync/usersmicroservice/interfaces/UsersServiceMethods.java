@@ -12,4 +12,5 @@ public interface UsersServiceMethods {
     void addUser(User user);
     void updateUser(String id, User user) throws  RuntimeException;
     void deleteUser(String id) throws  RuntimeException;
+
 }
