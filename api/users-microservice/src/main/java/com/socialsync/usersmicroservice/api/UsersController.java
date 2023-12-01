@@ -93,7 +93,7 @@ public class UsersController {
         try {
             String result = this.usersService.isValidJWT(token);
             if (result != null) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(result,HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
