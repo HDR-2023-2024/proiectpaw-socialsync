@@ -82,8 +82,8 @@ public class TopicController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String id) {
         try {
-            Topic topic = topicService.fetchTopicById(id);
             AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
+            Topic topic = topicService.fetchTopicById(id);
             if (Objects.equals(authorizedInfo.getRole(), "admin") || Objects.equals(authorizedInfo.getId(), topic.getCreatorId())) {
                 topicService.deleteTopic(id);
                 return new ResponseEntity<>("", HttpStatus.NO_CONTENT);

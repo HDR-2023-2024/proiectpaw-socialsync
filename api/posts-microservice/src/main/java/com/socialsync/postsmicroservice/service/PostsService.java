@@ -175,7 +175,7 @@ public class PostsService implements PostsServiceMethods {
     @Bean
     @Scheduled(fixedDelay = 5000L)
     void newRandomPost() {
-        log.info("We have " + repository.findAll().size() + " comments");
+        log.info("We have " + repository.findAll().size() + " posts");
 
         if (repository.findAll().size() > 200)
             deleteEverything();
