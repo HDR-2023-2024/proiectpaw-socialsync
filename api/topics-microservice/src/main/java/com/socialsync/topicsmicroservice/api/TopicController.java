@@ -90,9 +90,6 @@ public class TopicController {
             } else {
                 return new ResponseEntity<>("Topicul nu poate fi sters decat de admin sau utilizatorul care la creat!", HttpStatus.UNAUTHORIZED);
             }
-        } catch (RuntimeException ex) {
-            System.out.println(ex.getMessage());
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (UnauthorizedException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (TopicNotFound e) {
