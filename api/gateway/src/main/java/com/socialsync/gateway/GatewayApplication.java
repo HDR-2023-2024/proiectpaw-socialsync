@@ -94,10 +94,21 @@ public class GatewayApplication {
                         .path("/api/v1/users")
                         .uri("http://localhost:8082")
                 )
+                .route("login_user", r -> r
+                        .method("POST")
+                        .and()
+                        .path("/api/v1/users/login")
+                        .uri("http://localhost:8082")
+                ).route("update_password", r -> r
+                        .method("PUT")
+                        .and()
+                        .path("/api/v1/users/updatePassword")
+                        .uri("http://localhost:8082")
+                )
                 .route("update_user", r -> r
                         .method("PUT")
                         .and()
-                        .path("/api/v1/users/{id}")
+                        .path("/api/v1/users")
                         .uri("http://localhost:8082")
                 )
                 .route("delete_user", r -> r

@@ -7,7 +7,10 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}), @UniqueConstraint(columnNames = {"email"})})
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_username", columnNames = {"username"}),
+        @UniqueConstraint(name = "uk_email", columnNames = {"email"})
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

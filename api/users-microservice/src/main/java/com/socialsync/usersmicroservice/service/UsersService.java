@@ -2,17 +2,19 @@ package com.socialsync.usersmicroservice.service;
 
 import com.google.gson.Gson;
 import com.socialsync.usersmicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.usersmicroservice.exceptions.NotAcceptableException;
+import com.socialsync.usersmicroservice.exceptions.NotFoundException;
+import com.socialsync.usersmicroservice.exceptions.UnauthorizedException;
 import com.socialsync.usersmicroservice.interfaces.UsersServiceMethods;
-import com.socialsync.usersmicroservice.pojo.Credentials;
-import com.socialsync.usersmicroservice.pojo.User;
-import com.socialsync.usersmicroservice.pojo.UserQueueMessage;
-import com.socialsync.usersmicroservice.pojo.UserSelect;
+import com.socialsync.usersmicroservice.pojo.*;
 import com.socialsync.usersmicroservice.pojo.enums.GenderType;
 import com.socialsync.usersmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.usersmicroservice.pojo.enums.RoleType;
 import com.socialsync.usersmicroservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -37,7 +39,7 @@ public class UsersService implements UsersServiceMethods {
     private JWTService jwtService;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
-
+    private static final Logger logger = LoggerFactory.getLogger(AuthorizationService.class);
     private AmqpTemplate amqpTemplate;
 
     private Gson gson;
@@ -72,9 +74,12 @@ public class UsersService implements UsersServiceMethods {
     }
 
     @Bean
-    public void populateDb() {
+    public void populateDb() throws NotAcceptableException {
         deleteData();
-        users.forEach(this::addUser);
+        for (User u : users
+             ) {
+            addUser(u);
+        }
     }
 
     @Bean
@@ -84,7 +89,7 @@ public class UsersService implements UsersServiceMethods {
 
 
     @Scheduled(fixedDelay = 30000L)
-    public void newRandomUser() {
+    public void newRandomUser() throws NotAcceptableException {
         log.info("We have " + repository.findAll().size() + " users!");
         if (repository.findAll().size() > 50)
             deleteData();
@@ -112,49 +117,64 @@ public class UsersService implements UsersServiceMethods {
     @Override
     public HashMap<String, UserSelect> fetchAllUsers() {
         HashMap<String, UserSelect> list = new HashMap<>();
-
         List<User> users = repository.findAll();
-
         for (User user : users)
             list.put(user.getId(), new UserSelect(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getGender()));
-
         return list;
     }
 
     @Override
     public UserSelect fetchUserById(String id) throws RuntimeException {
-        //Long id, String username, String email, String role, GenderType gender
         User user = repository.findById(id).orElseThrow(() -> new RuntimeException("Not found: " + id));
         return new UserSelect(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getGender());
     }
 
     @Override
-    public void addUser(User user) {
+    public void addUser(User user) throws NotAcceptableException {
         user.setPassword(this.passwordEncoder().encode(user.getPassword()));
-        repository.save(user);
-        sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
+        try {
+            repository.save(user);
+            sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
+        } catch (Exception ex) {
+            if (ex.getMessage().contains("uk_email")) {
+                throw new NotAcceptableException("There is already a user with this email.");
+            } else if (ex.getMessage().contains("uk_username")) {
+                throw new NotAcceptableException("There is already a user with this username.");
+            }
+        }
     }
 
     @Override
-    public void updateUser(String id, UserSelect user) throws RuntimeException {
-        repository.findById(id).map(elem -> {
-            repository.updateUser(id, user.getUsername(), user.getEmail(), user.getRole(), user.getGender());
-            sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, new User(id, user.getUsername(), null, user.getEmail(), user.getGender(), user.getRole())));
-            return elem;
-        }).orElseThrow(() -> {
-            throw new RuntimeException("User not found.");
-        });
+    public void updateUser(String id, UserSelect user) throws RuntimeException, NotFoundException, NotAcceptableException {
+        Optional<User> userInDb = repository.findById(id);
+        if (userInDb.isPresent()) {
+            try {
+                repository.updateUser(id, user.getUsername(), user.getEmail(), user.getRole(), user.getGender());
+                sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, new User(id, user.getUsername(), null, user.getEmail(), user.getGender(), user.getRole())));
+            } catch (Exception ex) {
+                if (ex.getMessage().contains("uk_email")) {
+                    throw new NotAcceptableException("There is already a user with this email.");
+                } else if (ex.getMessage().contains("uk_username")) {
+                    throw new NotAcceptableException("There is already a user with this username.");
+                }
+            }
+        } else {
+            throw new NotFoundException("User not found.");
+        }
     }
 
     @Override
     public void updatePassword(String id, String password) throws RuntimeException {
-        this.repository.updatePassword(id,passwordEncoder().encode(password));
+        try {
+            this.repository.updatePassword(id, passwordEncoder().encode(password));
+        } catch (Exception ex) {
+            throw new RuntimeException("User not found.");
+        }
     }
 
     @Override
     public void deleteUser(String id) throws RuntimeException {
         Optional<User> user = repository.findById(id);
-
         if (user.isPresent()) {
             repository.deleteById(id);
             sendMessage(new UserQueueMessage(QueueMessageType.DELETE, user.get()));
@@ -163,23 +183,28 @@ public class UsersService implements UsersServiceMethods {
     }
 
     @Override
-    public User login(Credentials credentials) throws RuntimeException {
+    public AuthorizedInfo login(Credentials credentials) throws RuntimeException {
         Optional<User> user = repository.findByUsername(credentials.getUsername());
         if (user.isPresent()) {
             if (this.passwordEncoder().matches(credentials.getPassword(), user.get().getPassword())) {
-                return user.get();
+                return new AuthorizedInfo(user.get().getId(), user.get().getRole().name());
             }
         }
-        return null;
+        throw new RuntimeException("Unauthorized");
     }
 
     @Override
-    public String isValidJWT(String jwt) throws Exception {
+    public AuthorizedInfo isValidJWT(String jwt) throws Exception {
         try {
             String id = jwtService.getIdFromToken(jwt);
-            return id;
+            Optional<User> user = repository.findById(id);
+            if (user.isPresent()) {
+                return new AuthorizedInfo(id, user.get().getRole().name());
+            }
+            throw new UnauthorizedException();
         } catch (Exception ex) {
-            throw ex;
+            logger.error(ex.getMessage());
+            throw new UnauthorizedException();
         }
     }
 
