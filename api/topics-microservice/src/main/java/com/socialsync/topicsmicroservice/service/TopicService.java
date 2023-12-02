@@ -129,6 +129,7 @@ public class TopicService implements TopicServiceMethods {
             return elem;
         }).orElseThrow(() -> {
             topic.setTimestampCreated(Instant.now().getEpochSecond());
+            topic.setId(null);
             repository.insert(topic);
             sendMessage(new TopicQueueMessage(QueueMessageType.CREATE, topic));
             return new TopicNotFound("Topic not found. Created one instead.");
