@@ -150,7 +150,7 @@ public class UsersController {
         try {
             AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
             usersService.updatePassword(authorizedInfo.getId(), password.getPassword());
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (UnauthorizedException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
