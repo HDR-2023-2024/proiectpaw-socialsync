@@ -1,4 +1,4 @@
-package com.socialsync.gateway.other;
+package com.socialsync.usersmicroservice.other;
 
 public class Pair<K, V> {
     private K key;

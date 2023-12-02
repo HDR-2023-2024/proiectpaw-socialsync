@@ -90,6 +90,7 @@ public class UsersController {
 
     @PostMapping("/validateJWT")
     public ResponseEntity<?> validateToken(@RequestBody String token) {
+        System.out.println("Cerere cu token-ul: " + token);
         try {
             String result = this.usersService.isValidJWT(token);
             if (result != null) {
