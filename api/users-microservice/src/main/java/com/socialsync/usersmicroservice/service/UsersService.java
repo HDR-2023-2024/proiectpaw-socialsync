@@ -45,6 +45,7 @@ public class UsersService implements UsersServiceMethods {
     private Gson gson;
 
     static List<User> users = List.of(
+            new User("madab", "madab.123", "madab@gmail.com", GenderType.woman, RoleType.user),
             new User("timofteIorgu", "myPassword", "timofteIorgu@gmail.com", GenderType.man, RoleType.admin),
             new User("ciocoiuMatei", "imiPlacParoleleComplicate", "ciocoiuMatei@gmail.com", GenderType.man, RoleType.admin),
             new User("tomaIon", "tomaIonPassword1234", "tomaIon@gmail.com", GenderType.man, RoleType.user),
@@ -91,8 +92,8 @@ public class UsersService implements UsersServiceMethods {
     @Scheduled(fixedDelay = 30000L)
     public void newRandomUser() throws NotAcceptableException {
         log.info("We have " + repository.findAll().size() + " users!");
-        if (repository.findAll().size() > 50)
-            deleteData();
+        /*if (repository.findAll().size() > 50)
+            deleteData();*/
 
         User randomUser = users.get(new Random().nextInt(users.size()));
         User newUser = new User();
