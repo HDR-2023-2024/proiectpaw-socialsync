@@ -19,4 +19,12 @@ cd query-microservice
 ./mvnw clean
 ./mvnw install
 cd ..
+cd authorization-microservice
+./mvnw clean
+./mvnw install
+cd ..
+cd gateway
+./mvnw clean
+./mvnw install
+cd ..
 docker compose up
