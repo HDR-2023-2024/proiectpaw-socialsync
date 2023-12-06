@@ -110,7 +110,7 @@ const routes: Routes = [
     CreateAccountComponent,
     ProfileCommentComponent,
     CommunityEditComponent,
-    HelpSiteComponent
+    HelpSiteComponent,
   ],
   imports: [
     BrowserModule,

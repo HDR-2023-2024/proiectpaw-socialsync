@@ -14,8 +14,7 @@
 
                     <label for="padd">Parola*</label><br>
                     <input type="text" id="pass" name="pass" [(ngModel)]="formData.password" required><br><br>
-
-                    <br>
+                    <p class="text-danger text-right" id="loginErrMsg">{{loginMsg}}</p>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn contact-btn" [disabled]="!myForm.valid" (click)=" onLoginClick()">Conectare</button>
                     </div>
