@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { faL } from '@fortawesome/free-solid-svg-icons';
+import { CreatAccountService } from '../creat-account.service';
 
 @Component({
   selector: 'app-create-account',
@@ -10,7 +11,7 @@ import { faL } from '@fortawesome/free-solid-svg-icons';
 })
 export class CreateAccountComponent {
 
-  constructor(private router: Router, public authService: AuthService) { }
+  constructor(private router: Router,public authService:AuthService, public createAccount : CreatAccountService) { }
 
   formData = {
     username: '',
@@ -24,7 +25,26 @@ export class CreateAccountComponent {
   isValid = false;
   
   onSubmit() {
-    this.router.navigate(['/registration-successful']);
+    this.createAccount.saveUser(this.formData.username,this.formData.email, this.formData.password,this.formData.gender)
+    .subscribe(
+      response => {
+        console.log('Login sresponse:', response);
+        if(response.status === 200){
+          this.router.navigate(['/home']);
+        }
+        if(response.status === 406){
+          this.formData.error = response.error
+        }
+      },
+      error => {
+        if(error.status === 500){
+          this.router.navigate(['/internal-server-error']);
+        }
+        if(error.status === 406){
+          this.formData.error = error.error
+        }
+      }
+    );
   }
 
   onPasswordChange(): void {

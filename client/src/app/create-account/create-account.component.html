@@ -15,9 +15,9 @@
                     <input type="text" id="email" name="email" [(ngModel)]="formData.email" required><br><br>
                     <label for="gender">Genul*:</label>
                     <select id="gender" name="gender" [(ngModel)]="formData.gender">
-                        <option value="feminim">Feminin</option>
-                        <option value="masculin">Masculin</option>
-                        <option value="nuSpecific">Nu specific</option>
+                        <option value="woman">Feminin</option>
+                        <option value="man">Masculin</option>
+                        <option value="null">Nu specific</option>
                     </select>
                     <br><br>
                     <label for="pass">Parola*</label><br>
@@ -26,14 +26,16 @@
 
 
                     <label for="pass2">Repetare parolă*</label><br>
-                    <input type="text" id="pass2" name="pass2"  [(ngModel)]="formData.password2"(ngModelChange)="onPasswordChange()" required><br><br>
+                    <input type="text" id="pass2" name="pass2" [(ngModel)]="formData.password2"
+                        (ngModelChange)="onPasswordChange()" required><br><br>
 
 
-                    <p id="errorCreateAccount" class="m-0 p-0" *ngIf="!authService.isUserLoggedIn()">{{ formData.error
+                    <p id="errorCreateAccount" class="m-0 p-0">{{ formData.error
                         }}</p>
                     <br>
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn contact-btn" [disabled]="(!myForm.valid || isValid)">Conectare</button>
+                        <button type="submit" class="btn contact-btn"
+                            [disabled]="(!myForm.valid || isValid)">Conectare</button>
                     </div>
                     <br>
                 </form>
