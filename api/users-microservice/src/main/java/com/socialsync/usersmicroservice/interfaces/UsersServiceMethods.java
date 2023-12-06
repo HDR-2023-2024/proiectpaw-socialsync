@@ -15,6 +15,4 @@ public interface UsersServiceMethods {
     void updatePassword(String id, String password) throws  RuntimeException;
     void deleteUser(String id) throws  RuntimeException;
     AuthorizedInfo login(Credentials credentials) throws  RuntimeException;
-    AuthorizedInfo isValidJWT(String jwt) throws Exception;
-    String generateJWT(String id);
 }

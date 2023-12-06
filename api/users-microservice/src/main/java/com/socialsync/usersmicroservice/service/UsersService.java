@@ -36,7 +36,7 @@ import io.jsonwebtoken.Claims;
 @Slf4j
 public class UsersService implements UsersServiceMethods {
     private UserRepository repository;
-    private JWTService jwtService;
+    private AuthorizationService authorizationService;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationService.class);
@@ -192,25 +192,4 @@ public class UsersService implements UsersServiceMethods {
         }
         throw new RuntimeException("Unauthorized");
     }
-
-    @Override
-    public AuthorizedInfo isValidJWT(String jwt) throws Exception {
-        try {
-            String id = jwtService.getIdFromToken(jwt);
-            Optional<User> user = repository.findById(id);
-            if (user.isPresent()) {
-                return new AuthorizedInfo(id, user.get().getRole().name());
-            }
-            throw new UnauthorizedException();
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw new UnauthorizedException();
-        }
-    }
-
-    @Override
-    public String generateJWT(String id) {
-        return jwtService.generateAccessToken(id);
-    }
-
 }

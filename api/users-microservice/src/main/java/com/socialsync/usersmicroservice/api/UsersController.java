@@ -24,24 +24,18 @@ public class UsersController {
     private final ValidateParameterService validateParameterService;
 
     @GetMapping
-    public ResponseEntity<?> fetchAllUsers(@RequestHeader("Authorization") String authorizationHeader) {
-        try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
-            if (Objects.equals(authorizedInfo.getRole(), "admin")) {
-                return new ResponseEntity<>(usersService.fetchAllUsers(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Access allowed only for admin!", HttpStatus.UNAUTHORIZED);
-            }
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?> fetchAllUsers(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole) {
+        if (Objects.equals(userRole, "admin")) {
+            return new ResponseEntity<>(usersService.fetchAllUsers(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Access allowed only for admin!", HttpStatus.UNAUTHORIZED);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> fetchUserById(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String id) {
+    public ResponseEntity<Object> fetchUserById(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @PathVariable String id) {
         try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
-            if (Objects.equals(authorizedInfo.getRole(), "admin") || Objects.equals(authorizedInfo.getId(), id)) {
+            if (Objects.equals(userRole, "admin") || Objects.equals(userId, id)) {
                 return new ResponseEntity<>(usersService.fetchUserById(id), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Access allowed only for admin or the user who has this id!", HttpStatus.UNAUTHORIZED);
@@ -49,25 +43,23 @@ public class UsersController {
         } catch (RuntimeException ex) {
             System.out.println(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 
     @PostMapping
     public ResponseEntity<?> addUser(@RequestBody User user) {
         try {
-            if(!validateParameterService.isValidEmail(user.getEmail())){
-                return new ResponseEntity<>("Adresa da email nu are un format valid!",HttpStatus.NOT_ACCEPTABLE);
+            if (!validateParameterService.isValidEmail(user.getEmail())) {
+                return new ResponseEntity<>("Adresa da email nu are un format valid!", HttpStatus.NOT_ACCEPTABLE);
             }
-            if(!validateParameterService.isValidPassword(user.getPassword())){
-                return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\"",HttpStatus.NOT_ACCEPTABLE);
+            if (!validateParameterService.isValidPassword(user.getPassword())) {
+                return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
             }
-            if(!validateParameterService.isValidUsername(user.getUsername())){
-                return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"",HttpStatus.NOT_ACCEPTABLE);
+            if (!validateParameterService.isValidUsername(user.getUsername())) {
+                return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
             }
             usersService.addUser(user);
-            String token = usersService.generateJWT(user.getId());
+            String token = authorizationService.getJwt(new AuthorizedInfo(user.getId(), user.getRole().name()));
             HttpHeaders responseHeaders = new HttpHeaders();
             //Authorization: Bearer token
             responseHeaders.set("Authorization", "Bearer " + token);
@@ -76,37 +68,31 @@ public class UsersController {
                     .body(new UserSelect(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getGender()));
         } catch (NotAcceptableException unauthorizedException) {
             return new ResponseEntity<>(unauthorizedException.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (UnauthorizedException e) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @PutMapping("")
-    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String authorizationHeader, @RequestBody UserSelect user) {
-        if(!validateParameterService.isValidEmail(user.getEmail())){
-            return new ResponseEntity<>("Adresa da email nu are un format valid!",HttpStatus.NOT_ACCEPTABLE);
+    public ResponseEntity<?> updateUser(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @RequestBody UserSelect user) {
+        if (!validateParameterService.isValidEmail(user.getEmail())) {
+            return new ResponseEntity<>("Adresa da email nu are un format valid!", HttpStatus.NOT_ACCEPTABLE);
         }
-        if(!validateParameterService.isValidUsername(user.getUsername())){
-            return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"",HttpStatus.NOT_ACCEPTABLE);
+        if (!validateParameterService.isValidUsername(user.getUsername())) {
+            return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
         }
         try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
-            if (Objects.equals(authorizedInfo.getId(), authorizedInfo.getId())) {
-                usersService.updateUser(authorizedInfo.getId(), user);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                return new ResponseEntity<>("Access allowed only for user who has this id!", HttpStatus.UNAUTHORIZED);
-            }
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+            usersService.updateUser(userId, user);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String id) {
+    public ResponseEntity<?> deleteUser(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @PathVariable String id) {
         try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
-            if (Objects.equals(authorizedInfo.getRole(), "admin") || Objects.equals(authorizedInfo.getId(), id)) {
+            if (Objects.equals(userRole, "admin") || Objects.equals(userId, id)) {
                 usersService.deleteUser(id);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
@@ -115,22 +101,20 @@ public class UsersController {
         } catch (RuntimeException ex) {
             System.out.println(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Credentials credentials) {
-        if(!validateParameterService.isValidPassword(credentials.getPassword())){
-            return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\"",HttpStatus.NOT_ACCEPTABLE);
+        if (!validateParameterService.isValidPassword(credentials.getPassword())) {
+            return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
         }
-        if(!validateParameterService.isValidUsername(credentials.getUsername())){
-            return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"",HttpStatus.NOT_ACCEPTABLE);
+        if (!validateParameterService.isValidUsername(credentials.getUsername())) {
+            return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
         }
         try {
             AuthorizedInfo authorizedInfo = usersService.login(credentials);
-            String token = usersService.generateJWT(authorizedInfo.getId());
+            String token = authorizationService.getJwt(authorizedInfo);
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Authorization", "Bearer " + token);
             return ResponseEntity.ok()
@@ -142,30 +126,16 @@ public class UsersController {
     }
 
     @PutMapping("/updatePassword")
-    public ResponseEntity<?> updatePassword(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Password password) {
+    public ResponseEntity<?> updatePassword(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @RequestBody Password password) {
         // autorizare
-        if(!validateParameterService.isValidPassword(password.getPassword())){
-            return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\". Lungimea de minim 5 caractere",HttpStatus.NOT_ACCEPTABLE);
+        if (!validateParameterService.isValidPassword(password.getPassword())) {
+            return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\". Lungimea de minim 5 caractere", HttpStatus.NOT_ACCEPTABLE);
         }
         try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
-            usersService.updatePassword(authorizedInfo.getId(), password.getPassword());
+            usersService.updatePassword(userId, password.getPassword());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
-
-    @PostMapping("/validateJWT")
-    public ResponseEntity<?> validateToken(@RequestBody String token) {
-        System.out.println("Cerere cu token-ul: " + token);
-        try {
-            AuthorizedInfo result = this.usersService.isValidJWT(token);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

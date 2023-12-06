@@ -1,6 +1,5 @@
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/api/TopicController.java
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/util/exceptions/UnauthorizedException.java
-/home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/service/AuthorizationService.java
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/service/TopicService.java
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/pojo/Topic.java
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/pojo/enums/QueueMessageType.java

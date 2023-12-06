@@ -129,6 +129,25 @@ services:
       - '8081:8081'
     expose:
       - '8081'
+      
+  authorization-microservice:
+    build: "./authorization-microservice"
+    image: "authorization-ms:v1"
+    container_name: "authorization-microservice"
+    ports:
+      - '8087:8087'
+    expose:
+      - '8087'
+  
+  gateway:
+    build: "./gateway"
+    image: "gateway-ms:v1"
+    container_name: "gateway"
+    ports:
+      - '8086:8086'
+    expose:
+      - '8086'
+      
 
 volumes:
   data: {}

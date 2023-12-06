@@ -36,36 +36,27 @@ public class CommentsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addComment(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Comment comment) {
-        try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
-            comment.setCreatorId(authorizedInfo.getId());
+    public ResponseEntity<?> addComment(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @RequestBody Comment comment) {
+            comment.setCreatorId(userId);
             comment.setId(null);
             commentsService.addComment(comment);
             return new ResponseEntity<>(comment, HttpStatus.CREATED);
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateComment(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String id, @RequestBody Comment comment) {
-        AuthorizedInfo authorizedInfo = null;
+    public ResponseEntity<?> updateComment(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @PathVariable String id, @RequestBody Comment comment) {
         try {
-            authorizedInfo = authorizationService.authorized(authorizationHeader);
             Comment comment1 = commentsService.fetchCommentById(id);
-            if (Objects.equals(comment1.getCreatorId(), authorizedInfo.getId())) {
-                comment.setCreatorId(authorizedInfo.getId());
+            if (Objects.equals(comment1.getCreatorId(),userId)) {
+                comment.setCreatorId(userId);
                 commentsService.updateComment(id, comment);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>("Este topicul altui utilizator!", HttpStatus.UNAUTHORIZED);
             }
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (CommentNotFound topicNotFound) {
             System.out.println("Topicul nu exista il creez");
-            comment.setCreatorId(authorizedInfo.getId());
+            comment.setCreatorId(userId);
             comment.setId(null);
             commentsService.addComment(comment);
             return new ResponseEntity<>(comment, HttpStatus.CREATED);
@@ -73,18 +64,15 @@ public class CommentsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteComment(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String id) {
+    public ResponseEntity<String> deleteComment(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @PathVariable String id) {
         try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
             Comment comment = commentsService.fetchCommentById(id);
-            if (Objects.equals(authorizedInfo.getRole(), "admin") || Objects.equals(authorizedInfo.getId(), comment.getCreatorId())) {
+            if (Objects.equals(userRole, "admin") || Objects.equals(userId, comment.getCreatorId())) {
                 commentsService.deleteComment(id);
                 return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>("Comentatiul nu poate fi sters decat de admin sau utilizatorul care la creat!", HttpStatus.UNAUTHORIZED);
             }
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (CommentNotFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

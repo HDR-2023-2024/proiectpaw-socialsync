@@ -2,7 +2,6 @@ package com.socialsync.postsmicroservice.api;
 
 import com.socialsync.postsmicroservice.pojo.AuthorizedInfo;
 import com.socialsync.postsmicroservice.pojo.Post;
-import com.socialsync.postsmicroservice.service.AuthorizationService;
 import com.socialsync.postsmicroservice.service.PostsService;
 import com.socialsync.postsmicroservice.util.exceptions.PostNotFound;
 import com.socialsync.postsmicroservice.util.exceptions.UnauthorizedException;
@@ -20,7 +19,6 @@ import java.util.Objects;
 public class PostsController {
 
     private final PostsService postsService;
-    private final AuthorizationService authorizationService;
 
     @GetMapping
     public ResponseEntity<HashMap<String, Post>> fetchAllPosts() {
@@ -37,37 +35,28 @@ public class PostsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addPost(@RequestHeader("Authorization") String authorizationHeader,@RequestBody Post post) {
-        try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
-            post.setCreatorId(authorizedInfo.getId());
+    public ResponseEntity<?> addPost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole,@RequestBody Post post) {
+            post.setCreatorId(userId);
             post.setId(null);
             postsService.addPost(post);
             return new ResponseEntity<>(post, HttpStatus.CREATED);
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
-        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String id, @RequestBody Post post) {
-        AuthorizedInfo authorizedInfo = null;
+    public ResponseEntity<?> updatePost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @PathVariable String id, @RequestBody Post post) {
         try {
-            authorizedInfo = authorizationService.authorized(authorizationHeader);
             post.setId(id);
-            post.setCreatorId(authorizedInfo.getId());
+            post.setCreatorId(userId);
             Post post1 = postsService.fetchPostById(id);
-            if (Objects.equals(post1.getCreatorId(), authorizedInfo.getId())) {
+            if (Objects.equals(post1.getCreatorId(), userId)) {
                 postsService.updatePost(id, post);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>("Este postarea altui utilizator!", HttpStatus.UNAUTHORIZED);
             }
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (PostNotFound topicNotFound) {
             System.out.println("Postarea nu exista il creez");
-            post.setCreatorId(authorizedInfo.getId());
+            post.setCreatorId(userId);
             post.setId(null);
             postsService.addPost(post);
             return new ResponseEntity<>(post, HttpStatus.CREATED);
@@ -75,18 +64,15 @@ public class PostsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@RequestHeader("Authorization") String authorizationHeader,@PathVariable String id) {
+    public ResponseEntity<String> deletePost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole,@PathVariable String id) {
         try {
-            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
             Post post = postsService.fetchPostById(id);
-            if (Objects.equals(authorizedInfo.getRole(), "admin") || Objects.equals(authorizedInfo.getId(), post.getCreatorId())) {
+            if (Objects.equals(userRole, "admin") || Objects.equals(userId, post.getCreatorId())) {
                 postsService.deletePost(id);
                 return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>("Postarea nu poate fi stersa decat de admin sau utilizatorul care la creat!", HttpStatus.UNAUTHORIZED);
             }
-        } catch (UnauthorizedException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (PostNotFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

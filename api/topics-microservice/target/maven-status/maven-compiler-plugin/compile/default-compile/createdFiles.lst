@@ -1,6 +1,5 @@
 com/socialsync/topicsmicroservice/service/TopicService.class
 com/socialsync/topicsmicroservice/TopicsMicroserviceApplication.class
-com/socialsync/topicsmicroservice/service/AuthorizationService.class
 com/socialsync/topicsmicroservice/util/exceptions/CommentNotFound.class
 com/socialsync/topicsmicroservice/interfaces/TopicServiceMethods.class
 com/socialsync/topicsmicroservice/repository/TopicRepository.class
