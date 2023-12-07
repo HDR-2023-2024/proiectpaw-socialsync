@@ -129,6 +129,22 @@ services:
       - '8081:8081'
     expose:
       - '8081'
+
+  query-microservice:
+    build: "./query-microservice"
+    image: "query-ms:v1"
+    container_name: "query-microservice"
+    depends_on:
+      - redis-query
+      - rabbitmq
+      - users-microservice
+      - topics-microservice
+      - posts-microservice
+      - comments-microservice
+    ports:
+      - '8085:8085'
+    expose:
+      - '8085'
       
   authorization-microservice:
     build: "./authorization-microservice"
