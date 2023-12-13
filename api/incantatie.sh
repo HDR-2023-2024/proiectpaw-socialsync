@@ -27,4 +27,12 @@ cd gateway
 ./mvnw clean
 ./mvnw install
 cd ..
+cd query-microservice
+./mvnw clean
+./mvnw install
+cd ..
+cd storage-microservice
+./mvnw clean
+./mvnw install
+cd ..
 docker compose up
