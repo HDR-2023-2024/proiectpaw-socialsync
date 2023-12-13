@@ -177,8 +177,8 @@ public class PostsService implements PostsServiceMethods {
     void newRandomPost() {
         log.info("We have " + repository.findAll().size() + " posts");
 
-        if (repository.findAll().size() > 200)
-            deleteEverything();
+//        if (repository.findAll().size() > 200)
+//            deleteEverything();
 
         String titlu = titluPostare.get(new Random().nextInt(titluPostare.size()));
         String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";

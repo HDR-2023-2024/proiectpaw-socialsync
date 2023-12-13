@@ -80,8 +80,8 @@ public class TopicService implements TopicServiceMethods {
     void newRandomTopic() {
         log.info("We have " + repository.findAll().size() + " topic");
 
-        if (repository.findAll().size() > 50)
-            deleteEverything();
+//        if (repository.findAll().size() > 50)
+//            deleteEverything();
 
         Topic topic = listaTopicuri.get(new Random().nextInt(listaTopicuri.size()));
         Topic newTopic = new Topic();

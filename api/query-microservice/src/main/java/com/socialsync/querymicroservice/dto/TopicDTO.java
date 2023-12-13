@@ -1,46 +1,31 @@
 package com.socialsync.querymicroservice.dto;
 
-import com.redis.om.spring.annotations.Document;
-import com.redis.om.spring.annotations.Searchable;
-import com.socialsync.querymicroservice.pojo.Topic;
+import com.socialsync.querymicroservice.documents.TopicDocument;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Reference;
-import org.springframework.data.redis.core.index.Indexed;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Document
+@AllArgsConstructor
 public class TopicDTO {
-    @Id
     private String id;
-
-    @Reference
-    private UserDTO creator;
-
-    @Searchable
+    private UserSummaryDTO creator;
     private String name;
     private String description;
     private Boolean ageRestriction;
-
-    @Reference
-    private List<PostDTO> posts;
-
-    @Reference
-    private List<UserDTO> members;
-
     private Long timestampCreated;
-    private Long timestampUpdated;
+    private List<PostSummaryDTO> posts = new ArrayList<>();
 
-    public TopicDTO(Topic topic) {
+    public TopicDTO(TopicDocument topic, List<PostSummaryDTO> posts) {
         this.id = topic.getId();
         this.name = topic.getName();
         this.description = topic.getDescription();
         this.ageRestriction = topic.getAgeRestriction();
+        this.timestampCreated = topic.getTimestampCreated();
+        this.posts.addAll(posts);
     }
 }
