@@ -50,11 +50,12 @@ public class QueryService implements QueryServiceMethods {
     }
 
     public List<CommentDTO> fetchPostComments(String id, Integer page) {
-        log.info(id);
-        List<CommentDTO> rezultat = commentRepository.findAllByPostId(id, PageRequest.of(page, 10)).map(CommentDTO::new).toList();
-        log.info(String.valueOf(rezultat.size()));
-
-        return rezultat;
+        try {
+            return commentRepository.findAll().stream().filter(p -> p.getPostId().equals(id)).map(CommentDTO::new).toList().subList(page * 10, (page + 1) * 10);
+        } catch (IndexOutOfBoundsException ex) {
+            List<CommentDTO> list = commentRepository.findAll().stream().filter(p -> p.getPostId().equals(id)).map(CommentDTO::new).toList();
+            return list.subList(Math.max(list.size() - 10, 0), list.size() - 1);
+        }
     }
 
     public List<PostSummaryDTO> fetchAllPosts(Integer page) {

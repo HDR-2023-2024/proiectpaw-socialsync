@@ -2,8 +2,10 @@ package com.socialsync.querymicroservice.api;
 
 import com.google.gson.Gson;
 import com.socialsync.querymicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.querymicroservice.documents.PostDocument;
 import com.socialsync.querymicroservice.documents.TopicDocument;
 import com.socialsync.querymicroservice.documents.UserDocument;
+import com.socialsync.querymicroservice.dto.PostDTO;
 import com.socialsync.querymicroservice.dto.TopicDTO;
 import com.socialsync.querymicroservice.dto.UserDTO;
 import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
@@ -89,24 +91,26 @@ public class QueryController {
             log.error(ex.getMessage());
         }
     }
-
-    @GetMapping("/comments")
-    public ResponseEntity<?> fetchComments(@NotNull @RequestParam Integer page) {
-        return ResponseEntity
-                .ok(queryService.fetchAllComments(parsePage(page)));
-    }
-
-
-    @GetMapping("/posts")
-    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
-        return ResponseEntity
-                .ok(queryService.fetchAllPosts(parsePage(page)));
-    }
+//
+//    @GetMapping("/comments")
+//    public ResponseEntity<?> fetchComments(@NotNull @RequestParam Integer page) {
+//        return ResponseEntity
+//                .ok(queryService.fetchAllComments(parsePage(page)));
+//    }
+//
+//
+//    @GetMapping("/posts")
+//    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
+//        return ResponseEntity
+//                .ok(queryService.fetchAllPosts(parsePage(page)));
+//    }
 
     @GetMapping("/posts/{id}")
-    public ResponseEntity<?> fetchPost(@PathVariable String id) {
+    public ResponseEntity<?> fetchPost(@PathVariable String id, @NotNull @RequestParam Integer page) {
+        Optional<PostDocument> post = queryService.fetchPostById(id);
+
         return ResponseEntity
-                .ok(queryService.fetchPostById(id));
+                .ok(post.isPresent() ? new PostDTO(post.get(), queryService.fetchPostComments(post.get().getId(), page)) : "");
     }
 
     @GetMapping("/posts/{id}/comments")
@@ -122,7 +126,6 @@ public class QueryController {
                     .ok(queryService.searchTopicsByName(s, page)))
                 .orElseGet(() -> ResponseEntity
                     .ok(queryService.fetchAllTopics(parsePage(page))));
-
     }
 
     @GetMapping("/topics/{id}")

@@ -21,7 +21,6 @@ public class CommentDocument {
     @Indexed
     private String postId;
     private String content;
-    private Integer score;
     private Long timestampCreated;
     private Long timestampUpdated;
 
@@ -30,7 +29,6 @@ public class CommentDocument {
         this.creatorId = comment.getCreatorId();
         this.postId = comment.getPostId();
         this.content = comment.getContent();
-        this.score = comment.getScore();
         this.timestampCreated = comment.getTimestampCreated();
         this.timestampUpdated = comment.getTimestampUpdated();
     }

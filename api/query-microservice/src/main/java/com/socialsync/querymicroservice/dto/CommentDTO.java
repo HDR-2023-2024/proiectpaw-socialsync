@@ -12,13 +12,11 @@ public class CommentDTO {
     private String id;
     private UserSummaryDTO creator;
     private String content;
-    private Integer score;
     private Long timestampCreated;
 
     public CommentDTO(CommentDocument commentDocument) {
         this.id = commentDocument.getId();
         this.content = commentDocument.getContent();
-        this.score = commentDocument.getScore();
         this.timestampCreated = commentDocument.getTimestampCreated();
     }
 }
