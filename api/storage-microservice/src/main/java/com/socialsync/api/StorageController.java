@@ -1,14 +1,12 @@
 package com.socialsync.api;
 
+import com.socialsync.pojo.ErrorClass;
 import com.socialsync.pojo.FileInfo;
 import com.socialsync.pojo.JsonFile;
 import com.socialsync.pojo.UrlDto;
 import com.socialsync.repository.FileRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,27 +33,30 @@ public class StorageController {
         } else {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_PNG);
-
             return new ResponseEntity<>(optionalFile.get().getContent(), headers, HttpStatus.OK);
         }
     }
 
     @PostMapping("/upload-multipartFile")
-    public ResponseEntity<String> uploadFiles(@RequestParam("files") List<MultipartFile> files) {
+    public ResponseEntity<?> uploadFiles(@RequestParam("files") List<MultipartFile> files) {
         // se trece prin fiecare fisier
         List<UrlDto> url = new ArrayList<>();
 
         if (files.size() < 1) {
-            return ResponseEntity.ok("Nu sa trimis nici o imagine pentru a fi salvata!");
+            return new ResponseEntity<>(new ErrorClass("Nu sa trimis nici o imagine pentru a fi salvata!"),HttpStatus.NOT_ACCEPTABLE);
         }
         for (MultipartFile file : files) {
-            try {
-                FileInfo fileInfo = fileRepository.save(new FileInfo(file.getOriginalFilename(), null, file.getBytes()));
-                System.out.println(file.getOriginalFilename());
-                url.add(new UrlDto("http://localhost:8088/api/v1/storage/img/" + fileInfo.getId()));
-            } catch (IOException ioException) {
-                System.out.print(ioException.getMessage());
-                return ResponseEntity.status(500).body("Eroare la salvarea fisierelor.");
+            if (isImageFile(file.getOriginalFilename())) {
+                try {
+                    FileInfo fileInfo = fileRepository.save(new FileInfo(file.getOriginalFilename(), null, file.getBytes()));
+                    System.out.println(file.getOriginalFilename());
+                    url.add(new UrlDto("http://localhost:8088/api/v1/storage/img/" + fileInfo.getId()));
+                } catch (IOException ioException) {
+                    System.out.print(ioException.getMessage());
+                    return new ResponseEntity<>(new ErrorClass("Eroare la salvarea fisierelor."),HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }else{
+                return new ResponseEntity<>(new ErrorClass("Formatul fisierului nu este valid."),HttpStatus.NOT_ACCEPTABLE);
             }
         }
 
@@ -64,20 +65,31 @@ public class StorageController {
 
     @PostMapping("/upload-json")
     public ResponseEntity<?> uploadFilesJSON(@RequestBody List<JsonFile> files) {
-        // se trece prin fiecare fisier
-        List<UrlDto> url = new ArrayList<>();
-        if (files.size() < 1) {
-            return ResponseEntity.ok("Nu sa trimis nici o imagine pentru a fi salvata!");
-        }
-        for (JsonFile file : files) {
-            FileInfo fileInfo = fileRepository.save(new FileInfo(file.getFileName(), null, file.getContent()));
-            System.out.println(file.getFileName());
-            url.add(new UrlDto("http://localhost:8088/api/v1/storage/img/" + fileInfo.getId()));
+        List<UrlDto> urls = new ArrayList<>();
+
+        if (files.isEmpty()) {
+            return new ResponseEntity<>(new ErrorClass("Nu sa trimis nici o imagine pentru a fi salvata!"),HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity(url, HttpStatus.OK);
+        for (JsonFile file : files) {
+            // daca e imagine
+            if (isImageFile(file.getFileName())) {
+                FileInfo fileInfo = fileRepository.save(new FileInfo(file.getFileName(), null, file.getContent()));
+                urls.add(new UrlDto("http://localhost:8088/api/v1/storage/img/" + fileInfo.getId()));
+            }else{
+                return new ResponseEntity<>(new ErrorClass("Formatul fisierului nu este valid."),HttpStatus.NOT_ACCEPTABLE);
+            }
+        }
+
+        return new ResponseEntity<>(urls, HttpStatus.OK);
     }
 
+    private boolean isImageFile(String fileName) {
+        return fileName != null && (fileName.toLowerCase().endsWith(".png") ||
+                fileName.toLowerCase().endsWith(".jpg") ||
+                fileName.toLowerCase().endsWith(".jpeg") ||
+                fileName.toLowerCase().endsWith(".gif"));
+    }
     /*@GetMapping("/{id}")
     public ResponseEntity<JsonFile> getMemoryFileById(@PathVariable("id") String id) {
         Optional<FileInfo> optionalFile = this.fileRepository.findById(id);
