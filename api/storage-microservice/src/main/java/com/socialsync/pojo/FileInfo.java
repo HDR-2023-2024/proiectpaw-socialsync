@@ -22,8 +22,14 @@ public class FileInfo {
     @Column(name = "path", length = 1000)
     private String path;
 
-    public FileInfo(String filename, String path) {
+    @Lob
+    @Column(name = "content", columnDefinition = "LONGBLOB", nullable = false)
+    private byte[] content;
+
+
+    public FileInfo(String filename, String path,byte[] content) {
         this.filename = filename;
         this.path = path;
+        this.content = content;
     }
 }
