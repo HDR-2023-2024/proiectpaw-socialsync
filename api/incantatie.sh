@@ -15,10 +15,6 @@ cd users-microservice
 ./mvnw clean
 ./mvnw install
 cd ..
-cd query-microservice
-./mvnw clean
-./mvnw install
-cd ..
 cd authorization-microservice
 ./mvnw clean
 ./mvnw install

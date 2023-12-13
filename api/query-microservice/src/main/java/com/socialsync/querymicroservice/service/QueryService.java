@@ -1,9 +1,13 @@
 package com.socialsync.querymicroservice.service;
 
+import com.socialsync.querymicroservice.documents.CommentDocument;
+import com.socialsync.querymicroservice.documents.PostDocument;
+import com.socialsync.querymicroservice.documents.TopicDocument;
+import com.socialsync.querymicroservice.documents.UserDocument;
 import com.socialsync.querymicroservice.dto.CommentDTO;
-import com.socialsync.querymicroservice.dto.PostDTO;
-import com.socialsync.querymicroservice.dto.TopicDTO;
-import com.socialsync.querymicroservice.dto.UserDTO;
+import com.socialsync.querymicroservice.dto.PostSummaryDTO;
+import com.socialsync.querymicroservice.dto.TopicSummaryDTO;
+import com.socialsync.querymicroservice.dto.UserSummaryDTO;
 import com.socialsync.querymicroservice.interfaces.QueryServiceMethods;
 import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.querymicroservice.pojo.PostQueueMessage;
@@ -19,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.exceptions.JedisDataException;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +32,7 @@ import java.util.Random;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class QueryQueryService implements QueryServiceMethods {
+public class QueryService implements QueryServiceMethods {
     private CommentRepository commentRepository;
 
     private PostRepository postRepository;
@@ -38,155 +41,152 @@ public class QueryQueryService implements QueryServiceMethods {
 
     private TopicRepository topicRepository;
 
-    @Override
-    public Page<UserDTO> fetchAllUsers(Integer page) {
-        return userRepository.findAll(PageRequest.of(page, 10));
+    public List<UserSummaryDTO> fetchAllUsers(Integer page) {
+        return userRepository.findAll(PageRequest.of(page, 10)).map(UserSummaryDTO::new).toList();
     }
 
-    @Override
-    public Page<CommentDTO> fetchAllComments(Integer page) {
+    public Page<CommentDocument> fetchAllComments(Integer page) {
         return commentRepository.findAll(PageRequest.of(page, 10));
     }
 
-    @Override
-    public Page<PostDTO> fetchAllPosts(Integer page) {
-        return postRepository.findAll(PageRequest.of(page, 10));
+    public List<CommentDTO> fetchPostComments(String id, Integer page) {
+        log.info(id);
+        List<CommentDTO> rezultat = commentRepository.findAllByPostId(id, PageRequest.of(page, 10)).map(CommentDTO::new).toList();
+        log.info(String.valueOf(rezultat.size()));
+
+        return rezultat;
     }
 
-    @Override
-    public Page<TopicDTO> fetchAllTopics(Integer page) {
-        return topicRepository.findAll(PageRequest.of(page, 10));
+    public List<PostSummaryDTO> fetchAllPosts(Integer page) {
+        return postRepository.findAll(PageRequest.of(page, 10)).map(PostSummaryDTO::new).toList();
     }
 
-    @Override
-    public Page<UserDTO> fetchAllUsersByUsername(String username, Integer page) {
-        try {
-            return userRepository.searchByUsername(username + "*", PageRequest.of(page, 10));
-        } catch (JedisDataException ex) {
-            log.error(ex.getMessage());
-            return null;
-        }
+    public Optional<PostDocument> fetchPostById(String id) {
+        return postRepository.findById(id);
     }
 
-    @Override
-    public Page<PostDTO> fetchAllPostByTopicId(Integer page, String topicId) {
-        return postRepository.findAllByTopicId(topicId, PageRequest.of(page, 10));
+    public List<TopicSummaryDTO> fetchAllTopics(Integer page) {
+        return topicRepository.findAll(PageRequest.of(page, 10)).map(TopicSummaryDTO::new).toList();
     }
 
-    @Override
-    public Page<CommentDTO> fetchAllCommentsByPostId(Integer page, String postId) {
-        return commentRepository.findAllByPostId(PageRequest.of(page, 10), postId);
+    public Optional<TopicDocument> fetchTopic(String id) {
+        return topicRepository.findById(id);
     }
 
-    @Override
-    public Page<TopicDTO> fetchAllTopicsByName(String topicName, Integer page) {
-        return topicRepository.searchByName(topicName + "*", PageRequest.of(page, 10));
+    public List<PostSummaryDTO> fetchTopicPosts(String id, Integer page) {
+        return postRepository.findAllByTopicId(id, PageRequest.of(page, 10)).map(PostSummaryDTO::new).toList();
     }
 
-    @Override
-    public Page<CommentDTO> fetchAllCommentsByUserId(Integer page, String id) {
-        return commentRepository.findAllByCreator_Id(PageRequest.of(page, 10), id);
+    public List<TopicSummaryDTO> searchTopicsByName(String query, Integer page) {
+        return topicRepository.searchByName(query + "*", PageRequest.of(page, 10))
+                .map(TopicSummaryDTO::new).toList();
     }
 
-    @Override
-    public Page<PostDTO> fetchAllPostByUserId(Integer page, String id) {
-        return postRepository.findAllByCreator_Id(id, PageRequest.of(page, 10));
+    public Optional<UserDocument> fetchUser(String id) {
+        return userRepository.findById(id);
     }
 
+    public List<UserSummaryDTO> searchUsersByUsername(String query, Integer page) {
+        return userRepository.searchByUsername(query + "*", PageRequest.of(page, 10))
+                .map(UserSummaryDTO::new).toList();
+    }
+
+    //TODO
+//    public List<CommentDTO> fetchUserComments()
 
     @Override
     public void handleComment(CommentQueueMessage msgQ) throws RuntimeException {
         log.info("Handling comment " + msgQ.getComment().getId());
-        CommentDTO commentDTO = new CommentDTO(msgQ.getComment());
+        CommentDocument commentDocument = new CommentDocument(msgQ.getComment());
 
-        boolean parentPostExists = postRepository.existsById(commentDTO.getPostId());
-        Optional<UserDTO> creator = userRepository.findById(msgQ.getComment().getCreatorId());
+        boolean parentPostExists = postRepository.existsById(commentDocument.getPostId());
+        Optional<UserDocument> creator = userRepository.findById(msgQ.getComment().getCreatorId());
 
         boolean override = creator.isEmpty() && !parentPostExists && (msgQ.getComment().getCreatorId().equals("-1") || msgQ.getComment().getPostId().equals("-1"));
 
         if (parentPostExists && creator.isPresent() || override) {
-            commentDTO.setCreator(!override ? creator.get() : findRandomUser());
+            commentDocument.setCreatorId(!override ? creator.get().getId() : findRandomUser().getId());
             if (override)
-                commentDTO.setPostId(findRandomPostId());
+                commentDocument.setPostId(findRandomPostId());
 
-            log.info("Post and creator found for comment " + commentDTO.getId());
-            boolean commentExists = commentRepository.existsById(commentDTO.getId());
+            log.info("Post and creator found for comment " + commentDocument.getId());
+            boolean commentExists = commentRepository.existsById(commentDocument.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {
                     if (!commentExists) {
                         log.info("Adding comment " + msgQ.getComment().getId());
-                        commentRepository.save(commentDTO);
+                        commentRepository.save(commentDocument);
                     }
                     else {
-                        throw new CommentException("CREATE: Comment " + commentDTO.getId() + " already exists!");
+                        throw new CommentException("CREATE: Comment " + commentDocument.getId() + " already exists!");
                     }
                 }
                 case UPDATE -> {
                     if (commentExists) {
                         log.info("Updating comment " + msgQ.getComment().getId());
-                        commentRepository.save(commentDTO);
+                        commentRepository.save(commentDocument);
                     }
                     else {
-                        commentRepository.save(commentDTO);
-                        throw new CommentException("UPDATE: Comment " + commentDTO.getId() + " to be updated not found! Created instead!");
+                        commentRepository.save(commentDocument);
+                        throw new CommentException("UPDATE: Comment " + commentDocument.getId() + " to be updated not found! Created instead!");
                     }
                 }
                 case DELETE -> {
                     if (commentExists) {
                         log.info("Deleting comment " + msgQ.getComment().getId());
-                        commentRepository.delete(commentDTO);
+                        commentRepository.delete(commentDocument);
                     }
                     else
-                        throw new CommentException("DELETE: Comment " + commentDTO.getId() + " to be deleted not found!");
+                        throw new CommentException("DELETE: Comment " + commentDocument.getId() + " to be deleted not found!");
 
                 }
             }
         } else
-            throw new ParentException("Post " + commentDTO.getPostId() + " or creator " + msgQ.getComment().getCreatorId() + " not found for comment!");
+            throw new ParentException("Post " + commentDocument.getPostId() + " or creator " + msgQ.getComment().getCreatorId() + " not found for comment!");
 
     }
 
     @Override
     public void handlePost(PostQueueMessage msgQ) throws RuntimeException {
         log.info("Handling post " + msgQ.getPost().getId());
-        PostDTO postDTO = new PostDTO(msgQ.getPost());
-        Optional<UserDTO> creator = userRepository.findById(msgQ.getPost().getCreatorId());
-        boolean parentTopicExists = topicRepository.existsById(postDTO.getTopicId());
+        PostDocument postDocument = new PostDocument(msgQ.getPost());
+        Optional<UserDocument> creator = userRepository.findById(msgQ.getPost().getCreatorId());
+        boolean parentTopicExists = topicRepository.existsById(postDocument.getTopicId());
 
         boolean override = creator.isEmpty() && !parentTopicExists && (msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1"));
 
         if (parentTopicExists && creator.isPresent() || override) {
-            boolean postExists = postRepository.existsById(postDTO.getId());
-            postDTO.setCreator(!override ? creator.get() : findRandomUser());
+            boolean postExists = postRepository.existsById(postDocument.getId());
+            postDocument.setCreatorId(!override ? creator.get().getId() : findRandomUser().getId());
             if (override)
-                postDTO.setTopicId(findRandomTopicId());
+                postDocument.setTopicId(findRandomTopicId());
 
             switch (msgQ.getType()) {
                 case CREATE -> {
                     if (!postExists) {
                         log.info("Adding post " + msgQ.getPost().getId());
-                        postRepository.save(postDTO);
+                        postRepository.save(postDocument);
                     }
                     else
-                        throw new PostException("CREATE: Post " + postDTO.getId() + " already exists!");
+                        throw new PostException("CREATE: Post " + postDocument.getId() + " already exists!");
                 }
                 case UPDATE -> {
                     if (postExists) {
                         log.info("Updating post " + msgQ.getPost().getId());
-                        postRepository.save(postDTO);
+                        postRepository.save(postDocument);
                     }
                     else {
-                        postRepository.save(postDTO);
-                        throw new PostException("UPDATE: Post " + postDTO.getId() + " does not exist! Created one instead!");
+                        postRepository.save(postDocument);
+                        throw new PostException("UPDATE: Post " + postDocument.getId() + " does not exist! Created one instead!");
                     }
                 }
                 case DELETE -> {
                     if (postExists) {
                         log.info("Deleting post " + msgQ.getPost().getId());
-                        postRepository.delete(postDTO);
+                        postRepository.delete(postDocument);
                     }
                     else
-                        throw new PostException("DELETE: Post " + postDTO.getId() + " to be deleted not found!");
+                        throw new PostException("DELETE: Post " + postDocument.getId() + " to be deleted not found!");
                 }
             }
         }
@@ -197,40 +197,40 @@ public class QueryQueryService implements QueryServiceMethods {
     @Override
     public void handleTopic(TopicQueueMessage msgQ) throws RuntimeException {
         log.info("Handling topic " + msgQ.getTopic().getId());
-        TopicDTO topicDTO = new TopicDTO(msgQ.getTopic());
+        TopicDocument topicDocument = new TopicDocument(msgQ.getTopic());
 
-        Optional<UserDTO> creator = userRepository.findById(msgQ.getTopic().getCreatorId());
+        Optional<UserDocument> creator = userRepository.findById(msgQ.getTopic().getCreatorId());
         boolean override = creator.isEmpty() && Objects.equals(msgQ.getTopic().getCreatorId(), "-1");
 
         if (creator.isPresent() || override) {
-            topicDTO.setCreator(!override ? creator.get() : findRandomUser());
-            boolean topicExists = topicRepository.existsById(topicDTO.getId());
+            topicDocument.setCreatorId(!override ? creator.get().getId() : findRandomUser().getId());
+            boolean topicExists = topicRepository.existsById(topicDocument.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {
                     if (!topicExists) {
                         log.info("Adding topic " + msgQ.getTopic().getId());
-                        topicRepository.save(topicDTO);
+                        topicRepository.save(topicDocument);
                     }
                     else
-                        throw new TopicException("CREATE: Topic " + topicDTO.getId()  + " already exists!");
+                        throw new TopicException("CREATE: Topic " + topicDocument.getId()  + " already exists!");
                 }
                 case UPDATE -> {
                     if (topicExists) {
                         log.info("Updating topic " + msgQ.getTopic().getId());
-                        topicRepository.save(topicDTO);
+                        topicRepository.save(topicDocument);
                     }
                     else {
-                        topicRepository.save(topicDTO);
-                        throw new TopicException("UPDATE: Topic " + topicDTO.getId() + " does not exist! Created one instead!");
+                        topicRepository.save(topicDocument);
+                        throw new TopicException("UPDATE: Topic " + topicDocument.getId() + " does not exist! Created one instead!");
                     }
                 }
                 case DELETE -> {
                     if (topicExists) {
                         log.info("Deleting topic " + msgQ.getTopic().getId());
-                        topicRepository.delete(topicDTO);
+                        topicRepository.delete(topicDocument);
                     }
                     else
-                        throw new TopicException("DELETE: Topic " + topicDTO.getId() + " to be deleted not found!");
+                        throw new TopicException("DELETE: Topic " + topicDocument.getId() + " to be deleted not found!");
                 }
             }
         }
@@ -241,7 +241,7 @@ public class QueryQueryService implements QueryServiceMethods {
     @Override
     public void handleUser(UserQueueMessage msgQ) throws RuntimeException {
         log.info("Handling user " + msgQ.getUser().getId());
-        UserDTO user = new UserDTO(msgQ.getUser());
+        UserDocument user = new UserDocument(msgQ.getUser());
 
         boolean userExists = userRepository.existsById(user.getId());
         switch (msgQ.getType()) {
@@ -274,18 +274,18 @@ public class QueryQueryService implements QueryServiceMethods {
         }
     }
 
-    private UserDTO findRandomUser() {
-        List<UserDTO> firstPage = userRepository.findAll(PageRequest.of(0, 10)).getContent();
+    private UserDocument findRandomUser() {
+        List<UserDocument> firstPage = userRepository.findAll(PageRequest.of(0, 10)).getContent();
         return firstPage.get(new Random().nextInt(firstPage.size()));
     }
 
     private String findRandomTopicId() {
-        List<TopicDTO> firstPage = topicRepository.findAll(PageRequest.of(0, 10)).getContent();
+        List<TopicDocument> firstPage = topicRepository.findAll(PageRequest.of(0, 10)).getContent();
         return firstPage.get(new Random().nextInt(firstPage.size())).getId();
     }
 
     private String findRandomPostId() {
-        List<PostDTO> firstPage = postRepository.findAll(PageRequest.of(0, 10)).getContent();
+        List<PostDocument> firstPage = postRepository.findAll(PageRequest.of(0, 10)).getContent();
         return firstPage.get(new Random().nextInt(firstPage.size())).getId();
     }
 }

@@ -1,23 +1,31 @@
-package com.socialsync.querymicroservice.dto;
+package com.socialsync.querymicroservice.documents;
 
-import com.socialsync.querymicroservice.documents.UserDocument;
+import com.redis.om.spring.annotations.Document;
+import com.redis.om.spring.annotations.Indexed;
+import com.redis.om.spring.annotations.Searchable;
+import com.socialsync.querymicroservice.pojo.User;
 import com.socialsync.querymicroservice.pojo.enums.GenderType;
 import com.socialsync.querymicroservice.pojo.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+@Document
+public class UserDocument {
+    @Id
     private String id;
+    @Searchable
     private String  username;
+    @Indexed
     private String  email;
     private RoleType role;
     private GenderType gender;
 
-    public UserDTO(UserDocument user) {
+    public UserDocument(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();

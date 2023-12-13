@@ -71,8 +71,8 @@ public class CommentsService implements CommentsServiceMethods {
         List<String> reactie = List.of("NASPA", "MEH", "BUNA");
         log.info("We have " + repository.findAll().size() + " comments");
 
-        if (repository.findAll().size() > 200)
-            deleteEverything();
+//        if (repository.findAll().size() > 200)
+//            deleteEverything();
 
         Comment comment = new Comment("-1", "-1", "POSTARE " + reactie.get(new Random().nextInt(reactie.size())) + " UNGA BUNGA!");
         addComment(comment);

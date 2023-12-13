@@ -2,11 +2,15 @@ package com.socialsync.querymicroservice.api;
 
 import com.google.gson.Gson;
 import com.socialsync.querymicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.querymicroservice.documents.TopicDocument;
+import com.socialsync.querymicroservice.documents.UserDocument;
+import com.socialsync.querymicroservice.dto.TopicDTO;
+import com.socialsync.querymicroservice.dto.UserDTO;
 import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.querymicroservice.pojo.PostQueueMessage;
 import com.socialsync.querymicroservice.pojo.TopicQueueMessage;
 import com.socialsync.querymicroservice.pojo.UserQueueMessage;
-import com.socialsync.querymicroservice.service.QueryQueryService;
+import com.socialsync.querymicroservice.service.QueryService;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +35,7 @@ public class QueryController {
 
     private Gson gson;
 
-    private QueryQueryService queryService;
+    private QueryService queryService;
 
     @Bean
     void initTemplate() {
@@ -89,64 +93,67 @@ public class QueryController {
     @GetMapping("/comments")
     public ResponseEntity<?> fetchComments(@NotNull @RequestParam Integer page) {
         return ResponseEntity
-                .ok()
-                .body(queryService.fetchAllComments(parsePage(page)));
+                .ok(queryService.fetchAllComments(parsePage(page)));
     }
 
-
-    @GetMapping("/post/{id}/comments")
-    public ResponseEntity<?> fetchCommentsForPost(@NotNull @PathVariable String id, @NotNull @RequestParam Integer page) {
-        return ResponseEntity
-                .ok()
-                .body(queryService.fetchAllCommentsByPostId(parsePage(page), id));
-    }
 
     @GetMapping("/posts")
     public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
         return ResponseEntity
-                .ok()
-                .body(queryService.fetchAllPosts(parsePage(page)));
+                .ok(queryService.fetchAllPosts(parsePage(page)));
     }
 
-    @GetMapping("/topic/{id}/posts")
-    public ResponseEntity<?> fetchPostsByTopicId(@NotNull @PathVariable String id, @NotNull @RequestParam Integer page) {
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<?> fetchPost(@PathVariable String id) {
         return ResponseEntity
-                .ok()
-                .body(queryService.fetchAllPostByTopicId(parsePage(page), id));
+                .ok(queryService.fetchPostById(id));
+    }
+
+    @GetMapping("/posts/{id}/comments")
+    public ResponseEntity<?> fetchPostComments(@PathVariable String id, @NotNull @RequestParam Integer page) {
+        log.info(id);
+        return ResponseEntity
+                .ok(queryService.fetchPostComments(id, page));
     }
 
     @GetMapping("/topics")
-    public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page, @RequestParam Optional<String> name) {
-        return name.map(s -> ResponseEntity
-                    .ok()
-                    .body(queryService.fetchAllTopicsByName(s, page)))
+    public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page, Optional<String> query) {
+        return query.map(s -> ResponseEntity
+                    .ok(queryService.searchTopicsByName(s, page)))
                 .orElseGet(() -> ResponseEntity
-                    .ok()
-                    .body(queryService.fetchAllTopics(parsePage(page))));
+                    .ok(queryService.fetchAllTopics(parsePage(page))));
+
+    }
+
+    @GetMapping("/topics/{id}")
+    public ResponseEntity<?> fetchTopic(@PathVariable String id) {
+        Optional<TopicDocument> topic = queryService.fetchTopic(id);
+
+        return ResponseEntity
+                .ok(topic.isPresent() ? new TopicDTO(topic.get(), queryService.fetchTopicPosts(id, 0)) : "shit");
+    }
+
+    @GetMapping("/topics/{id}/posts")
+    public ResponseEntity<?> fetchTopicPosts(@PathVariable String id, @NotNull @RequestParam Integer page) {
+        return ResponseEntity
+                .ok(queryService.fetchTopicPosts(id, page));
     }
 
     @GetMapping("/users")
-    public ResponseEntity<?> fetchUsers(@NotNull @RequestParam Integer page, @RequestParam Optional<String> username) {
-        return username.map(s -> ResponseEntity
-                    .ok()
-                    .body(queryService.fetchAllUsersByUsername(s, parsePage(page))))
+    public ResponseEntity<?> fetchUsers(@NotNull @RequestParam Integer page, Optional<String> query) {
+        return query.map(s -> ResponseEntity
+                    .ok(queryService.searchUsersByUsername(s, page)))
                 .orElseGet(() -> ResponseEntity
-                    .ok()
-                    .body(queryService.fetchAllUsers(parsePage(page))));
+                    .ok(queryService.fetchAllUsers(parsePage(page))));
+
     }
 
-    @GetMapping("/user/{id}/comments")
-    public ResponseEntity<?> fetchUserComments(@NotNull @RequestParam Integer page, @PathVariable String id) {
-        return ResponseEntity
-                .ok()
-                .body(queryService.fetchAllCommentsByUserId(parsePage(page), id));
-    }
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> fetchUser(@PathVariable String id) {
+        Optional<UserDocument> user = queryService.fetchUser(id);
 
-    @GetMapping("/user/{id}/posts")
-    public ResponseEntity<?> fetchUserPosts(@NotNull @RequestParam Integer page, @PathVariable String id) {
         return ResponseEntity
-                .ok()
-                .body(queryService.fetchAllPostByUserId(parsePage(page), id));
+                .ok(user.isPresent() ? new UserDTO(user.get()) : "");
     }
 
     private static Integer parsePage(Integer page) {

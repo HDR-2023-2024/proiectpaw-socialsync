@@ -8,19 +8,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDTO {
+public class PostSummaryDTO {
     private String id;
     private UserSummaryDTO creator;
-    private String topicId;
     private String title;
-    private String content;
     private Integer score;
 
-    public PostDTO(PostDocument post) {
+    public PostSummaryDTO(PostDocument post) {
         this.id = post.getId();
-        this.topicId = post.getTopicId();
         this.title = post.getTitle();
-        this.content = post.getContent();
         this.score = post.getScore();
     }
 }
