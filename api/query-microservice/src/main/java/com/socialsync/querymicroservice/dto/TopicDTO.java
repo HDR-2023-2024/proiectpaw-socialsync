@@ -23,6 +23,7 @@ public class TopicDTO {
     public TopicDTO(TopicDocument topic, List<PostSummaryDTO> posts) {
         this.id = topic.getId();
         this.name = topic.getName();
+        this.creator = topic.getCreator();
         this.description = topic.getDescription();
         this.ageRestriction = topic.getAgeRestriction();
         this.timestampCreated = topic.getTimestampCreated();

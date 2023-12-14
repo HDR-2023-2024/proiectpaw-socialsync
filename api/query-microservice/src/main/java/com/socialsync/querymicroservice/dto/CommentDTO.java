@@ -16,6 +16,7 @@ public class CommentDTO {
 
     public CommentDTO(CommentDocument commentDocument) {
         this.id = commentDocument.getId();
+        this.creator = commentDocument.getCreator();
         this.content = commentDocument.getContent();
         this.timestampCreated = commentDocument.getTimestampCreated();
     }

@@ -54,7 +54,7 @@ public class QueryService implements QueryServiceMethods {
             return commentRepository.findAll().stream().filter(p -> p.getPostId().equals(id)).map(CommentDTO::new).toList().subList(page * 10, (page + 1) * 10);
         } catch (IndexOutOfBoundsException ex) {
             List<CommentDTO> list = commentRepository.findAll().stream().filter(p -> p.getPostId().equals(id)).map(CommentDTO::new).toList();
-            return list.subList(Math.max(list.size() - 10, 0), list.size() - 1);
+            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
         }
     }
 
@@ -106,7 +106,7 @@ public class QueryService implements QueryServiceMethods {
         boolean override = creator.isEmpty() && !parentPostExists && (msgQ.getComment().getCreatorId().equals("-1") || msgQ.getComment().getPostId().equals("-1"));
 
         if (parentPostExists && creator.isPresent() || override) {
-            commentDocument.setCreatorId(!override ? creator.get().getId() : findRandomUser().getId());
+            commentDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));
             if (override)
                 commentDocument.setPostId(findRandomPostId());
 
@@ -158,7 +158,7 @@ public class QueryService implements QueryServiceMethods {
 
         if (parentTopicExists && creator.isPresent() || override) {
             boolean postExists = postRepository.existsById(postDocument.getId());
-            postDocument.setCreatorId(!override ? creator.get().getId() : findRandomUser().getId());
+            postDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));
             if (override)
                 postDocument.setTopicId(findRandomTopicId());
 
@@ -204,7 +204,7 @@ public class QueryService implements QueryServiceMethods {
         boolean override = creator.isEmpty() && Objects.equals(msgQ.getTopic().getCreatorId(), "-1");
 
         if (creator.isPresent() || override) {
-            topicDocument.setCreatorId(!override ? creator.get().getId() : findRandomUser().getId());
+            topicDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));
             boolean topicExists = topicRepository.existsById(topicDocument.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {

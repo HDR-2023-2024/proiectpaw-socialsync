@@ -1,6 +1,7 @@
 package com.socialsync.querymicroservice.documents;
 
 import com.redis.om.spring.annotations.Document;
+import com.socialsync.querymicroservice.dto.UserSummaryDTO;
 import com.socialsync.querymicroservice.pojo.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +17,7 @@ public class CommentDocument {
     @Id
     private String id;
     @Indexed
-    private String creatorId;
+    private UserSummaryDTO creator;
 
     @Indexed
     private String postId;
@@ -26,7 +27,6 @@ public class CommentDocument {
 
     public CommentDocument(Comment comment) {
         this.id = comment.getId();
-        this.creatorId = comment.getCreatorId();
         this.postId = comment.getPostId();
         this.content = comment.getContent();
         this.timestampCreated = comment.getTimestampCreated();

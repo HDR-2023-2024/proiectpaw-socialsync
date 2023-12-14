@@ -23,6 +23,7 @@ public class PostDTO {
     public PostDTO(PostDocument post, List<CommentDTO> comments) {
         this.id = post.getId();
         this.topicId = post.getTopicId();
+        this.creator = post.getCreator();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.score = post.getScore();

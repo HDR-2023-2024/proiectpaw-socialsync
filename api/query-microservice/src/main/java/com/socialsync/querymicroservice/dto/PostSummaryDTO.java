@@ -16,6 +16,7 @@ public class PostSummaryDTO {
 
     public PostSummaryDTO(PostDocument post) {
         this.id = post.getId();
+        this.creator = post.getCreator();
         this.title = post.getTitle();
         this.score = post.getScore();
     }

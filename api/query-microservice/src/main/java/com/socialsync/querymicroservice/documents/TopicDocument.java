@@ -3,6 +3,7 @@ package com.socialsync.querymicroservice.documents;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import com.redis.om.spring.annotations.Searchable;
+import com.socialsync.querymicroservice.dto.UserSummaryDTO;
 import com.socialsync.querymicroservice.pojo.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class TopicDocument {
     @Id
     private String id;
     @Indexed
-    private String creatorId;
+    private UserSummaryDTO creator;
     @Searchable
     private String name;
     private String description;
@@ -27,7 +28,6 @@ public class TopicDocument {
 
     public TopicDocument(Topic topic) {
         this.id = topic.getId();
-        this.creatorId = topic.getCreatorId();
         this.name = topic.getName();
         this.description = topic.getDescription();
         this.ageRestriction = topic.getAgeRestriction();

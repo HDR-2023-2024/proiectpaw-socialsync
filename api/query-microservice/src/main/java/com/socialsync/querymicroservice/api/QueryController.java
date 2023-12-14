@@ -91,19 +91,19 @@ public class QueryController {
             log.error(ex.getMessage());
         }
     }
-//
-//    @GetMapping("/comments")
-//    public ResponseEntity<?> fetchComments(@NotNull @RequestParam Integer page) {
-//        return ResponseEntity
-//                .ok(queryService.fetchAllComments(parsePage(page)));
-//    }
-//
-//
-//    @GetMapping("/posts")
-//    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
-//        return ResponseEntity
-//                .ok(queryService.fetchAllPosts(parsePage(page)));
-//    }
+
+    @GetMapping("/comments")
+    public ResponseEntity<?> fetchComments(@NotNull @RequestParam Integer page) {
+        return ResponseEntity
+                .ok(queryService.fetchAllComments(parsePage(page)));
+    }
+
+
+    @GetMapping("/posts")
+    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
+        return ResponseEntity
+                .ok(queryService.fetchAllPosts(parsePage(page)));
+    }
 
     @GetMapping("/posts/{id}")
     public ResponseEntity<?> fetchPost(@PathVariable String id, @NotNull @RequestParam Integer page) {
