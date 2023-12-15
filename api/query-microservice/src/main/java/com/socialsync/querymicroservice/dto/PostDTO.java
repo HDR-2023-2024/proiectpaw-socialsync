@@ -19,6 +19,8 @@ public class PostDTO {
     private String content;
     private List<CommentDTO> comments = new ArrayList<>();
     private Integer score;
+    private Long timestampCreated;
+
 
     public PostDTO(PostDocument post, List<CommentDTO> comments) {
         this.id = post.getId();
@@ -28,5 +30,6 @@ public class PostDTO {
         this.content = post.getContent();
         this.score = post.getScore();
         this.comments.addAll(comments);
+        this.timestampCreated = post.getTimestampCreated();
     }
 }
