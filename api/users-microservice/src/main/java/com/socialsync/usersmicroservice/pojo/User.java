@@ -14,6 +14,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,14 +34,20 @@ public class User {
     @Column(name = "gender", length = 1)
     private GenderType gender;
 
+    @Getter
+    @Column(name = "photoId", length = 100)
+    private String photoId;
+
     @Column(name = "role", length = 1)
     private RoleType role;
 
-    public User(String username, String password, String email, GenderType gender, RoleType role) {
+    public User(String username, String password, String email, GenderType gender, String photoId, RoleType role) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.gender = gender;
+        this.photoId = photoId;
         this.role = role;
     }
+
 }

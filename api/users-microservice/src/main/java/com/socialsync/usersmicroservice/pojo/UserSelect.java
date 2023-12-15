@@ -18,13 +18,15 @@ public class UserSelect {
     private String  username;
     private String  email;
     private RoleType role;
+    private String photoId;
     private GenderType gender;
 
-    public UserSelect(String id, String username, String email, RoleType role, GenderType gender) {
+    public UserSelect(String id, String username, String email, RoleType role,String photoId, GenderType gender) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
+        this.photoId = photoId;
         this.gender = gender;
     }
 }
