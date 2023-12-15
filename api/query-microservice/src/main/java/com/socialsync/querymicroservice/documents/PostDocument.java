@@ -30,6 +30,7 @@ public class PostDocument {
     private Integer score;
     private Set<String> upvotes = new HashSet<>();
     private Set<String> downvotes = new HashSet<>();
+    private Set<String> photos = new HashSet<>();
     private Long timestampCreated;
     private Long timestampUpdated;
 

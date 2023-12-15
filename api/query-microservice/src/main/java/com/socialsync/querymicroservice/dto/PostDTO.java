@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +20,7 @@ public class PostDTO {
     private String title;
     private String content;
     private List<CommentDTO> comments = new ArrayList<>();
+    private Set<String> photos = new HashSet<>();
     private Integer score;
     private Long timestampCreated;
 
@@ -28,6 +31,7 @@ public class PostDTO {
         this.creator = post.getCreator();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.photos = post.getPhotos();
         this.score = post.getUpvotes().size() - post.getDownvotes().size();
         this.comments.addAll(comments);
         this.timestampCreated = post.getTimestampCreated();
