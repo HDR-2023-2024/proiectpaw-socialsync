@@ -18,6 +18,8 @@ import org.springframework.data.annotation.Id;
 public class UserDocument {
     @Id
     private String id;
+    private String photoId;
+
     @Searchable
     private String  username;
     @Indexed
@@ -28,6 +30,7 @@ public class UserDocument {
     public UserDocument(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
+        this.photoId = user.getPhotoId();
         this.email = user.getEmail();
         this.role = user.getRole();
         this.gender = user.getGender();

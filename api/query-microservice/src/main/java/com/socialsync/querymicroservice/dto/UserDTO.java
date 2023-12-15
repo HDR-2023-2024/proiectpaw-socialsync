@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDTO {
     private String id;
+    private String photoId;
     private String  username;
     private String  email;
     private RoleType role;
@@ -19,6 +20,7 @@ public class UserDTO {
 
     public UserDTO(UserDocument user) {
         this.id = user.getId();
+        this.photoId =user.getPhotoId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.role = user.getRole();
