@@ -11,4 +11,7 @@ public interface PostsServiceMethods {
     void addPost(Post post);
     void updatePost(String id, Post post) throws PostNotFound;
     void deletePost(String id) throws PostNotFound;
+
+    void upvotePost(String postId, String userId) throws PostNotFound;
+    void downvotePost(String postId, String userId) throws PostNotFound;
 }

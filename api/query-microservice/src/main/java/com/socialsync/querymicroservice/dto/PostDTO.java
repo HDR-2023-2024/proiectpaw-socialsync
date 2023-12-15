@@ -28,7 +28,7 @@ public class PostDTO {
         this.creator = post.getCreator();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.score = post.getScore();
+        this.score = post.getUpvotes().size() - post.getDownvotes().size();
         this.comments.addAll(comments);
         this.timestampCreated = post.getTimestampCreated();
     }

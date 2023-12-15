@@ -77,4 +77,28 @@ public class PostsController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/{id}/upvote")
+    public ResponseEntity<?> upvotePost(@RequestHeader("X-User-Id") String userId, @PathVariable String id) {
+        try {
+            postsService.upvotePost(id, userId);
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } catch (PostNotFound e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}/downvote")
+    public ResponseEntity<?> downvotePost(@RequestHeader("X-User-Id") String userId, @PathVariable String id) {
+        try {
+            postsService.downvotePost(id, userId);
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } catch (PostNotFound e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

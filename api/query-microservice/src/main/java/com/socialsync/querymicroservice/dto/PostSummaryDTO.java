@@ -22,7 +22,7 @@ public class PostSummaryDTO {
         this.creator = post.getCreator();
         this.title = post.getTitle();
         this.content = post.getContent().substring(0, Math.min(post.getContent().length(), 500));
-        this.score = post.getScore();
+        this.score = post.getUpvotes().size() - post.getDownvotes().size();
         this.timestampCreated = post.getTimestampCreated();
     }
 }

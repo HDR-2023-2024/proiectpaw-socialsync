@@ -10,6 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +28,8 @@ public class PostDocument {
     private String title;
     private String content;
     private Integer score;
+    private Set<String> upvotes = new HashSet<>();
+    private Set<String> downvotes = new HashSet<>();
     private Long timestampCreated;
     private Long timestampUpdated;
 
@@ -33,8 +38,18 @@ public class PostDocument {
         this.topicId = post.getTopicId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.score = post.getScore();
+        this.score = 0;
         this.timestampCreated = post.getTimestampCreated();
         this.timestampUpdated = post.getTimestampUpdated();
+    }
+
+    public void addUpvote(String userId) {
+        upvotes.add(userId);
+        downvotes.remove(userId);
+    }
+
+    public void addDownvote(String userId) {
+        downvotes.add(userId);
+        upvotes.remove(userId);
     }
 }

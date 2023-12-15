@@ -9,18 +9,19 @@ import com.socialsync.postsmicroservice.interfaces.PostsServiceMethods;
 import com.socialsync.postsmicroservice.pojo.Post;
 import com.socialsync.postsmicroservice.util.exceptions.PostNotFound;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -186,6 +187,34 @@ public class PostsService implements PostsServiceMethods {
         addPost(post);
     }
 
+    @Bean
+    @Scheduled(initialDelay = 1000L,fixedDelay = 100)
+    @SneakyThrows
+    void randomLikeDislike() {
+        boolean like = Math.random() < 0.5;
+        Post randomPost = repository.findAll().get(new Random().nextInt(0, 100));
+
+        if (like)
+        {
+            log.info("Post " + randomPost.getId() + " was upvoted");
+            upvotePost(randomPost.getId(), "-1");
+            upvotePost(randomPost.getId(), "-1");
+            upvotePost(randomPost.getId(), "-1");
+            upvotePost(randomPost.getId(), "-1");
+            upvotePost(randomPost.getId(), "-1");
+        }
+        else
+        {
+            log.info("Post " + randomPost.getId() + " was downvoted");
+            downvotePost(randomPost.getId(), "-1");
+            downvotePost(randomPost.getId(), "-1");
+            downvotePost(randomPost.getId(), "-1");
+            downvotePost(randomPost.getId(), "-1");
+            downvotePost(randomPost.getId(), "-1");
+            downvotePost(randomPost.getId(), "-1");
+        }
+    }
+
     @Override
     public HashMap<String, Post> fetchAllPosts() {
         HashMap<String, Post> lista = new HashMap<>();
@@ -236,6 +265,40 @@ public class PostsService implements PostsServiceMethods {
         if (post.isPresent()) {
             repository.deleteById(id);
             sendMessage(new PostQueueMessage(QueueMessageType.DELETE, post.get()));
+        }
+        else
+            throw new PostNotFound("Post not found.");
+    }
+
+    @Override
+    public void upvotePost(String postId, String userId) throws PostNotFound {
+        Optional<Post> post = repository.findById(postId);
+
+        if (post.isPresent()) {
+            post.get().getUpvotes().add(userId);
+            post.get().getDownvotes().remove(userId);
+
+            repository.save(post.get());
+
+            sendMessage(new PostQueueMessage(QueueMessageType.UPVOTE, new Post(postId, userId, post.get().getTopicId())));
+//            sendMessage(new PostQueueMessage(QueueMessageType.UPVOTE, new Post(postId, userId, "657ca7e2fb8e4725915e20c9")));
+        }
+        else
+            throw new PostNotFound("Post not found.");
+    }
+
+    @Override
+    public void downvotePost(String postId, String userId) throws PostNotFound {
+        Optional<Post> post = repository.findById(postId);
+
+        if (post.isPresent()) {
+            post.get().getDownvotes().add(userId);
+            post.get().getUpvotes().remove(userId);
+
+            repository.save(post.get());
+
+            sendMessage(new PostQueueMessage(QueueMessageType.DOWNVOTE, new Post(postId, userId, post.get().getTopicId())));
+//            sendMessage(new PostQueueMessage(QueueMessageType.DOWNVOTE, new Post(postId, userId, "657ca7e2fb8e4725915e20c9")));
         }
         else
             throw new PostNotFound("Post not found.");

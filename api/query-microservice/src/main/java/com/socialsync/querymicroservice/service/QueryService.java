@@ -150,7 +150,8 @@ public class QueryService implements QueryServiceMethods {
         Optional<UserDocument> creator = userRepository.findById(msgQ.getPost().getCreatorId());
         boolean parentTopicExists = topicRepository.existsById(postDocument.getTopicId());
 
-        boolean override = creator.isEmpty() && !parentTopicExists && (msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1"));
+        //boolean override = creator.isEmpty() && !parentTopicExists || (msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1"));
+        boolean override = msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1");
 
         if (parentTopicExists && creator.isPresent() || override) {
             boolean postExists = postRepository.existsById(postDocument.getId());
@@ -185,10 +186,30 @@ public class QueryService implements QueryServiceMethods {
                     else
                         throw new PostException("DELETE: Post " + postDocument.getId() + " to be deleted not found!");
                 }
+                case UPVOTE -> {
+                    if (postExists) {
+                        log.info("Post " + msgQ.getPost().getId() + " upvoted by " + postDocument.getCreator().getId());
+                        PostDocument postInDB = postRepository.findById(msgQ.getPost().getId()).get();
+                        postInDB.addUpvote(postDocument.getCreator().getId());
+                        postRepository.save(postInDB);
+                    }
+                    else
+                        throw new PostException("UPVOTE: Post " + postDocument.getId() + " to be upvoted not found");
+                }
+                case DOWNVOTE -> {
+                    if (postExists) {
+                        log.info("Post " + msgQ.getPost().getId() + " downvoted by " + postDocument.getCreator().getId());
+                        PostDocument postInDB = postRepository.findById(msgQ.getPost().getId()).get();
+                        postInDB.addDownvote(postDocument.getCreator().getId());
+                        postRepository.save(postInDB);
+                    }
+                    else
+                        throw new PostException("DOWNVOTE: Post " + postDocument.getId() + " to be downvoted not found");
+                }
             }
         }
         else
-            throw new ParentException("Topic " + msgQ.getPost().getTopicId() + " or creator " + msgQ.getPost().getCreatorId() + " not found for comment!");
+            throw new ParentException("Topic " + msgQ.getPost().getTopicId() + " or creator " + msgQ.getPost().getCreatorId() + " not found for post!");
     }
 
     @Override
