@@ -12,12 +12,14 @@ public class PostSummaryDTO {
     private String id;
     private UserSummaryDTO creator;
     private String title;
+    private String content;
     private Integer score;
 
     public PostSummaryDTO(PostDocument post) {
         this.id = post.getId();
         this.creator = post.getCreator();
         this.title = post.getTitle();
+        this.content = post.getContent().substring(0, Math.min(post.getContent().length(), 500));
         this.score = post.getScore();
     }
 }
