@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserSummaryDTO {
     private String id;
+    private String photoId;
     private String  username;
     private RoleType role;
 
     public UserSummaryDTO(UserDocument user) {
         this.id = user.getId();
+        this.photoId = user.getPhotoId();
         this.username = user.getUsername();
         this.role = user.getRole();
     }
