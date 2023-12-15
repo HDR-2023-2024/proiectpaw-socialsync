@@ -91,10 +91,6 @@ public class QueryService implements QueryServiceMethods {
         return userRepository.searchByUsername(query + "*", PageRequest.of(page, 10))
                 .map(UserSummaryDTO::new).toList();
     }
-
-    //TODO
-//    public List<CommentDTO> fetchUserComments()
-
     @Override
     public void handleComment(CommentQueueMessage msgQ) throws RuntimeException {
         log.info("Handling comment " + msgQ.getComment().getId());
