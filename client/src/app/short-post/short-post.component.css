@@ -25,7 +25,23 @@
   cursor: pointer;
 }
 
+.reaction-value{
+  cursor: default;
+}
+
+.disableReaction:hover{
+  cursor: default;
+}
+
 .reaction-box-like{
   background-color: #8888883f;
   border-radius: 20px;
+}
+
+.shortPostClass{
+  width: 100%;
+}
+
+.shortOver:hover{
+  cursor: pointer;
 }

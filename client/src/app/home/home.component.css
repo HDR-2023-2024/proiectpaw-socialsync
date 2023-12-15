@@ -23,3 +23,19 @@ app-short-post {
     font-size: 1.5em;
     text-align: center;
 }
+
+.postShort{
+    width: 100%;
+}
+
+.divFull{
+    width: 100%;
+}
+
+app-carousel{
+    width: 200%;
+}
+
+.divMare{
+    width: 100%;
+}
