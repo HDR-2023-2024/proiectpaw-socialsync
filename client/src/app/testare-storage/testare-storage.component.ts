@@ -38,7 +38,7 @@ export class TestareStorageComponent {
           }
         );
     } else {
-      console.error('Niciun fisier selectat.');
+      console.error('Niciun fisier. selectat.');
     }
   }
 }

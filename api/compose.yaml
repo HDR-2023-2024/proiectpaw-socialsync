@@ -138,15 +138,16 @@ services:
       - '8087:8087'
     expose:
       - '8087'
-  
-  gateway:
-    build: "./gateway"
-    image: "gateway-ms:v1"
-    container_name: "gateway"
-    ports:
-      - '8086:8086'
-    expose:
-      - '8086'
+
+# nu mai e in docker
+#  gateway:
+#    build: "./gateway"
+#    image: "gateway-ms:v1"
+#    container_name: "gateway"
+#    ports:
+#      - '8086:8086'
+#    expose:
+#      - '8086'
 
 #  storage-microservice:
 #    build: "./storage-microservice"
@@ -165,7 +166,7 @@ volumes:
   data1: {}
   data2: {}
   data3: {}
-  storage: {}
+#  storage: {}
 networks:
   default:
     name: 'socialsync_network'

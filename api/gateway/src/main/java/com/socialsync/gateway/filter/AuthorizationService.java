@@ -27,7 +27,7 @@ public class AuthorizationService {
             HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
             try {
-                String url = "http://authorization-microservice:8087/api/v1/authorization/validateJWT";
+                String url = "http://localhost:8087/api/v1/authorization/validateJWT";
                 ResponseEntity<AuthorizedInfo> responseEntity = restTemplate.exchange(
                         url,
                         HttpMethod.POST,
