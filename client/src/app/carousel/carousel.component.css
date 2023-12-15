@@ -1,10 +1,22 @@
-.next-prev:hover {
+.next:hover, .prev:hover {
     color: #FF4433;
     cursor: pointer;
 }
 
-.next-prev {
+.next, .prev {
     font-size: 4em;
+}
+
+.next{
+    position: absolute;
+    left: 89%;
+    top: 15%;
+}
+
+.prev{
+    position: absolute;
+    left: 25%;
+    top: 15%;
 }
 
 img {
