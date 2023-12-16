@@ -7,27 +7,26 @@ import { Observable } from 'rxjs';
 })
 export class DataHomeService {
 
-  constructor(private http: HttpClient) {}
-  
-  
-  
+  constructor(private http: HttpClient) { }
 
-  getData(page : string): Observable<any> {
+
+
+
+  getData(page: string): Observable<any> {
     return this.http.get('http://localhost:8086/api/v1/query/posts?page=' + String(page));
   }
 
-  
+
   async getDataSync(page: string): Promise<any> {
-    const apiUrl = 'http://localhost:8086/api/v1/query/posts?page=' + page;
-    console.log("&");
-    try {
-      const data = await this.http.get(apiUrl).toPromise();
-      console.log("*");
-       console.log(apiUrl);
-      return data;
-    } catch (error) {
-      console.error('Eroare la obtinerea datelor:', error);
-      throw error;
-    }
+    //console.log(page)
+      const apiUrl = 'http://localhost:8086/api/v1/query/posts?page=' + page;
+      try {
+        const data = await this.http.get(apiUrl).toPromise();
+        console.log(apiUrl);
+        return data;
+      } catch (error) {
+        console.error('Eroare la obtinerea datelor:', error);
+        throw error;
+      }
   }
 }

@@ -6,36 +6,51 @@
         </div>
         <div class="row col-lg-10 col-12 m-0 p-0">
             <div class="col-12 col-lg-6  vh-80 div-contact m-0 p-0 ">
-                <form (ngSubmit)="onSubmit()" #myForm="ngForm" class="formContact p-5 mx-auto col-12">
+                <form #myForm="ngForm" class="formContact p-5 mx-auto col-12 justify-content-center">
                     <h1 class="mb-0 text-center">Creare cont</h1>
                     <br>
+                    <div class="file-input-wrapper d-flex align-items-center justify-content-center">
+                        <input type="file" #fileInput style="display: none" (change)="uploadFiles()">
+                        <button class="round-button" (click)="fileInput.click()">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 640 512">
+                                <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!--
+                        <input type="file" #fileInput multiple>
+<button (click)="uploadFiles()">Incarca fisiere</button>
+
+                    -->
+                    <br>
                     <label for="username">Nume de utilizator*</label><br>
-                    <input type="text" id="username" name="username" [(ngModel)]="formData.username" required><br><br>
+                    <input type="text" id="username" name="username" [(ngModel)]="myFormData.username" required><br><br>
                     <label for="email">Email*</label><br>
-                    <input type="text" id="email" name="email" [(ngModel)]="formData.email" required><br><br>
+                    <input type="text" id="email" name="email" [(ngModel)]="myFormData.email" required><br><br>
                     <label for="gender">Genul*:</label>
-                    <select id="gender" name="gender" [(ngModel)]="formData.gender">
+                    <select id="gender" name="gender" [(ngModel)]="myFormData.gender">
                         <option value="woman">Feminin</option>
                         <option value="man">Masculin</option>
                         <option value="null">Nu specific</option>
                     </select>
                     <br><br>
                     <label for="pass">Parola*</label><br>
-                    <input type="text" id="pass" name="pass" [(ngModel)]="formData.password"
+                    <input type="text" id="pass" name="pass" [(ngModel)]="myFormData.password"
                         (ngModelChange)="onPasswordChange()" required><br><br>
 
 
                     <label for="pass2">Repetare parolă*</label><br>
-                    <input type="text" id="pass2" name="pass2" [(ngModel)]="formData.password2"
+                    <input type="text" id="pass2" name="pass2" [(ngModel)]="myFormData.password2"
                         (ngModelChange)="onPasswordChange()" required><br><br>
 
 
-                    <p id="errorCreateAccount" class="m-0 p-0">{{ formData.error
+                    <p id="errorCreateAccount" class="m-0 p-0">{{ myFormData.error
                         }}</p>
                     <br>
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn contact-btn"
-                            [disabled]="(!myForm.valid || isValid)">Conectare</button>
+                        <button type="submit" class="btn contact-btn" [disabled]="(!myForm.valid || isValid)"
+                            (click)="onSubmit()">Conectare</button>
                     </div>
                     <br>
                 </form>

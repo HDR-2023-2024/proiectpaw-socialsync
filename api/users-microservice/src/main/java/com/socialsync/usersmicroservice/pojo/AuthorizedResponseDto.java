@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AuthorizedResponseDto {
     private String token;
+    private String username;
+    private String photoId;
 }

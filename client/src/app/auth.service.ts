@@ -13,6 +13,8 @@ export class AuthService {
 
   constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private http: HttpClient) { }
   private loginUrl = 'http://localhost:8086/api/v1/users/login';
+  private loginInfo: any | null = null;
+
 
   login(username: string, password: string): Observable<any> {
     const postData = { username: username, password: password };
@@ -20,7 +22,10 @@ export class AuthService {
     return this.http.post(this.loginUrl, postData, { observe: 'response' }).pipe(
       tap((response: HttpResponse<any>) => {
         console.log(response.body)
-        this.storage.set("Token",response.body.token);
+        this.loginInfo = response.body;
+        this.storage.set("Token", response.body.token);
+        this.storage.set("PhotoId", response.body.photoId);
+        this.storage.set("Username", response.body.username);
         return response;
       }),
       catchError(error => {
@@ -32,6 +37,8 @@ export class AuthService {
   logout() {
     console.log("Delogat")
     this.storage.remove("Token");
+    this.storage.remove("PhotoId");
+    this.storage.remove("Username");
   }
 
   isUserLoggedIn(): boolean {
@@ -39,7 +46,11 @@ export class AuthService {
   }
 
   getAvatar() {
-    return "assets/images/avatar.png"
+      if (this.storage.get("PhotoId") == null) {
+        return "assets/images/avatar.png"
+      } else {
+        return this.storage.get("PhotoId") ;
+      }
   }
 
   getUsername() {
