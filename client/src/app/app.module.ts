@@ -43,6 +43,8 @@ import { ProfileCommentComponent } from './profile-comment/profile-comment.compo
 import { CommunityEditComponent } from './community-edit/community-edit.component';
 import { HelpSiteComponent } from './help-site/help-site.component';
 import { TestareStorageComponent } from './testare-storage/testare-storage.component';
+import { ViewTopicsComponent } from './view-topics/view-topics.component';
+import { TopicShortComponent } from './topic-short/topic-short.component';
 
 
 const routes: Routes = [
@@ -71,7 +73,8 @@ const routes: Routes = [
   { path: "p-com", component: ProfileCommentComponent},
   { path: "c-e", component: CommunityEditComponent},
   { path: "help", component: HelpSiteComponent},
-  { path: "testare-storage", component: TestareStorageComponent}
+  { path: "testare-storage", component: TestareStorageComponent},
+  { path: "view-topics", component: ViewTopicsComponent}
 ];
 
 
@@ -114,6 +117,8 @@ const routes: Routes = [
     CommunityEditComponent,
     HelpSiteComponent,
     TestareStorageComponent,
+    ViewTopicsComponent,
+    TopicShortComponent,
   ],
   imports: [
     BrowserModule,

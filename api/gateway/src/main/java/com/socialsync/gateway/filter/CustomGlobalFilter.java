@@ -30,7 +30,6 @@ public class CustomGlobalFilter {
             HttpMethod requestMethod = exchange.getRequest().getMethod();
             String authorizationHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
-
             List<Pair<String, HttpMethod>> publicUrl = new ArrayList<>(List.of(
                     new Pair<>("/api/v1/posts/{id}", HttpMethod.GET),
                     new Pair<>("/api/v1/posts", HttpMethod.GET),
@@ -49,7 +48,30 @@ public class CustomGlobalFilter {
 
             for (Pair<String, HttpMethod> pair : publicUrl) {
                 if (requestUri.contains(pair.getKey()) && pair.getValue() == requestMethod) {
-                    return chain.filter(exchange);
+                    if(authorizationHeader != null){
+                        try{
+                            AuthorizedInfo authorizedInfo = authorizationService.authorized(authorizationHeader);
+
+                            String userId = authorizedInfo.getId();
+                            String role = authorizedInfo.getRole();
+
+                            ServerHttpRequest mutatedRequest = exchange.getRequest()
+                                    .mutate()
+                                    .header("X-User-Id", userId)
+                                    .header("X-User-Role", role)
+                                    .build();
+                            System.out.println("Cerere pentru utilizatorul: " + userId);
+                            ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
+
+                            // continuare
+                            return chain.filter(mutatedExchange);
+                        }catch (UnauthorizedException un)
+                        {
+                            return chain.filter(exchange);
+                        }
+                    }else{
+                        return chain.filter(exchange);
+                    }
                 }
             }
 
@@ -64,7 +86,7 @@ public class CustomGlobalFilter {
                         .header("X-User-Id", userId)
                         .header("X-User-Role", role)
                         .build();
-
+                System.out.println("Cerere pentru utilizatorul: " + userId);
                 ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
 
                 // continuare

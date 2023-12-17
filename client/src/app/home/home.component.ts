@@ -38,7 +38,7 @@ export class HomeComponent {
   private handleScrollEnd(): void {
     this.page++;
   
-    this.dataService.getDataSync(this.page.toString())
+    this.dataService.getDataSync('http://localhost:8086/api/v1/query/posts?page=' + this.page.toString())
       .then((data: any[]) => {
         if (data !== undefined) {
           for (const item of data) {
@@ -55,7 +55,7 @@ export class HomeComponent {
   }
   
   loadDataOnPageLoad(): void {
-    this.dataService.getData(this.page.toString()).subscribe(
+    this.dataService.getData('http://localhost:8086/api/v1/query/posts?page=' + this.page.toString()).subscribe(
       (data) => {
         console.log('Datele de la server:', data);
         this.myArr = data;
