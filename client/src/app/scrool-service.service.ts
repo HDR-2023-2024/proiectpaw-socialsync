@@ -16,10 +16,9 @@ export class ScroolServiceService {
   }
 
   isScrolledToBottom(): boolean {
-    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0;
-    const documentHeight = document.documentElement.scrollHeight;
+    const isAtBottom = window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight;
 
-    return scrollPosition + windowHeight >= documentHeight;
+    return isAtBottom;
+    
   }
 }

@@ -62,3 +62,40 @@ input,select {
     text-align:end;
     color: #ff0000;
 }
+
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+  
+  .file-input-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+  
+  .round-button {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #FF4433;
+    background-color: #FF4433;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    line-height: 50px;
+  }
+  
+  .round-button:hover {
+    background-color: #ff0000;
+    border-color: #ff0000;
+  }
+
+  svg{
+    width: 40px;
+    height: 40px;
+  }

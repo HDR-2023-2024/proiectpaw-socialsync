@@ -149,16 +149,16 @@ services:
 #    expose:
 #      - '8086'
 
-#  storage-microservice:
-#    build: "./storage-microservice"
-#    image: 'storage-microservice:v1'
-#    container_name: "storage-microservice"
-#    ports:
-#      - '8088:8088'
-#    expose:
-#      - '8088'
-#    volumes:
-#      - 'storage:/storage'
+  storage-microservice:
+    build: "./storage-microservice"
+    image: 'storage-microservice:v1'
+    container_name: "storage-microservice"
+    ports:
+      - '8088:8088'
+    expose:
+      - '8088'
+    volumes:
+      - 'storage:/storage'
       
 
 volumes:
@@ -166,7 +166,7 @@ volumes:
   data1: {}
   data2: {}
   data3: {}
-#  storage: {}
+  storage: {}
 networks:
   default:
     name: 'socialsync_network'

@@ -1,5 +1,6 @@
 package com.socialsync.usersmicroservice.api;
 
+import com.rabbitmq.client.AMQP;
 import com.socialsync.usersmicroservice.exceptions.NotAcceptableException;
 import com.socialsync.usersmicroservice.exceptions.UnauthorizedException;
 import com.socialsync.usersmicroservice.pojo.*;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -60,7 +62,7 @@ public class UsersController {
             }
             usersService.addUser(user);
             String token = authorizationService.getJwt(new AuthorizedInfo(user.getId(), user.getRole().name()));
-            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token),HttpStatus.OK);
+            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token,user.getUsername(),user.getPhotoId()),HttpStatus.OK);
         } catch (NotAcceptableException unauthorizedException) {
             return new ResponseEntity<>(unauthorizedException.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         } catch (UnauthorizedException e) {
@@ -110,7 +112,8 @@ public class UsersController {
         try {
             AuthorizedInfo authorizedInfo = usersService.login(credentials);
             String token = authorizationService.getJwt(authorizedInfo);
-            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token) ,HttpStatus.OK);
+           UserSelect user = this.usersService.fetchUserById(authorizedInfo.getId());
+            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token,user.getUsername(),user.getPhotoId()) ,HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>("Datele de autentificare nu sunt valide!", HttpStatus.UNAUTHORIZED);
         }
