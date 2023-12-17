@@ -45,12 +45,20 @@ public class PostDocument {
     }
 
     public void addUpvote(String userId) {
-        upvotes.add(userId);
-        downvotes.remove(userId);
+        if (!this.upvotes.contains(userId)) {
+            upvotes.add(userId);
+            downvotes.remove(userId);
+        }
+        else
+            upvotes.remove(userId);
     }
 
     public void addDownvote(String userId) {
-        downvotes.add(userId);
-        upvotes.remove(userId);
+        if (!this.downvotes.contains(userId)) {
+            downvotes.add(userId);
+            upvotes.remove(userId);
+        }
+        else
+            downvotes.remove(userId);
     }
 }
