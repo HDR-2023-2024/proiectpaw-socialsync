@@ -29,6 +29,7 @@ import java.util.*;
 @EnableScheduling
 public class PostsService implements PostsServiceMethods {
 
+
     private PostRepository repository;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
