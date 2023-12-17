@@ -193,7 +193,7 @@ public class PostsService implements PostsServiceMethods {
     }
 
     @Bean
-    @Scheduled(initialDelay = 1000L,fixedDelay = 100)
+    @Scheduled(initialDelay = 1000L,fixedDelay = 3000)
     @SneakyThrows
     void randomLikeDislike() {
         boolean like = Math.random() < 0.5;
