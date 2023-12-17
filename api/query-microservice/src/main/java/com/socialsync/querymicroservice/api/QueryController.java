@@ -100,9 +100,12 @@ public class QueryController {
 
 
     @GetMapping("/posts")
-    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
-        return ResponseEntity
-                .ok(queryService.fetchAllPosts(parsePage(page)));
+    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page, Optional<String> query, @RequestHeader("X-User-Id") Optional<String> userId) {
+        return query.map(s -> ResponseEntity
+                    .ok(queryService.searchPostByTitle(s, parsePage(page), userId)))
+                .orElseGet(() -> ResponseEntity
+                    .ok(queryService.fetchAllPosts(parsePage(page), userId)));
+
     }
 
     @GetMapping("/posts/{id}")

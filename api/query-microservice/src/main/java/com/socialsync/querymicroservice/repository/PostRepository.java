@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends RedisDocumentRepository<PostDocument, String> {
     Page<PostDocument> findAll(Pageable pageable);
     Page<PostDocument> findAllByTopicId(String id, Pageable pageable);
+    Page<PostDocument> searchByTitle(String title, Pageable pageable);
 }
