@@ -1,13 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+
+interface InputData {
+  stringName: string;
+}
 
 @Component({
   selector: 'app-navbar-disconnected',
   templateUrl: './navbar-disconnected.component.html',
   styleUrls: ['./navbar-disconnected.component.css']
 })
+
+
 export class NavbarDisconnectedComponent implements OnInit {
+  @Input() inputData: InputData | null = null; // in ce caut
+
   ngOnInit(): void {
     const searchInput = document.getElementById("search-input") as HTMLInputElement;
 
@@ -53,4 +61,13 @@ export class NavbarDisconnectedComponent implements OnInit {
     this.router.navigate(['/create-account']);
   }
 
+  onEnterKeyPressed() {
+    const searchInput = document.getElementById("search-input") as HTMLInputElement;
+    const inputValue = searchInput.value;
+    if(inputValue.length == 1){
+      alert("Nu se poate căuta după o singură literă.");
+      return;
+    }
+    this.router.navigate(['/view-topics', { query: inputValue }]);
+  }
 }
