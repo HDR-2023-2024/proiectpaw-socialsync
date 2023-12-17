@@ -20,6 +20,10 @@ public class AuthorizationService {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationService.class);
 
     public AuthorizedInfo authorized(String token) throws UnauthorizedException {
+
+        if(token == null){
+            throw new UnauthorizedException();
+        }
         if (token.contains("Bearer ")) {
             HttpHeaders headers = new HttpHeaders();
             headers.set(HttpHeaders.AUTHORIZATION, token.replace("Bearer ",""));

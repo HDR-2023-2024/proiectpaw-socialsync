@@ -19,9 +19,10 @@ public class UserSelect {
     private String  email;
     private RoleType role;
     private String photoId;
+    private String description;
     private GenderType gender;
 
-    public UserSelect(String id, String username, String email, RoleType role,String photoId, GenderType gender) {
+    public UserSelect(String id, String username, String email, RoleType role,String photoId,String description, GenderType gender) {
         this.id = id;
         this.username = username;
         this.email = email;

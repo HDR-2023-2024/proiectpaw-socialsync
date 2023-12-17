@@ -37,15 +37,19 @@ public class User {
     @Column(name = "photoId", length = 100)
     private String photoId;
 
+    @Column(name = "description", length = 1000)
+    private String description;
+
     @Column(name = "role", length = 1)
     private RoleType role;
 
-    public User(String username, String password, String email, GenderType gender, String photoId, RoleType role) {
+    public User(String username, String password, String email, GenderType gender, String photoId,String description, RoleType role) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.gender = gender;
         this.photoId = photoId;
+        this.description = description;
         this.role = role;
     }
 
