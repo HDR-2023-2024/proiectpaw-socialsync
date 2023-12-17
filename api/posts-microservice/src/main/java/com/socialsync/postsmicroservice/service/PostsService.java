@@ -193,7 +193,7 @@ public class PostsService implements PostsServiceMethods {
     }
 
     @Bean
-    @Scheduled(initialDelay = 1000L,fixedDelay = 100)
+    @Scheduled(initialDelay = 1000L,fixedDelay = 3000)
     @SneakyThrows
     void randomLikeDislike() {
         boolean like = Math.random() < 0.5;
@@ -280,8 +280,12 @@ public class PostsService implements PostsServiceMethods {
         Optional<Post> post = repository.findById(postId);
 
         if (post.isPresent()) {
-            post.get().getUpvotes().add(userId);
-            post.get().getDownvotes().remove(userId);
+            if (!post.get().getUpvotes().contains(userId)) {
+                post.get().getUpvotes().add(userId);
+                post.get().getDownvotes().remove(userId);
+            }
+            else
+                post.get().getUpvotes().remove(userId);
 
             repository.save(post.get());
 
@@ -297,8 +301,12 @@ public class PostsService implements PostsServiceMethods {
         Optional<Post> post = repository.findById(postId);
 
         if (post.isPresent()) {
-            post.get().getDownvotes().add(userId);
-            post.get().getUpvotes().remove(userId);
+            if (!post.get().getDownvotes().contains(userId)) {
+                post.get().getDownvotes().add(userId);
+                post.get().getUpvotes().remove(userId);
+            }
+            else
+                post.get().getDownvotes().remove(userId);
 
             repository.save(post.get());
 

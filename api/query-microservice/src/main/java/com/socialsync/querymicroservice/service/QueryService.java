@@ -58,12 +58,29 @@ public class QueryService implements QueryServiceMethods {
         }
     }
 
-    public List<PostSummaryDTO> fetchAllPosts(Integer page) {
-        return postRepository.findAll(PageRequest.of(page, 10)).map(PostSummaryDTO::new).toList();
+    public List<PostSummaryDTO> fetchAllPosts(Integer page, Optional<String> userId) {
+        return postRepository.findAll(PageRequest.of(page, 10)).map(postDocument -> toSummary(postDocument, userId)).toList();
+    }
+
+    private PostSummaryDTO toSummary(PostDocument postDocument, Optional<String> userId) {
+        PostSummaryDTO postSummaryDTO = new PostSummaryDTO(postDocument);
+        if (userId.isPresent()) {
+            if (postDocument.getUpvotes().contains(userId.get()))
+                postSummaryDTO.setLikedByUser(true);
+            if (postDocument.getDownvotes().contains(userId.get()))
+                postSummaryDTO.setDislikedByUser(true);
+        }
+
+        return postSummaryDTO;
     }
 
     public Optional<PostDocument> fetchPostById(String id) {
         return postRepository.findById(id);
+    }
+
+    public List<PostSummaryDTO> searchPostByTitle(String query, Integer page, Optional<String> userId) {
+        return postRepository.searchByTitle(query + "*", PageRequest.of(page, 10))
+                .map(postDocument -> toSummary(postDocument, userId)).toList();
     }
 
     public List<TopicSummaryDTO> fetchAllTopics(Integer page) {
@@ -75,16 +92,7 @@ public class QueryService implements QueryServiceMethods {
     }
 
     public List<PostSummaryDTO> fetchTopicPosts(String id, Integer page, Optional<String> userId) {
-        return postRepository.findAllByTopicId(id, PageRequest.of(page, 10)).map(postDocument -> {
-            PostSummaryDTO postSummaryDTO = new PostSummaryDTO(postDocument);
-            if (userId.isPresent()) {
-                if (postDocument.getUpvotes().contains(userId.get()))
-                    postSummaryDTO.setLikedByUser(true);
-                if (postDocument.getDownvotes().contains(userId.get()))
-                    postSummaryDTO.setDislikedByUser(true);
-            }
-            return postSummaryDTO;
-        }).toList();
+        return postRepository.findAllByTopicId(id, PageRequest.of(page, 10)).map(postDocument -> toSummary(postDocument, userId)).toList();
     }
 
     public List<TopicSummaryDTO> searchTopicsByName(String query, Integer page) {
