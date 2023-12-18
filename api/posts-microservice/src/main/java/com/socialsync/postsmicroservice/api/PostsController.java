@@ -35,11 +35,11 @@ public class PostsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addPost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @RequestBody Post post) {
+    public ResponseEntity<?> addPost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole,@RequestBody Post post) {
             post.setCreatorId(userId);
             post.setId(null);
-
-            return new ResponseEntity<>(postsService.addPost(post), HttpStatus.CREATED);
+            postsService.addPost(post);
+            return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -80,7 +80,6 @@ public class PostsController {
 
     @PutMapping("/{id}/upvote")
     public ResponseEntity<?> upvotePost(@RequestHeader("X-User-Id") String userId, @PathVariable String id) {
-    	System.out.println(userId);
         try {
             postsService.upvotePost(id, userId);
             return ResponseEntity
@@ -93,7 +92,6 @@ public class PostsController {
 
     @PutMapping("/{id}/downvote")
     public ResponseEntity<?> downvotePost(@RequestHeader("X-User-Id") String userId, @PathVariable String id) {
-    System.out.println(userId);
         try {
             postsService.downvotePost(id, userId);
             return ResponseEntity

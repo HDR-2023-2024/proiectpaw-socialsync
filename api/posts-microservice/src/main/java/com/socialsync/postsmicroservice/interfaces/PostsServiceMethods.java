@@ -8,7 +8,7 @@ import java.util.HashMap;
 public interface PostsServiceMethods {
     HashMap<String, Post> fetchAllPosts();
     Post fetchPostById(String id) throws PostNotFound;
-    Post addPost(Post post);
+    void addPost(Post post);
     void updatePost(String id, Post post) throws PostNotFound;
     void deletePost(String id) throws PostNotFound;
 
