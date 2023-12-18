@@ -89,7 +89,7 @@ public class TopicService implements TopicServiceMethods {
         listaTopicuri.forEach(this::addTopic);
     }
 
-    @Bean
+  /*  @Bean
     @Scheduled(fixedDelay = 30000L)
     void newRandomTopic() {
         log.info("We have " + repository.findAll().size() + " topic");
@@ -104,7 +104,7 @@ public class TopicService implements TopicServiceMethods {
         newTopic.setCreatorId("-1");
         addTopic(newTopic);
     }
-
+*/
     @Override
     public HashMap<String, Topic> fetchAllTopics() {
         HashMap<String, Topic> all_topics = new HashMap<>();
