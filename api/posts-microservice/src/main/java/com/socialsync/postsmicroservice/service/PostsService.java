@@ -236,10 +236,13 @@ public class PostsService implements PostsServiceMethods {
     }
 
     @Override
-    public void addPost(Post post)  {
+    public Post addPost(Post post)  {
         post.setTimestampCreated(Instant.now().getEpochSecond());
         repository.insert(post);
-        sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
+        Post postInBD = repository.findById(post.getId()).get();
+        sendMessage(new PostQueueMessage(QueueMessageType.CREATE, postInBD));
+
+        return post;
     }
 
     @Override

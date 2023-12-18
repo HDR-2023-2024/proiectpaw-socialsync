@@ -38,8 +38,8 @@ public class PostsController {
     public ResponseEntity<?> addPost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole,@RequestBody Post post) {
             post.setCreatorId(userId);
             post.setId(null);
-            postsService.addPost(post);
-            return new ResponseEntity<>(post, HttpStatus.CREATED);
+
+            return new ResponseEntity<>(postsService.addPost(post), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
