@@ -16,7 +16,6 @@ public class TopicDTO {
     private UserSummaryDTO creator;
     private String name;
     private String description;
-    private Boolean ageRestriction;
     private Long timestampCreated;
     private List<PostSummaryDTO> posts = new ArrayList<>();
 
@@ -25,7 +24,6 @@ public class TopicDTO {
         this.name = topic.getName();
         this.creator = topic.getCreator();
         this.description = topic.getDescription();
-        this.ageRestriction = topic.getAgeRestriction();
         this.timestampCreated = topic.getTimestampCreated();
         this.posts.addAll(posts);
     }

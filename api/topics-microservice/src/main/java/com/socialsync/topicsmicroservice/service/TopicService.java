@@ -101,7 +101,6 @@ public class TopicService implements TopicServiceMethods {
         Topic newTopic = new Topic();
         newTopic.setName(topic.getName() + new Random().nextInt(10000));
         newTopic.setDescription(topic.getDescription() + new Random().nextInt(10000));
-        newTopic.setAgeRestriction(false);
         newTopic.setCreatorId("-1");
         addTopic(newTopic);
     }
@@ -134,7 +133,6 @@ public class TopicService implements TopicServiceMethods {
         repository.findById(id).map(elem -> {
             elem.setName(topic.getName());
             elem.setDescription(topic.getDescription());
-            elem.setAgeRestriction(topic.getAgeRestriction());
             elem.setPhotoId(topic.getPhotoId());
             elem.setCreatorId(topic.getCreatorId());
             elem.setTimestampUpdated(Instant.now().getEpochSecond());
