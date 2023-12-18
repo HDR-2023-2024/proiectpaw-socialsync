@@ -100,17 +100,35 @@ public class QueryController {
 
 
     @GetMapping("/posts")
-    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page) {
-        return ResponseEntity
-                .ok(queryService.fetchAllPosts(parsePage(page)));
+    public ResponseEntity<?> fetchPosts(@NotNull @RequestParam Integer page, Optional<String> query, @RequestHeader("X-User-Id") Optional<String> userId) {
+        return query.map(s -> ResponseEntity
+                    .ok(queryService.searchPostByTitle(s, parsePage(page), userId)))
+                .orElseGet(() -> ResponseEntity
+                    .ok(queryService.fetchAllPosts(parsePage(page), userId)));
+
     }
 
     @GetMapping("/posts/{id}")
-    public ResponseEntity<?> fetchPost(@PathVariable String id, @NotNull @RequestParam Integer page) {
+    public ResponseEntity<?> fetchPost(@PathVariable String id, @NotNull @RequestParam Integer page, @RequestHeader("X-User-Id") Optional<String> userId) {
         Optional<PostDocument> post = queryService.fetchPostById(id);
 
+        if (post.isPresent()) {
+            PostDTO postResponse = new PostDTO(post.get(), queryService.fetchPostComments(post.get().getId(), page));
+
+            if (userId.isPresent())
+            {
+                if (post.get().getDownvotes().contains(userId.get()))
+                    postResponse.setDislikedByUser(true);
+                else if (post.get().getUpvotes().contains(userId.get()))
+                    postResponse.setLikedByUser(true);
+            }
+
+            return ResponseEntity
+                    .ok(postResponse);
+        }
+
         return ResponseEntity
-                .ok(post.isPresent() ? new PostDTO(post.get(), queryService.fetchPostComments(post.get().getId(), page)) : "");
+                .ok("");
     }
 
     @GetMapping("/posts/{id}/comments")
@@ -129,17 +147,17 @@ public class QueryController {
     }
 
     @GetMapping("/topics/{id}")
-    public ResponseEntity<?> fetchTopic(@PathVariable String id) {
+    public ResponseEntity<?> fetchTopic(@PathVariable String id, @RequestHeader("X-User-Id") Optional<String> userId) {
         Optional<TopicDocument> topic = queryService.fetchTopic(id);
 
         return ResponseEntity
-                .ok(topic.isPresent() ? new TopicDTO(topic.get(), queryService.fetchTopicPosts(id, 0)) : "shit");
+                .ok(topic.isPresent() ? new TopicDTO(topic.get(), queryService.fetchTopicPosts(id, 0, userId)) : "shit");
     }
 
     @GetMapping("/topics/{id}/posts")
-    public ResponseEntity<?> fetchTopicPosts(@PathVariable String id, @NotNull @RequestParam Integer page) {
+    public ResponseEntity<?> fetchTopicPosts(@PathVariable String id, @NotNull @RequestParam Integer page, @RequestHeader("X-User-Id") Optional<String> userId) {
         return ResponseEntity
-                .ok(queryService.fetchTopicPosts(id, page));
+                .ok(queryService.fetchTopicPosts(id, page, userId));
     }
 
     @GetMapping("/users")
@@ -157,6 +175,11 @@ public class QueryController {
 
         return ResponseEntity
                 .ok(user.isPresent() ? new UserDTO(user.get()) : "");
+    }
+
+    @GetMapping("/users/{id}/topics")
+    public ResponseEntity<?> fetchUserTopics(@PathVariable String id) {
+        return ResponseEntity.ok(queryService.fetchTopicsByCreatorId(id));
     }
 
     private static Integer parsePage(Integer page) {

@@ -25,7 +25,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -58,12 +57,29 @@ public class QueryService implements QueryServiceMethods {
         }
     }
 
-    public List<PostSummaryDTO> fetchAllPosts(Integer page) {
-        return postRepository.findAll(PageRequest.of(page, 10)).map(PostSummaryDTO::new).toList();
+    public List<PostSummaryDTO> fetchAllPosts(Integer page, Optional<String> userId) {
+        return postRepository.findAll(PageRequest.of(page, 10)).map(postDocument -> toSummary(postDocument, userId)).toList();
+    }
+
+    private PostSummaryDTO toSummary(PostDocument postDocument, Optional<String> userId) {
+        PostSummaryDTO postSummaryDTO = new PostSummaryDTO(postDocument);
+        if (userId.isPresent()) {
+            if (postDocument.getUpvotes().contains(userId.get()))
+                postSummaryDTO.setLikedByUser(true);
+            if (postDocument.getDownvotes().contains(userId.get()))
+                postSummaryDTO.setDislikedByUser(true);
+        }
+
+        return postSummaryDTO;
     }
 
     public Optional<PostDocument> fetchPostById(String id) {
         return postRepository.findById(id);
+    }
+
+    public List<PostSummaryDTO> searchPostByTitle(String query, Integer page, Optional<String> userId) {
+        return postRepository.searchByTitle(query + "*", PageRequest.of(page, 10))
+                .map(postDocument -> toSummary(postDocument, userId)).toList();
     }
 
     public List<TopicSummaryDTO> fetchAllTopics(Integer page) {
@@ -74,13 +90,17 @@ public class QueryService implements QueryServiceMethods {
         return topicRepository.findById(id);
     }
 
-    public List<PostSummaryDTO> fetchTopicPosts(String id, Integer page) {
-        return postRepository.findAllByTopicId(id, PageRequest.of(page, 10)).map(PostSummaryDTO::new).toList();
+    public List<PostSummaryDTO> fetchTopicPosts(String id, Integer page, Optional<String> userId) {
+        return postRepository.findAllByTopicId(id, PageRequest.of(page, 10)).map(postDocument -> toSummary(postDocument, userId)).toList();
     }
 
     public List<TopicSummaryDTO> searchTopicsByName(String query, Integer page) {
         return topicRepository.searchByName(query + "*", PageRequest.of(page, 10))
                 .map(TopicSummaryDTO::new).toList();
+    }
+
+    public List<TopicSummaryDTO> fetchTopicsByCreatorId(String id) {
+        return topicRepository.findByCreator_Id(id).stream().map(TopicSummaryDTO::new).toList();
     }
 
     public Optional<UserDocument> fetchUser(String id) {
@@ -151,17 +171,20 @@ public class QueryService implements QueryServiceMethods {
         boolean parentTopicExists = topicRepository.existsById(postDocument.getTopicId());
 
         //boolean override = creator.isEmpty() && !parentTopicExists || (msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1"));
-        boolean override = msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1");
+        boolean overrideCreator = msgQ.getPost().getCreatorId().equals("-1");
+        boolean overrideTopic = msgQ.getPost().getTopicId().equals("-1");
 
-        if (parentTopicExists && creator.isPresent() || override) {
-            boolean postExists = postRepository.existsById(postDocument.getId());
-            postDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));
-            if (override)
+        if (parentTopicExists && creator.isPresent() || overrideCreator || overrideTopic) {
+            Optional<PostDocument> postExists = postRepository.findById(postDocument.getId());
+            postDocument.setCreator(!overrideCreator ? new UserSummaryDTO(creator.orElseThrow(() -> new PostException("creator  not found for post!"))) : new UserSummaryDTO(findRandomUser()));
+            if (postExists.isPresent())
+                postDocument.setTopicId(postExists.get().getTopicId());
+            else if (overrideTopic)
                 postDocument.setTopicId(findRandomTopicId());
 
             switch (msgQ.getType()) {
                 case CREATE -> {
-                    if (!postExists) {
+                    if (postExists.isEmpty()) {
                         log.info("Adding post " + msgQ.getPost().getId());
                         postRepository.save(postDocument);
                     }
@@ -169,7 +192,7 @@ public class QueryService implements QueryServiceMethods {
                         throw new PostException("CREATE: Post " + postDocument.getId() + " already exists!");
                 }
                 case UPDATE -> {
-                    if (postExists) {
+                    if (postExists.isPresent()) {
                         log.info("Updating post " + msgQ.getPost().getId());
                         postRepository.save(postDocument);
                     }
@@ -179,7 +202,7 @@ public class QueryService implements QueryServiceMethods {
                     }
                 }
                 case DELETE -> {
-                    if (postExists) {
+                    if (postExists.isPresent()) {
                         log.info("Deleting post " + msgQ.getPost().getId());
                         postRepository.delete(postDocument);
                     }
@@ -187,9 +210,9 @@ public class QueryService implements QueryServiceMethods {
                         throw new PostException("DELETE: Post " + postDocument.getId() + " to be deleted not found!");
                 }
                 case UPVOTE -> {
-                    if (postExists) {
+                    if (postExists.isPresent()) {
                         log.info("Post " + msgQ.getPost().getId() + " upvoted by " + postDocument.getCreator().getId());
-                        PostDocument postInDB = postRepository.findById(msgQ.getPost().getId()).get();
+                        PostDocument postInDB = postExists.get();
                         postInDB.addUpvote(postDocument.getCreator().getId());
                         postRepository.save(postInDB);
                     }
@@ -197,9 +220,9 @@ public class QueryService implements QueryServiceMethods {
                         throw new PostException("UPVOTE: Post " + postDocument.getId() + " to be upvoted not found");
                 }
                 case DOWNVOTE -> {
-                    if (postExists) {
+                    if (postExists.isPresent()) {
                         log.info("Post " + msgQ.getPost().getId() + " downvoted by " + postDocument.getCreator().getId());
-                        PostDocument postInDB = postRepository.findById(msgQ.getPost().getId()).get();
+                        PostDocument postInDB = postExists.get();
                         postInDB.addDownvote(postDocument.getCreator().getId());
                         postRepository.save(postInDB);
                     }
@@ -216,9 +239,8 @@ public class QueryService implements QueryServiceMethods {
     public void handleTopic(TopicQueueMessage msgQ) throws RuntimeException {
         log.info("Handling topic " + msgQ.getTopic().getId());
         TopicDocument topicDocument = new TopicDocument(msgQ.getTopic());
-
         Optional<UserDocument> creator = userRepository.findById(msgQ.getTopic().getCreatorId());
-        boolean override = creator.isEmpty() && Objects.equals(msgQ.getTopic().getCreatorId(), "-1");
+        boolean override = creator.isEmpty() && msgQ.getTopic().getCreatorId().equals("-1");
 
         if (creator.isPresent() || override) {
             topicDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));

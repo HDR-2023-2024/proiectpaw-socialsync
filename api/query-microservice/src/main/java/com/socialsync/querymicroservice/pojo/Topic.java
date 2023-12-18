@@ -7,7 +7,6 @@ public class Topic {
     private String id;
     private String name;
     private String description;
-    private Boolean ageRestriction;
     private Integer photoId;
     private String creatorId;
     private Long timestampCreated;

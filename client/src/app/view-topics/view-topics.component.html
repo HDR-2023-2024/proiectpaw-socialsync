@@ -1,0 +1,36 @@
+<app-navbar-disconnected [inputData]="{stringName : 'Căutare în comunități...'}"></app-navbar-disconnected>
+<div class="row m-0 p-0 ">
+    <div class="full-div d-flex col-lg-2 col-0  m-0 p-0 d-none d-lg-block">
+        <app-navbar-horizontally></app-navbar-horizontally>
+    </div>
+    <div class="col-lg-10 col-12 m-0 p-0 content d-flex justify-content-center">
+        <div class="row m-0 p-0 d-flex justify-content-center divMare">
+            <div class=" col-lg-10 col-12 m-0 mx-auto p-0 content  ">
+                <div class=" m-0 p-0 d-none d-lg-block col-0 col-lg-12" id="carousel">
+                    <app-carousel></app-carousel>
+                </div>
+                <div class="container-flex d-flex col-lg-10 col-12  row  mx-auto p-0">
+                    <div class="listPosts mx-auto">
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <button type="button" class="btn px-3 py-auto" id="create-post-btn"
+                                    (click)="redirectToCreateTopicPage()" *ngIf="authService.isUserLoggedIn()">+</button>
+                            </div>
+
+                            <div class="d-flex justify-content-center sort-category  pb-2 mt-3 my-auto">
+                                <label class="sort-category">Sortează după:</label>
+                                <select class="sort-category">
+                                    <option value="nume-asc">Nume (Ascendent)</option>
+                                    <option value="nume-desc">Nume (Descendent)</option>
+                                    <option value="data-asc">Data (Ascendent)</option>
+                                    <option value="data-desc">Data (Descendent)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div *ngFor="let item of myArr " class="postShort mx-auto">
+                            <app-topic-short class="mx-0 " [data]="item"></app-topic-short>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -80,6 +80,7 @@ public class PostsController {
 
     @PutMapping("/{id}/upvote")
     public ResponseEntity<?> upvotePost(@RequestHeader("X-User-Id") String userId, @PathVariable String id) {
+    	System.out.println(userId);
         try {
             postsService.upvotePost(id, userId);
             return ResponseEntity
@@ -92,6 +93,7 @@ public class PostsController {
 
     @PutMapping("/{id}/downvote")
     public ResponseEntity<?> downvotePost(@RequestHeader("X-User-Id") String userId, @PathVariable String id) {
+    System.out.println(userId);
         try {
             postsService.downvotePost(id, userId);
             return ResponseEntity

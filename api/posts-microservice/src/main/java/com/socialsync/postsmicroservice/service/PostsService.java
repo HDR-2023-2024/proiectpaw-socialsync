@@ -29,6 +29,7 @@ import java.util.*;
 @EnableScheduling
 public class PostsService implements PostsServiceMethods {
 
+
     private PostRepository repository;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
@@ -167,7 +168,8 @@ public class PostsService implements PostsServiceMethods {
 
         for (int i = 0;i < 100; i++) {
             String titlu = titluPostare.get(new Random().nextInt(titluPostare.size()));
-            String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";
+            String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\". Praesent in gravida dolor. Proin vel metus sapien. Suspendisse luctus eget elit a suscipit. Pellentesque orci enim, accumsan vel nunc ut, porta dictum ex. Praesent semper eleifend ipsum vel dictum. Etiam et commodo orci, non rutrum nibh. Proin ultricies condimentum pretium. Donec et consequat lorem. Aliquam convallis scelerisque arcu, vitae interdum ligula molestie ut.\n" +
+                    "Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis ullamcorper egestas felis a tincidunt. Nullam ac neque laoreet nunc molestie maximus. Pellentesque odio massa, aliquam ornare nibh in, varius pretium erat. Cras commodo imperdiet cursus. Praesent vehicula quis risus et pharetra. Nullam ipsum ipsum, maximus id tellus ut, pharetra tempor justo. Duis rhoncus, elit pellentesque tempus commodo, quam est interdum ipsum, quis fermentum turpis diam sed felis. Vestibulum id mi id nisl egestas sagittis. Sed sit amet tincidunt justo, ac gravida nunc. Donec lacinia sapien dolor, a sagittis nulla sollicitudin et. Aenean eu nisl laoreet, elementum tortor sit amet, auctor tortor. Nullam feugiat libero ut libero semper, eget cursus nisi tempus.";
             Post post = new Post("-1", "-1", titlu, continut);
             addPost(post);
         }
@@ -182,13 +184,14 @@ public class PostsService implements PostsServiceMethods {
 //            deleteEverything();
 
         String titlu = titluPostare.get(new Random().nextInt(titluPostare.size()));
-        String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";
+        String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\". Praesent in gravida dolor. Proin vel metus sapien. Suspendisse luctus eget elit a suscipit. Pellentesque orci enim, accumsan vel nunc ut, porta dictum ex. Praesent semper eleifend ipsum vel dictum. Etiam et commodo orci, non rutrum nibh. Proin ultricies condimentum pretium. Donec et consequat lorem. Aliquam convallis scelerisque arcu, vitae interdum ligula molestie ut.\n" +
+                "Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis ullamcorper egestas felis a tincidunt. Nullam ac neque laoreet nunc molestie maximus. Pellentesque odio massa, aliquam ornare nibh in, varius pretium erat. Cras commodo imperdiet cursus. Praesent vehicula quis risus et pharetra. Nullam ipsum ipsum, maximus id tellus ut, pharetra tempor justo. Duis rhoncus, elit pellentesque tempus commodo, quam est interdum ipsum, quis fermentum turpis diam sed felis. Vestibulum id mi id nisl egestas sagittis. Sed sit amet tincidunt justo, ac gravida nunc. Donec lacinia sapien dolor, a sagittis nulla sollicitudin et. Aenean eu nisl laoreet, elementum tortor sit amet, auctor tortor. Nullam feugiat libero ut libero semper, eget cursus nisi tempus.";
         Post post = new Post("-1", "-1", titlu, continut);
         addPost(post);
     }
 
     @Bean
-    @Scheduled(initialDelay = 1000L,fixedDelay = 100)
+    @Scheduled(initialDelay = 1000L,fixedDelay = 3000)
     @SneakyThrows
     void randomLikeDislike() {
         boolean like = Math.random() < 0.5;
@@ -275,8 +278,12 @@ public class PostsService implements PostsServiceMethods {
         Optional<Post> post = repository.findById(postId);
 
         if (post.isPresent()) {
-            post.get().getUpvotes().add(userId);
-            post.get().getDownvotes().remove(userId);
+            if (!post.get().getUpvotes().contains(userId)) {
+                post.get().getUpvotes().add(userId);
+                post.get().getDownvotes().remove(userId);
+            }
+            else
+                post.get().getUpvotes().remove(userId);
 
             repository.save(post.get());
 
@@ -292,8 +299,12 @@ public class PostsService implements PostsServiceMethods {
         Optional<Post> post = repository.findById(postId);
 
         if (post.isPresent()) {
-            post.get().getDownvotes().add(userId);
-            post.get().getUpvotes().remove(userId);
+            if (!post.get().getDownvotes().contains(userId)) {
+                post.get().getDownvotes().add(userId);
+                post.get().getUpvotes().remove(userId);
+            }
+            else
+                post.get().getDownvotes().remove(userId);
 
             repository.save(post.get());
 

@@ -45,6 +45,10 @@ export class AuthService {
     return this.storage.get("Token") != null;
   }
 
+  getToken(): string {
+    return this.storage.get("Token") ;
+  }
+
   getAvatar() {
       if (this.storage.get("PhotoId") == null) {
         return "assets/images/avatar.png"

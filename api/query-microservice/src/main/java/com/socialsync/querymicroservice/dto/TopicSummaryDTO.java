@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TopicSummaryDTO {
     private String id;
+    private UserSummaryDTO creator;
     private String name;
     private String description;
-    private Boolean ageRestriction;
 
     public TopicSummaryDTO(TopicDocument topic) {
         this.id = topic.getId();
+        this.creator = topic.getCreator();
         this.name = topic.getName();
         this.description = topic.getDescription();
-        this.ageRestriction = topic.getAgeRestriction();
     }
 }

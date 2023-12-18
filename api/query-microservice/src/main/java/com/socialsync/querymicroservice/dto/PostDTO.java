@@ -19,6 +19,8 @@ public class PostDTO {
     private String topicId;
     private String title;
     private String content;
+    private boolean likedByUser = false;
+    private boolean dislikedByUser = false;
     private List<CommentDTO> comments = new ArrayList<>();
     private Set<String> photos = new HashSet<>();
     private Integer score;

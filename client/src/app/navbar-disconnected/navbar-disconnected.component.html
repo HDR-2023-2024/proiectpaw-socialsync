@@ -11,7 +11,7 @@
         <div class="container d-none d-sm-block  ">
             <div class="container d-flex w-50 mx-auto" id="search-box">
                 <img src="assets/images/search.svg" alt="search" id="search-icon">
-                <input type="text" class="form-control" id="search-input" placeholder="Căutare...">
+                <input type="text" class="form-control" id="search-input" [placeholder]="inputData != null ? inputData.stringName : 'Căutare în postări...'" (keyup.enter)="onEnterKeyPressed()" />
             </div>
         </div>
 

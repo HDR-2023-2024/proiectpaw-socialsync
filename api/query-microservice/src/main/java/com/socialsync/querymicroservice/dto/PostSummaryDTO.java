@@ -13,6 +13,8 @@ public class PostSummaryDTO {
     private UserSummaryDTO creator;
     private String title;
     private String content;
+    private boolean likedByUser = false;
+    private boolean dislikedByUser = false;
     private Integer score;
     private Long timestampCreated;
 

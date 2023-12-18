@@ -21,6 +21,11 @@
   color: #000;
 }
 
+.reaction-neg{
+  font-size: 1.0em;
+  color: #000;
+}
+
 .reaction:hover{
   cursor: pointer;
 }
@@ -29,9 +34,6 @@
   cursor: default;
 }
 
-.disableReaction:hover{
-  cursor: default;
-}
 
 .reaction-box-like{
   background-color: #8888883f;
