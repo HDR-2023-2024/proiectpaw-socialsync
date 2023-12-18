@@ -25,7 +25,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -98,6 +97,10 @@ public class QueryService implements QueryServiceMethods {
     public List<TopicSummaryDTO> searchTopicsByName(String query, Integer page) {
         return topicRepository.searchByName(query + "*", PageRequest.of(page, 10))
                 .map(TopicSummaryDTO::new).toList();
+    }
+
+    public List<TopicSummaryDTO> fetchTopicsByCreatorId(String id) {
+        return topicRepository.findByCreator_Id(id).stream().map(TopicSummaryDTO::new).toList();
     }
 
     public Optional<UserDocument> fetchUser(String id) {
@@ -173,7 +176,7 @@ public class QueryService implements QueryServiceMethods {
 
         if (parentTopicExists && creator.isPresent() || overrideCreator || overrideTopic) {
             Optional<PostDocument> postExists = postRepository.findById(postDocument.getId());
-            postDocument.setCreator(!overrideCreator ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));
+            postDocument.setCreator(!overrideCreator ? new UserSummaryDTO(creator.orElseThrow(() -> new PostException("creator  not found for post!"))) : new UserSummaryDTO(findRandomUser()));
             if (postExists.isPresent())
                 postDocument.setTopicId(postExists.get().getTopicId());
             else if (overrideTopic)
@@ -236,9 +239,8 @@ public class QueryService implements QueryServiceMethods {
     public void handleTopic(TopicQueueMessage msgQ) throws RuntimeException {
         log.info("Handling topic " + msgQ.getTopic().getId());
         TopicDocument topicDocument = new TopicDocument(msgQ.getTopic());
-
         Optional<UserDocument> creator = userRepository.findById(msgQ.getTopic().getCreatorId());
-        boolean override = creator.isEmpty() && Objects.equals(msgQ.getTopic().getCreatorId(), "-1");
+        boolean override = creator.isEmpty() && msgQ.getTopic().getCreatorId().equals("-1");
 
         if (creator.isPresent() || override) {
             topicDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));

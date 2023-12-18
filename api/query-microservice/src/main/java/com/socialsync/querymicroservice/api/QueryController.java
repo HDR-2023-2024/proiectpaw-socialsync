@@ -177,6 +177,11 @@ public class QueryController {
                 .ok(user.isPresent() ? new UserDTO(user.get()) : "");
     }
 
+    @GetMapping("/users/{id}/topics")
+    public ResponseEntity<?> fetchUserTopics(@PathVariable String id) {
+        return ResponseEntity.ok(queryService.fetchTopicsByCreatorId(id));
+    }
+
     private static Integer parsePage(Integer page) {
         return page == 0 ? page : page < 0 ? 0 : page - 1;
     }
