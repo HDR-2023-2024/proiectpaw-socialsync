@@ -22,7 +22,6 @@ public class TopicDocument {
     @Searchable
     private String name;
     private String description;
-    private Boolean ageRestriction;
     private Long timestampCreated;
     private Long timestampUpdated;
 
@@ -30,7 +29,6 @@ public class TopicDocument {
         this.id = topic.getId();
         this.name = topic.getName();
         this.description = topic.getDescription();
-        this.ageRestriction = topic.getAgeRestriction();
         this.timestampCreated = topic.getTimestampCreated();
         this.timestampUpdated = topic.getTimestampUpdated();
     }

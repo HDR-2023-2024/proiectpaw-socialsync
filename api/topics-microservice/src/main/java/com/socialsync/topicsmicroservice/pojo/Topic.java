@@ -15,7 +15,6 @@ public class Topic {
     private String id;
     private String name;
     private String description;
-    private Boolean ageRestriction;
 
     private Integer photoId;
 
@@ -27,7 +26,6 @@ public class Topic {
     public Topic(String name, String description, Boolean ageRestriction, String creatorId) {
         this.name = name;
         this.description = description;
-        this.ageRestriction = ageRestriction;
         this.creatorId = creatorId;
     }
 }
