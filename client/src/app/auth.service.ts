@@ -56,6 +56,7 @@ export class AuthService {
   getUsername() {
     return "madalinaB"
   }
+  
 }
 
 export interface ApiResponse {

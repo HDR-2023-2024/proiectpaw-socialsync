@@ -15,5 +15,4 @@ export class ShortPostComponent {
   navigateToPost(postId: number) {
     this.router.navigate(['/full-post', postId]);
   }
-
 }

@@ -201,6 +201,16 @@ public class GatewayApplication {
                 .route("storage", r -> r
                         .path("/api/v1/storage/**")
                         .uri("http://localhost:8088"))
+                .route("comments", r -> r
+                    .path("/api/v1/comments/**")
+                    .uri("http://localhost:8085"))
+                .route("posts", r -> r
+                    .path("/api/v1/query/posts/**")
+                    .uri("http://localhost:8085"))
+                .route("posts", r -> r
+                        .path("/api/v1/query/topics/**")
+                        .uri("http://localhost:8085"))
                 .build();
+
     }
 }

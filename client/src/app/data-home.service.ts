@@ -9,11 +9,9 @@ export class DataHomeService {
 
   constructor(private http: HttpClient) { }
 
-
-
-
   getData(page: string): Observable<any> {
     return this.http.get('http://localhost:8086/api/v1/query/posts?page=' + String(page));
+    
   }
 
 

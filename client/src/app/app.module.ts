@@ -43,6 +43,7 @@ import { ProfileCommentComponent } from './profile-comment/profile-comment.compo
 import { CommunityEditComponent } from './community-edit/community-edit.component';
 import { HelpSiteComponent } from './help-site/help-site.component';
 import { TestareStorageComponent } from './testare-storage/testare-storage.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 const routes: Routes = [
@@ -59,7 +60,7 @@ const routes: Routes = [
   { path: 'unauthorized', component: UnauthorizedComponent },  // ok
   { path: "full-post/:id", component: FullPostPageComponent },
   { path: "links", component: LinksComponent },
-  { path: "community", component: CommunityComponent },
+  { path: "community/:id", component: CommunityComponent },
   { path: "p-c", component: ProfileCardComponent },
   { path: "p-n", component: ProfileNavComponent },
   { path: "p", component: ProfileComponent },
@@ -122,6 +123,8 @@ const routes: Routes = [
     AngularEditorModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
+
   ],
   exports: [RouterModule],
   providers: [],
