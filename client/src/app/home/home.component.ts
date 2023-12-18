@@ -5,6 +5,7 @@ import { DataHomeService } from '../data-home.service';
 import { ScroolServiceService } from '../scrool-service.service';
 import { debounceTime, filter } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',

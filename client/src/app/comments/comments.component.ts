@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommentService } from '../comment.service';
+import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-comments',
@@ -6,22 +9,65 @@ import { Component } from '@angular/core';
   styleUrls: ['./comments.component.css']
 })
 export class CommentsComponent {
+ 
+  @Input() comments: any[] = [];
+  @Input() replies: any[] = [];
+  private page: number = 0;
+  postId: string = '';
+  showReplyTextarea: boolean[] = [];
 
-  comments: any[] = [
-    {
-      username: 'Utilizator1',
-      time: '2 ore în urmă',
-      content: 'Excelent articol!',
-      img: "assets/images/avatar.png",
-      points: 10
-    },
-    {
-      username: 'Utilizator2',
-      time: '3 ore în urmă',
-      content: 'Frumos articol!',
-      img: "assets/images/avatar.png",
-      points: 5
-    },
-  ];
+  constructor(
+    private route: ActivatedRoute,
+    private commentService: CommentService,
+    private fb: FormBuilder
+  ) {}
 
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.postId = params['id'];
+      this.loadComments();
+    });
+  }
+
+  loadComments() {
+    this.commentService.getComment(this.postId, this.page.toString()).subscribe(
+      (data) => {
+        console.log('Datele de la server:', data);
+        this.comments = data;
+      },
+      (error) => {
+        console.error('Eroare la incarcarea comentariilor:', error);
+      }
+    );
+  }
+
+  addComment(content: string) {
+    this.commentService.postComment(this.postId, content).subscribe(
+      (response) => {
+        console.log('Comentariu creat cu succes.', response);
+        console.log(content);
+        this.comments = [response, ...this.comments];
+      },
+      (error) => {
+        console.error('Eroare la creare.', error);
+      }
+    ); 
+  }
+
+  toggleReplyTextarea(index: number) {
+    this.showReplyTextarea[index] = !this.showReplyTextarea[index];
+  }
+
+  
+  addReplies(content: string) {
+    this.commentService.postComment(this.postId, content).subscribe(
+      (response) => {
+        console.log('Comentariu creat cu succes.', response);
+        this.replies = [response, ...this.comments];
+      },
+      (error) => {
+        console.error('Eroare la creare.', error);
+      }
+    ); 
+  }
 }

@@ -45,6 +45,7 @@ import { HelpSiteComponent } from './help-site/help-site.component';
 import { TestareStorageComponent } from './testare-storage/testare-storage.component';
 import { ViewTopicsComponent } from './view-topics/view-topics.component';
 import { TopicShortComponent } from './topic-short/topic-short.component';
+import { CommunityCreateComponent } from './community-create/community-create.component';
 
 
 const routes: Routes = [
@@ -61,7 +62,7 @@ const routes: Routes = [
   { path: 'unauthorized', component: UnauthorizedComponent },  // ok
   { path: "full-post/:id", component: FullPostPageComponent },
   { path: "links", component: LinksComponent },
-  { path: "community", component: CommunityComponent },
+  { path: "community/:id", component: CommunityComponent },
   { path: "p-c", component: ProfileCardComponent },
   { path: "p-n", component: ProfileNavComponent },
   { path: "p", component: ProfileComponent },
@@ -74,7 +75,8 @@ const routes: Routes = [
   { path: "c-e", component: CommunityEditComponent},
   { path: "help", component: HelpSiteComponent},
   { path: "testare-storage", component: TestareStorageComponent},
-  { path: "view-topics", component: ViewTopicsComponent}
+  { path: "view-topics", component: ViewTopicsComponent},
+  { path: "create-topics", component: CommunityCreateComponent}
 ];
 
 
@@ -119,6 +121,7 @@ const routes: Routes = [
     TestareStorageComponent,
     ViewTopicsComponent,
     TopicShortComponent,
+    CommunityCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -126,7 +129,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     AngularEditorModule,
     HttpClientModule,
-    FormsModule,
+    FormsModule
   ],
   exports: [RouterModule],
   providers: [],

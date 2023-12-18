@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CommunityService } from '../community.service';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'app-community-details',
@@ -6,16 +9,44 @@ import { Component } from '@angular/core';
   styleUrls: ['./community-details.component.css']
 })
 export class CommunityDetailsComponent {
-  community: any[] = [
-    {
-      nume: "Comunitatea Superioară",
-      img: "assets/images/avatar.png",
-      membersCount: 1000,  
-      creationDate: "1 ianuarie 2020", 
-      description: "Aceasta este comunitatea noastră superbă în care discutăm despre tot ce ne pasionează. Alăturați-vă nouă pentru a împărtăși experiențe și cunoștințe!",  // Descriere
-      moderators: ["Moderator 1", "Moderator 2"] 
-    }
-  ];
-  
+  joined: boolean = false;
+  isNotified : boolean = false;
+  @Input() data:any;
+  page= 0;
+  communityId:string='';
+  formattedDate?: string;
+
+  constructor(private route:ActivatedRoute, private communityService:CommunityService){}
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.communityId = params['id'];
+      this.loadData();
+      console.log(this.communityId);
+    });
+  }
+
+  loadData(): void {
+    this.communityService.getCommunityById(this.communityId, this.page.toString()).subscribe(
+      (response) => {
+        console.log('Datele de la server:', response);
+        this.data = response; 
+      },
+      (error) => {
+        console.error('Eroare la încărcarea datelor.', error);
+      }
+    );
+  }
+ 
+  formatTimestampToDate(timestamp: number):string {
+     const date = new Date(timestamp);
+
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+
+    this.formattedDate = `${day}-${month}-${year}`;
+    return this.formattedDate;
+  }
 
 }

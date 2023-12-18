@@ -2,8 +2,8 @@
 <div class="container-fluid">
     <nav class="container-1 row m-0 p-0">
         <div class="d-flex justify-content-center align-items-center">
-            <img class="avatar-short-post" src="{{community[0].img}}">
-            <h2 class="ms-3">{{community[0].nume}}</h2>
+            <img class="avatar-short-post" src="{{data.image}}">
+            <h2 class="ms-3">{{data.name}}</h2>
             <button type="button" class="btn ms-3" id="join-btn" (click)="toggleJoinState()" >{{ joined ? 'Părăsește' : 'Alătură-te' }}</button>
             <div class="d-flex reaction-box-like mb-0" (click)="toggleNotifyState()">
                 <p class="reaction my-auto mx-2 mb-1">
@@ -22,16 +22,16 @@
                 <div class="listPosts mx-auto">
                     <div class="d-flex justify-content-start mt-4 ms-5">
                         <select id="sort-category">
-                            <option value="nume-asc">Voturi (Ascendent)</option>
-                            <option value="nume-desc">Voturi (Descendent)</option>
-                            <option value="data-asc">Data (Ascendent)</option>
-                            <option value="data-desc">Data (Descendent)</option>
-                            <option value="com-asc">Comentarii (Ascendent)</option>
-                            <option value="com-desc">Comentarii (Descendent)</option>
+                          <option value="nume-asc">Voturi (Ascendent)</option>
+                          <option value="nume-desc">Voturi (Descendent)</option>
+                          <option value="data-asc">Data (Ascendent)</option>
+                          <option value="data-desc">Data (Descendent)</option>
+                          <option value="com-asc">Comentarii (Ascendent)</option>
+                          <option value="com-desc">Comentarii (Descendent)</option>
                         </select>
-                    </div>
-                    <div *ngFor="let item of myArr">
-                        <app-short-post class="mx-auto" [data]="item"></app-short-post>
+                      </div>
+                    <div *ngFor="let post of posts">
+                        <app-short-post class="mx-auto" [data]="post"></app-short-post>
                     </div>
                 </div>
             </div>
