@@ -39,6 +39,9 @@ export class ShortPostComponent {
           },
           error => {
             console.error('Eroare:', error);
+            if (error.status == 401) {
+              this.router.navigate(['/unauthorized']);
+            }
           }
         );
     } else {

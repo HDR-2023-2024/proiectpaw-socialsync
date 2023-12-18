@@ -47,7 +47,6 @@ import { ViewTopicsComponent } from './view-topics/view-topics.component';
 import { TopicShortComponent } from './topic-short/topic-short.component';
 import { CommunityCreateComponent } from './community-create/community-create.component';
 
-
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
   { path: 'home-menu', component: HomeMenuComponent }, // ok
