@@ -16,6 +16,7 @@ public class TopicDTO {
     private UserSummaryDTO creator;
     private String name;
     private String description;
+    private String photoId;
     private Long timestampCreated;
     private List<PostSummaryDTO> posts = new ArrayList<>();
 
@@ -23,6 +24,7 @@ public class TopicDTO {
         this.id = topic.getId();
         this.name = topic.getName();
         this.creator = topic.getCreator();
+        this.photoId = topic.getPhotoId();
         this.description = topic.getDescription();
         this.timestampCreated = topic.getTimestampCreated();
         this.posts.addAll(posts);

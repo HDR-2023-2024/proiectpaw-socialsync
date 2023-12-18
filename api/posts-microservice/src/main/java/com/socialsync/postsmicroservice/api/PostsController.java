@@ -35,7 +35,7 @@ public class PostsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addPost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole,@RequestBody Post post) {
+    public ResponseEntity<?> addPost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @RequestBody Post post) {
             post.setCreatorId(userId);
             post.setId(null);
 

@@ -22,6 +22,7 @@ public class TopicDocument {
     @Searchable
     private String name;
     private String description;
+    private String photoId;
     private Long timestampCreated;
     private Long timestampUpdated;
 
@@ -29,6 +30,7 @@ public class TopicDocument {
         this.id = topic.getId();
         this.name = topic.getName();
         this.description = topic.getDescription();
+        this.photoId = topic.getPhotoId();
         this.timestampCreated = topic.getTimestampCreated();
         this.timestampUpdated = topic.getTimestampUpdated();
     }

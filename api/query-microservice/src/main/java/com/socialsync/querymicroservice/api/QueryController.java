@@ -178,8 +178,18 @@ public class QueryController {
     }
 
     @GetMapping("/users/{id}/topics")
-    public ResponseEntity<?> fetchUserTopics(@PathVariable String id) {
-        return ResponseEntity.ok(queryService.fetchTopicsByCreatorId(id));
+    public ResponseEntity<?> fetchUserTopics(@PathVariable String id, @NotNull @RequestParam Integer page) {
+        return ResponseEntity.ok(queryService.fetchTopicsByCreatorId(id, page));
+    }
+
+    @GetMapping("/users/{id}/posts")
+    public ResponseEntity<?> fetchUserPosts(@PathVariable String id, @NotNull @RequestParam Integer page) {
+        return ResponseEntity.ok(queryService.fetchPostsByCreatorId(id, page));
+    }
+
+    @GetMapping("/users/{id}/comments")
+    public ResponseEntity<?> fetchUserComments(@PathVariable String id, @NotNull @RequestParam Integer page) {
+        return ResponseEntity.ok(queryService.fetchCommentsByCreatorId(id, page));
     }
 
     private static Integer parsePage(Integer page) {
