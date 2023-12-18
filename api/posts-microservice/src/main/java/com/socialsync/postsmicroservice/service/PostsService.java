@@ -175,7 +175,7 @@ public class PostsService implements PostsServiceMethods {
         }
     }
 
-    @Bean
+  /*  @Bean
     @Scheduled(fixedDelay = 5000L)
     void newRandomPost() {
         log.info("We have " + repository.findAll().size() + " posts");
@@ -189,8 +189,8 @@ public class PostsService implements PostsServiceMethods {
         Post post = new Post("-1", "-1", titlu, continut);
         addPost(post);
     }
-
-    @Bean
+*/
+    /*@Bean
     @Scheduled(initialDelay = 1000L,fixedDelay = 3000)
     @SneakyThrows
     void randomLikeDislike() {
@@ -216,7 +216,7 @@ public class PostsService implements PostsServiceMethods {
             downvotePost(randomPost.getId(), "-1");
             downvotePost(randomPost.getId(), "-1");
         }
-    }
+    }*/
 
     @Override
     public HashMap<String, Post> fetchAllPosts() {

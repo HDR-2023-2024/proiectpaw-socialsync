@@ -16,14 +16,17 @@ public class AuthorizationController {
 
     @PostMapping("/generateJWT")
     public ResponseEntity<?> getJWT(@RequestBody AuthorizedInfo authorizedInfo) {
+    System.out.println(authorizedInfo.getId() + " " + authorizedInfo.getRole());
         try {
             String token = jwtService.generateAccessToken(authorizedInfo.getId(),authorizedInfo.getRole());
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Authorization",  token);
+            
             return ResponseEntity.ok()
                     .headers(responseHeaders)
                     .body(authorizedInfo);
         } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         }
     }

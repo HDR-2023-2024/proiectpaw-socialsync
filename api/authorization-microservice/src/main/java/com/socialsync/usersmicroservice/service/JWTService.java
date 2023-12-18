@@ -38,12 +38,16 @@ public class JWTService {
 
 
     public String generateAccessToken(String id, String role) throws NoSuchAlgorithmException {
+        long currentTimeMillis = System.currentTimeMillis();
+
+
+        long expirationTimeMillis = currentTimeMillis + (1 * 60 * 60 * 1000);
         String token = Jwts.builder()
                 .setId(id)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + getInstance()))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .setExpiration(new Date(expirationTimeMillis) )
+                .signWith(SignatureAlgorithm.HS512,   getInstance())
                 .compact();
         return token;
     }
@@ -62,6 +66,7 @@ public class JWTService {
         } catch (SignatureException e) {
             throw new Exception("Token invalid sau semnatura invalida");
         } catch (Exception e) {
+            e.printStackTrace();
             throw new Exception("Exceptie la validarea token-ului");
         }
     }
