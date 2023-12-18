@@ -242,7 +242,7 @@ public class PostsService implements PostsServiceMethods {
         Post postInBD = repository.findById(post.getId()).get();
         sendMessage(new PostQueueMessage(QueueMessageType.CREATE, postInBD));
 
-        return post;
+        return postInBD;
     }
 
     @Override
