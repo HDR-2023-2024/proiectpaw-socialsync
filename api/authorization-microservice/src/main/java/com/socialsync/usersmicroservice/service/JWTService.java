@@ -40,6 +40,7 @@ public class JWTService {
     public String generateAccessToken(String id, String role) throws NoSuchAlgorithmException {
         long currentTimeMillis = System.currentTimeMillis();
 
+
         long expirationTimeMillis = currentTimeMillis + (1 * 60 * 60 * 1000);
         String token = Jwts.builder()
                 .setId(id)
