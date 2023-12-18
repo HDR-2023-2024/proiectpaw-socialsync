@@ -9,7 +9,7 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class DataHomeService {
 
-  constructor(private http: HttpClient,private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   getData(apiUrl: string): Observable<any> {
 
@@ -21,22 +21,22 @@ export class DataHomeService {
       });
     }
     console.log(headers)
-    return this.http.get(apiUrl,{ headers: headers });
+    return this.http.get(apiUrl, { headers: headers });
   }
 
 
   async getDataSync(apiUrl: string): Promise<any> {
 
     let headers = new HttpHeaders();
-    if (this.authService.isUserLoggedIn() ) {
+    if (this.authService.isUserLoggedIn()) {
       console.log("ceva")
-       headers = new HttpHeaders({
+      headers = new HttpHeaders({
         'Authorization': this.authService.getToken()
       });
     }
     try {
       console.log(headers)
-      const data = await this.http.get(apiUrl,{ headers: headers }).toPromise();
+      const data = await this.http.get(apiUrl, { headers: headers }).toPromise();
       console.log(apiUrl);
       return data;
     } catch (error) {
@@ -61,5 +61,6 @@ export class DataHomeService {
       console.error('Eroare la obtinerea datelor:', error);
       throw error;
     }
+
   }
 }

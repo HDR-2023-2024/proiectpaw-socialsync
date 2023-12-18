@@ -47,6 +47,7 @@ import { ViewTopicsComponent } from './view-topics/view-topics.component';
 import { TopicShortComponent } from './topic-short/topic-short.component';
 import { CommunityCreateComponent } from './community-create/community-create.component';
 
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
   { path: 'home-menu', component: HomeMenuComponent }, // ok
@@ -61,7 +62,7 @@ const routes: Routes = [
   { path: 'unauthorized', component: UnauthorizedComponent },  // ok
   { path: "full-post/:id", component: FullPostPageComponent },
   { path: "links", component: LinksComponent },
-  { path: "community", component: CommunityComponent },
+  { path: "community/:id", component: CommunityComponent },
   { path: "p-c", component: ProfileCardComponent },
   { path: "p-n", component: ProfileNavComponent },
   { path: "p", component: ProfileComponent },
@@ -128,7 +129,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     AngularEditorModule,
     HttpClientModule,
-    FormsModule,
+    FormsModule
   ],
   exports: [RouterModule],
   providers: [],

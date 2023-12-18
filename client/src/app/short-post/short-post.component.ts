@@ -1,8 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { faL } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-short-post',
@@ -10,13 +8,15 @@ import { faL } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./short-post.component.css']
 })
 export class ShortPostComponent {
-  @Input() data: any
-  constructor(public authService: AuthService, private router: Router, private http: HttpClient) { }
+  @Input() data: any;
+
+  constructor(public authService : AuthService,private router: Router){}
 
   navigateToPost(postId: number) {
     this.router.navigate(['/full-post', postId]);
   }
 
+<<<<<<< HEAD
   downvote() {
     //console.log("downvote");
     if (!this.authService.getToken()) {
@@ -108,5 +108,8 @@ export class ShortPostComponent {
         );
     }
   }
+=======
+  
+>>>>>>> 16c0933c15e8945527eb99ca0fcaa7ad54a76939
 
 }
