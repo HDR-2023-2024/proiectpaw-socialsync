@@ -64,6 +64,7 @@ public class QueryController {
             queryService.handlePost(msgQ);
         }
         catch (RuntimeException ex) {
+        ex.printStackTrace();
             log.error(ex.getMessage());
         }
     }
