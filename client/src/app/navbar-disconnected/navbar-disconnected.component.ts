@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
@@ -64,10 +64,20 @@ export class NavbarDisconnectedComponent implements OnInit {
   onEnterKeyPressed() {
     const searchInput = document.getElementById("search-input") as HTMLInputElement;
     const inputValue = searchInput.value;
-    if(inputValue.length == 1){
+    if (inputValue.length == 1) {
       alert("Nu se poate căuta după o singură literă.");
       return;
     }
-    this.router.navigate(['/view-topics', { query: inputValue }]);
+    
+    if (this.inputData != null && this.inputData.stringName.includes("com")) {
+      console.log("Cautare in topicuri!");
+      this.router.navigate(['/view-topics', { query: inputValue }]);
+    } else if (this.inputData != null && this.inputData.stringName.includes("uti")) {
+      console.log("Cautare in postari!")
+      this.router.navigate(['/home', { query: inputValue }]);
+    }else{
+      console.log("Cautare in postari!")
+      this.router.navigate(['/home', { query: inputValue }]);
+    }
   }
 }
