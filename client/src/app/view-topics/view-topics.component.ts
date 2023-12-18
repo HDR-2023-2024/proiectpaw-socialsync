@@ -5,6 +5,7 @@ import { DataHomeService } from '../data-home.service';
 import { ScroolServiceService } from '../scrool-service.service';
 import { debounceTime, filter } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-view-topics',
@@ -47,6 +48,7 @@ export class ViewTopicsComponent {
   private handleScrollEnd(): void {
     this.page++;
     let url  = "";
+
     if (this.query == null || this.query.length == 0) {
       url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() ;
     }
@@ -76,6 +78,7 @@ export class ViewTopicsComponent {
 
   loadDataOnPageLoad(): void {
     let url;
+
     if (this.query == null || this.query.length == 0) {
       url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() ;
     }

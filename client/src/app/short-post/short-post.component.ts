@@ -23,17 +23,15 @@ export class ShortPostComponent {
       alert('Este necesară autentificarea pentru a vota. Vă rugăm să vă autentificați.');
       return;
     }
-
     const headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
     });
-
     if (this.data.dislikedByUser == false) {
       this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/downvote", '', { headers: headers })
         .subscribe(
           data => {
             //console.log(data);
-            this.data.score++;
+            this.data.score--;
             this.data.dislikedByUser = true;
             this.data.likedByUser = false;
           },
@@ -45,8 +43,21 @@ export class ShortPostComponent {
           }
         );
     } else {
-      this.data.score--;
-      this.data.dislikedByUser = false;
+      this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/downvote", '', { headers: headers })
+        .subscribe(
+          data => {
+            //console.log(data);
+            this.data.score++;
+            this.data.dislikedByUser = false;
+            this.data.likedByUser = false;
+          },
+          error => {
+            console.error('Eroare:', error);
+            if (error.status == 401) {
+              this.router.navigate(['/unauthorized']);
+            }
+          }
+        );
     }
     console.log(this.data.dislikedByUser)
   }
@@ -57,12 +68,12 @@ export class ShortPostComponent {
       alert('Este necesară autentificarea pentru a vota. Vă rugăm să vă autentificați.');
       return;
     }
-    //console.log("upvote");
     const headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
     });
+    //console.log("upvote");
     if (this.data.likedByUser == false) {
-      this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/upvote", '', { headers: headers })
+      this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/upvote", '', { headers: headers})
         .subscribe(
           data => {
             //console.log(data);
@@ -78,8 +89,23 @@ export class ShortPostComponent {
           }
         );
     } else {
-      this.data.score--;
-      this.data.likedByUser = false;
+
+      // e aceiasi metoda
+      this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/upvote", '', { headers: headers })
+        .subscribe(
+          data => {
+            //console.log(data);
+            this.data.score--;
+            this.data.likedByUser = false;
+            this.data.dislikedByUser = false;
+          },
+          error => {
+            console.error('Eroare:', error);
+            if (error.status == 401) {
+              this.router.navigate(['/unauthorized']);
+            }
+          }
+        );
     }
   }
 
