@@ -1,17 +1,32 @@
 <div class="container d-flex justify-content-center mt-5">
-    <div class="col-md-6">
-      <div class="create-post-container p-3">
-         <form class="post-form">
-             <h1 class="text-center">Create post</h1>
-             <input type="text" class="form-control mb-3" placeholder="Title">
-             <input type="text" class="form-control mb-3" placeholder="URL">
-             <angular-editor [config]="editorConfig"></angular-editor>
-          </form>
-          <div class="d-flex justify-content-end mt-3">
-             <button class="btn btn-outline-dark postButton">Post</button> 
-             <button class="btn btn-outline-dark discardButton">Discard</button>
-          </div>
-       </div>
-    </div>
+   <div class="col-md-7">
+     <div class="create-post-container p-3">
+       <form class="post-form" name="post_form">
+         <h2 class="text-center">Create Post</h2>
+         <form #form="ngForm">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="titlu" [(ngModel)]="title" name="titlu"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" [(ngModel)]="content"
+                    name="content" rows="3" required></textarea>
+            </div>
+            <br><br>
+            <div class="form-group">
+                <label for="photo">Community Photo:</label>
+                <input type="file" class="form-control-file" id="photo" name="photo">
+            </div>
+         </form>
+         <div class="d-flex justify-content-end mt-3">
+           <button class="btn btn-outline-dark postButton"  (click)="createPost()">Post</button>
+           <button class="btn btn-outline-dark discardButton" (click)="clearForm(form)">Discard</button>
+         </div>
+     </form>
+     </div>
+  </div>
 </div>
 
+ 
