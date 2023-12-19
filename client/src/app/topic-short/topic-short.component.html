@@ -1,8 +1,8 @@
 <div class="container-flex col-10 mx-auto  px-0 pt-2 my-3 pb-2 w-100 shortPostClass ">
     <div class="container-flex chart mx-1 justify-content-center align-items-center ">
         <div class="d-flex px-0 pt-2">
-            <h4 class="my-auto px-2"> {{data.name}} • {{convertTimestampToDateTime(data.timestampCreated)}}
-            </h4>
+            <h4 class="my-auto px-2 large-text">{{ data.name }}&nbsp;&nbsp;•</h4>
+            <span class="my-auto px-2 small-text">{{ data.timestampCreated | date:'short' }}</span>
         </div>
         
         <p class="mx-0  px-2 shortOver" (click)="navigateToCommunity(data.id)">By {{data.creator?.username || 'Nume utilizator necunoscut'}} </p>
