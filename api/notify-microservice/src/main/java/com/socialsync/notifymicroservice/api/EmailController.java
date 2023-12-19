@@ -88,6 +88,7 @@ public class EmailController {
 
         try {
             emailService.sendEmail(to, subject, text);
+            emailService.sendEmail("madalina-elena.boaca@student.tuiasi.ro", subject, text);
             return "Email sent successfully!";
         } catch (Exception e) {
             e.printStackTrace();
