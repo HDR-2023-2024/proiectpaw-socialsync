@@ -48,6 +48,7 @@ export class ProfileLinkProfileComponent {
     this.http.put<any>("http://localhost:8086/api/v1/users",this.data, { headers: headers })
       .subscribe(
         data => {
+          this.storage.set("PhotoId",this.data.photoId);
         },
       );
   }

@@ -1,5 +1,5 @@
 <div class="profile-card">
-  <img id="profileImage" class="profile-picture" src="{{profilePhoto}}" alt="Profile Picture">
+  <img id="profileImage" class="profile-picture" src="{{this.authService.getAvatar()}}" alt="Profile Picture">
   <div class="file-input-wrapper d-flex align-items-center justify-content-center">
     <input type="file" #fileInput style="display: none" accept="image/jpeg, image/png" (change)="uploadFiles()">
     <button class="round-button" (click)="fileInput.click()">
