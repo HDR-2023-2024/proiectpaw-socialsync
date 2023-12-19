@@ -79,6 +79,7 @@ public class UsersController {
             return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
         }
         try {
+            System.out.println(user);
             usersService.updateUser(userId, user);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {

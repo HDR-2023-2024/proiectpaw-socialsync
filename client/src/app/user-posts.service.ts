@@ -51,9 +51,15 @@ export class UserPostsService {
 
   async getDataSyncTopics(apiUrl: string): Promise<any> {
     //console.log(page)
-
+    let headers = new HttpHeaders();
+    if (this.authService.isUserLoggedIn()) {
+      console.log("ceva")
+      headers = new HttpHeaders({
+        'Authorization': this.authService.getToken()
+      });
+    }
     try {
-      const data = await this.http.get(apiUrl).toPromise();
+      const data = await this.http.get(apiUrl,{ headers: headers }).toPromise();
       console.log(apiUrl);
       return data;
     } catch (error) {

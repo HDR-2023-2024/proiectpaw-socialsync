@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FullPostService } from '../full-post.service';
 import { AuthService } from '../auth.service';
@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { UserServiceService } from '../user-service.service';
 import { ViewChild, ElementRef } from '@angular/core';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 @Component({
   selector: 'app-profile-card',
@@ -13,7 +14,7 @@ import { ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./profile-card.component.css']
 })
 export class ProfileCardComponent {
-  constructor( private user: UserServiceService,private router: Router, public authService: AuthService, private http: HttpClient ) { }
+  constructor( @Inject(LOCAL_STORAGE) private storage: StorageService,private user: UserServiceService,private router: Router, public authService: AuthService, private http: HttpClient ) { }
   data = {
     id: '',
     photoId: '',
@@ -22,6 +23,7 @@ export class ProfileCardComponent {
     role: '',
     gender: ''
 }
+profilePhoto = '../../assets/images/profile_pic.jpg';
 
 @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
@@ -39,6 +41,7 @@ export class ProfileCardComponent {
   uploadFiles() {
     const fileInput = this.fileInputRef.nativeElement;
     const files = fileInput.files;
+   
 
     if (files && files.length > 0) {
       const formData = new FormData();
@@ -52,6 +55,8 @@ export class ProfileCardComponent {
           data => {
             if (data && data.length > 0) {
               console.log(data)
+              this.storage.set("ProfilePhoto",data[0].url);
+              this.profilePhoto = data[0].url;
             }
           },
           error => {

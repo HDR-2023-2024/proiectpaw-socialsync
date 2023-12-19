@@ -29,5 +29,6 @@ public class UserSelect {
         this.role = role;
         this.photoId = photoId;
         this.gender = gender;
+        this.description = description;
     }
 }

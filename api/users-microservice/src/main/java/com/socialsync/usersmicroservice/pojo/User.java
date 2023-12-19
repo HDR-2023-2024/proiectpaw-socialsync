@@ -34,7 +34,7 @@ public class User {
     @Column(name = "gender", length = 1)
     private GenderType gender;
 
-    @Column(name = "photoId", length = 100)
+    @Column(name = "photo_id", length = 100)
     private String photoId;
 
     @Column(name = "description", length = 1000)

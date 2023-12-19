@@ -10,7 +10,11 @@
         <label for="email">Email</label>
         <input type="email" class="form-control" id="email" [(ngModel)]="data.email" name="email">
       </div>
-      <button type="submit" class="btn btn-primary">Salvează modificările</button>
+      <div class="form-group">
+        <label for="email">Desciere</label>
+        <input type="email" class="form-control" id="description" [(ngModel)]="data.description" name="description">
+      </div>
+      <button type="submit" class="btn btn-primary" (click)="updateUser()"  >Salvează modificările</button>
     </form>
   </div>
   

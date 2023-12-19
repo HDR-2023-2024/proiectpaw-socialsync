@@ -155,7 +155,7 @@ public class UsersService implements UsersServiceMethods {
         Optional<User> userInDb = repository.findById(id);
         if (userInDb.isPresent()) {
             try {
-                repository.updateUser(id, user.getUsername(), user.getEmail(), user.getRole(), user.getGender());
+                repository.updateUser(id, user.getUsername(), user.getEmail(), user.getRole(), user.getGender(),user.getDescription(),user.getPhotoId());
                 sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, new User(id, user.getUsername(), null, user.getEmail(), user.getGender(),user.getPhotoId(),user.getDescription(), user.getRole())));
             } catch (Exception ex) {
                 if (ex.getMessage().contains("uk_email")) {
