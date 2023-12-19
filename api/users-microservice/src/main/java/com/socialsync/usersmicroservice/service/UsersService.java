@@ -97,8 +97,8 @@ public class UsersService implements UsersServiceMethods {
     @Scheduled(fixedDelay = 30000L)
     public void newRandomUser() throws NotAcceptableException {
         log.info("We have " + repository.findAll().size() + " users!");
-        if (repository.findAll().size() > 50)
-            deleteData();
+    //    if (repository.findAll().size() > 50)
+     //       deleteData();
 
         User randomUser = users.get(new Random().nextInt(users.size()));
         User newUser = new User();

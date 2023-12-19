@@ -24,7 +24,7 @@ export class ProfileLinkPostsComponent {
   }
 
   myArr: any[] = [];
-    
+
   navigateToPost(postId: number) {
     this.router.navigate(['/full-post', postId]);
   }
@@ -52,12 +52,7 @@ export class ProfileLinkPostsComponent {
   private handleScrollEnd(): void {
     this.page++;
     let url = "";
-    if (this.query == null || this.query.length == 0) {
-      url = 'http://localhost:8086/api/v1/query/posts?page=' + this.page.toString();
-    }
-    else {
-      url = 'http://localhost:8086/api/v1/query/posts?page=' + this.page.toString() + "&query=" + this.query;
-    }
+    url = 'http://localhost:8086/api/v1/query/users/' + this.authService.getId() + '/posts?page=' + this.page.toString();
     let oldSize = this.myArr.length;
     this.dataService.getDataSync(url)
       .then((data: any[]) => {
@@ -88,26 +83,21 @@ export class ProfileLinkPostsComponent {
 
   loadDataOnPageLoad(): void {
     let url;
-    if (this.query == null || this.query.length == 0) {
-      url = 'http://localhost:8086/api/v1/query/posts?page=' + this.page.toString();
-    }
-    else {
-      url = 'http://localhost:8086/api/v1/query/posts?page=' + this.page.toString() + "&query=" + this.query;
-    }
+    url = 'http://localhost:8086/api/v1/query/users/' + this.authService.getId() + '/posts?page=' + this.page.toString();
 
     this.dataService.getData(url).subscribe(
       (data) => {
         console.log('Datele de la server:', data);
         this.myArr = data;
         var seenIds: Record<string, boolean> = {};
-          var filteredArr = this.myArr.filter(function (item: any) {
-            if (seenIds.hasOwnProperty(item.id)) {
-              return false;
-            }
-            seenIds[item.id] = true;
-            return true;
-          });
-          this.myArr = filteredArr;
+        var filteredArr = this.myArr.filter(function (item: any) {
+          if (seenIds.hasOwnProperty(item.id)) {
+            return false;
+          }
+          seenIds[item.id] = true;
+          return true;
+        });
+        this.myArr = filteredArr;
       },
       (error) => {
         console.error('Eroare la incarcarea datelor:', error);
