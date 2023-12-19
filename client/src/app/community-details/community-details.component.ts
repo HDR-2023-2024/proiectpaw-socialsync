@@ -39,16 +39,11 @@ export class CommunityDetailsComponent {
     );
   }
  
-  formatTimestampToDate(timestamp: number):string {
-     const date = new Date(timestamp);
-
-    const day = ('0' + date.getDate()).slice(-2);
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const year = date.getFullYear();
-
-    this.formattedDate = `${day}-${month}-${year}`;
-    return this.formattedDate;
+  convertTimestampToDateTime(timestamp: number) {
+    var date = new Date(timestamp * 1000);
+    return date.toLocaleString();
   }
+
 
   navigateToPost(topicId: string,topicName : string) {
     this.router.navigate(['/create-post', topicId, topicName]);
