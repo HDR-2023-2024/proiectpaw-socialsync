@@ -4,10 +4,7 @@ import com.socialsync.querymicroservice.documents.CommentDocument;
 import com.socialsync.querymicroservice.documents.PostDocument;
 import com.socialsync.querymicroservice.documents.TopicDocument;
 import com.socialsync.querymicroservice.documents.UserDocument;
-import com.socialsync.querymicroservice.dto.CommentDTO;
-import com.socialsync.querymicroservice.dto.PostSummaryDTO;
-import com.socialsync.querymicroservice.dto.TopicSummaryDTO;
-import com.socialsync.querymicroservice.dto.UserSummaryDTO;
+import com.socialsync.querymicroservice.dto.*;
 import com.socialsync.querymicroservice.interfaces.QueryServiceMethods;
 import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.querymicroservice.pojo.PostQueueMessage;
@@ -50,9 +47,18 @@ public class QueryService implements QueryServiceMethods {
 
     public List<CommentDTO> fetchPostComments(String id, Integer page) {
         try {
-            return commentRepository.findAll().stream().filter(p -> p.getPostId().equals(id)).map(CommentDTO::new).toList().subList(page * 10, (page + 1) * 10);
+            return commentRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getPostId().equals(id)).map(CommentDTO::new)
+                    .toList()
+                    .subList(page * 10, (page + 1) * 10);
         } catch (IndexOutOfBoundsException ex) {
-            List<CommentDTO> list = commentRepository.findAll().stream().filter(p -> p.getPostId().equals(id)).map(CommentDTO::new).toList();
+            List<CommentDTO> list = commentRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getPostId().equals(id))
+                    .map(CommentDTO::new).toList();
             return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
         }
     }
@@ -62,7 +68,12 @@ public class QueryService implements QueryServiceMethods {
     }
 
     private PostSummaryDTO toSummary(PostDocument postDocument, Optional<String> userId) {
-        PostSummaryDTO postSummaryDTO = new PostSummaryDTO(postDocument);
+        PostSummaryDTO postSummaryDTO = new PostSummaryDTO(
+                postDocument,
+                new PostTopicSummaryDTO(
+                        topicRepository
+                                .findById(postDocument.getTopicId())
+                                .orElseThrow(() -> new TopicException("Topic not found for post summary " + postDocument.getId()))));
         if (userId.isPresent()) {
             if (postDocument.getUpvotes().contains(userId.get()))
                 postSummaryDTO.setLikedByUser(true);
@@ -101,27 +112,60 @@ public class QueryService implements QueryServiceMethods {
 
     public List<TopicSummaryDTO> fetchTopicsByCreatorId(String id, Integer page) {
         try {
-            return topicRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(TopicSummaryDTO::new).toList().subList(page * 10, (page + 1) * 10);
+            return topicRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getCreator().getId().equals(id))
+                    .map(TopicSummaryDTO::new)
+                    .toList()
+                    .subList(page * 10, (page + 1) * 10);
         } catch (IndexOutOfBoundsException ex) {
-            List<TopicSummaryDTO> list = topicRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(TopicSummaryDTO::new).toList();
+            List<TopicSummaryDTO> list = topicRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getCreator().getId().equals(id))
+                    .map(TopicSummaryDTO::new)
+                    .toList();
             return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
         }
     }
 
     public List<PostSummaryDTO> fetchPostsByCreatorId(String id, Integer page) {
         try {
-            return postRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(postDocument -> toSummary(postDocument, Optional.of(id))).toList().subList(page * 10, (page + 1) * 10);
+            return postRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getCreator().getId().equals(id))
+                    .map(postDocument -> toSummary(postDocument, Optional.of(id)))
+                    .toList()
+                    .subList(page * 10, (page + 1) * 10);
         } catch (IndexOutOfBoundsException ex) {
-            List<PostSummaryDTO> list = postRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(PostSummaryDTO::new).toList();
+            List<PostSummaryDTO> list = postRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getCreator().getId().equals(id))
+                    .map(postDocument -> toSummary(postDocument, Optional.of(id)))
+                    .toList();
             return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
         }
     }
 
     public List<CommentDTO> fetchCommentsByCreatorId(String id, Integer page) {
         try {
-            return commentRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(CommentDTO::new).toList().subList(page * 10, (page + 1) * 10);
+            return commentRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getCreator().getId().equals(id))
+                    .map(CommentDTO::new)
+                    .toList()
+                    .subList(page * 10, (page + 1) * 10);
         } catch (IndexOutOfBoundsException ex) {
-            List<CommentDTO> list = commentRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(CommentDTO::new).toList();
+            List<CommentDTO> list = commentRepository
+                    .findAll()
+                    .stream()
+                    .filter(p -> p.getCreator().getId().equals(id))
+                    .map(CommentDTO::new)
+                    .toList();
             return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
         }
     }

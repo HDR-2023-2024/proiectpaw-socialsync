@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class PostSummaryDTO {
     private String id;
     private UserSummaryDTO creator;
+    private PostTopicSummaryDTO topic;
     private String title;
     private String content;
     private boolean likedByUser = false;
@@ -19,9 +20,10 @@ public class PostSummaryDTO {
     private Long timestampCreated;
 
 
-    public PostSummaryDTO(PostDocument post) {
+    public PostSummaryDTO(PostDocument post, PostTopicSummaryDTO topic) {
         this.id = post.getId();
         this.creator = post.getCreator();
+        this.topic = topic;
         this.title = post.getTitle();
         this.content = post.getContent().substring(0, Math.min(post.getContent().length(), 500));
         this.score = post.getUpvotes().size() - post.getDownvotes().size();

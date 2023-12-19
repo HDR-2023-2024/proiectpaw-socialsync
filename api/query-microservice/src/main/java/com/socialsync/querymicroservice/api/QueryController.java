@@ -6,6 +6,7 @@ import com.socialsync.querymicroservice.documents.PostDocument;
 import com.socialsync.querymicroservice.documents.TopicDocument;
 import com.socialsync.querymicroservice.documents.UserDocument;
 import com.socialsync.querymicroservice.dto.PostDTO;
+import com.socialsync.querymicroservice.dto.PostTopicSummaryDTO;
 import com.socialsync.querymicroservice.dto.TopicDTO;
 import com.socialsync.querymicroservice.dto.UserDTO;
 import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
@@ -13,6 +14,7 @@ import com.socialsync.querymicroservice.pojo.PostQueueMessage;
 import com.socialsync.querymicroservice.pojo.TopicQueueMessage;
 import com.socialsync.querymicroservice.pojo.UserQueueMessage;
 import com.socialsync.querymicroservice.service.QueryService;
+import com.socialsync.querymicroservice.util.exceptions.TopicException;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -114,7 +116,10 @@ public class QueryController {
         Optional<PostDocument> post = queryService.fetchPostById(id);
 
         if (post.isPresent()) {
-            PostDTO postResponse = new PostDTO(post.get(), queryService.fetchPostComments(post.get().getId(), page));
+            PostDTO postResponse = new PostDTO(
+                    post.get(),
+                    queryService.fetchPostComments(post.get().getId(), page),
+                    new PostTopicSummaryDTO(queryService.fetchTopic(post.get().getTopicId()).orElseThrow(() -> new TopicException("Topic not found for post " + post.get().getId()))));
 
             if (userId.isPresent())
             {

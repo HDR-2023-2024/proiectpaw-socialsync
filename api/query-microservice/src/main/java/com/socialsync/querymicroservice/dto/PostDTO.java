@@ -16,7 +16,7 @@ import java.util.Set;
 public class PostDTO {
     private String id;
     private UserSummaryDTO creator;
-    private String topicId;
+    private PostTopicSummaryDTO topic;
     private String title;
     private String content;
     private boolean likedByUser = false;
@@ -27,10 +27,10 @@ public class PostDTO {
     private Long timestampCreated;
 
 
-    public PostDTO(PostDocument post, List<CommentDTO> comments) {
+    public PostDTO(PostDocument post, List<CommentDTO> comments, PostTopicSummaryDTO topic) {
         this.id = post.getId();
-        this.topicId = post.getTopicId();
         this.creator = post.getCreator();
+        this.topic = topic;
         this.title = post.getTitle();
         this.content = post.getContent();
         this.photos = post.getPhotos();
