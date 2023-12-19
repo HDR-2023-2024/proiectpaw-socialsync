@@ -26,6 +26,7 @@ export class AuthService {
         this.storage.set("Token", response.body.token);
         this.storage.set("PhotoId", response.body.photoId);
         this.storage.set("Username", response.body.username);
+        this.storage.set("Id", response.body.id);
         return response;
       }),
       catchError(error => {
@@ -39,6 +40,7 @@ export class AuthService {
     this.storage.remove("Token");
     this.storage.remove("PhotoId");
     this.storage.remove("Username");
+    this.storage.remove("Id");
   }
 
   isUserLoggedIn(): boolean {
@@ -47,6 +49,10 @@ export class AuthService {
 
   getToken(): string {
     return this.storage.get("Token") ;
+  }
+
+  getId(): string {
+    return this.storage.get("Id") ;
   }
 
   getAvatar() {

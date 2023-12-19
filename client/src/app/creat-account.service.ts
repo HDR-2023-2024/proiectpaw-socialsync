@@ -23,6 +23,7 @@ export class CreatAccountService {
         this.storage.set("Token", response.body.token);
         this.storage.set("PhotoId", response.body.photoId);
         this.storage.set("Username", response.body.username);
+        this.storage.set("Id", response.body.id);
         return response;
       }),
       catchError(error => {

@@ -1,4 +1,10 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FullPostService } from '../full-post.service';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { UserServiceService } from '../user-service.service';
 
 @Component({
   selector: 'app-profile-card',
@@ -6,29 +12,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile-card.component.css']
 })
 export class ProfileCardComponent {
-  handleImageChange(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    if (inputElement.files && inputElement.files.length > 0) {
-      const selectedFile = inputElement.files[0];
+  constructor( private user: UserServiceService,public authService: AuthService ) { }
+  data = {
+    id: '',
+    photoId: '',
+    username: '',
+    email: '',
+    role: '',
+    gender: ''
+}
 
-      // Handle the selected file here (e.g., upload to server, display as profile picture, etc.)
-      // You can implement this logic as needed.
-      const profileImage = document.getElementById('profileImage') as HTMLImageElement;
-
-      if (profileImage) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          console.log('Event:', e);
-          if (e && e.target && e.target.result) {
-            console.log('Data URL:', e.target.result);
-            // Display the selected image in the img element
-            profileImage.src = e.target.result as string;
-          } else {
-            console.error('Event data is missing.');
-          }
-        };
-        reader.readAsDataURL(selectedFile);
+  ngOnInit() {
+    this.user.getData(this.authService.getId() ).subscribe(
+      (data) => {
+        console.log('Datele de la server:', data);
+        this.data = data;
+      },
+      (error) => {
+        console.error('Eroare la incarcarea datelor:', error);
       }
-    }
+    );
   }
+
+ 
 }

@@ -32,7 +32,6 @@ import { CommunityDetailsComponent } from './community-details/community-details
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { ProfileNavComponent } from './profile-nav/profile-nav.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ProfilePostComponent } from './profile-post/profile-post.component';
 import { ProfileLinkProfileComponent } from './profile-link-profile/profile-link-profile.component';
 import { ProfileLinkPostsComponent } from './profile-link-posts/profile-link-posts.component';
 import { ProfileLinkCommentsComponent } from './profile-link-comments/profile-link-comments.component';
@@ -46,6 +45,7 @@ import { TestareStorageComponent } from './testare-storage/testare-storage.compo
 import { ViewTopicsComponent } from './view-topics/view-topics.component';
 import { TopicShortComponent } from './topic-short/topic-short.component';
 import { CommunityCreateComponent } from './community-create/community-create.component';
+import { UserServiceComponent } from './user-service/user-service.component';
 
 
 const routes: Routes = [
@@ -109,7 +109,6 @@ const routes: Routes = [
     ProfileCardComponent,
     ProfileNavComponent,
     ProfileComponent,
-    ProfilePostComponent,
     ProfileLinkProfileComponent,
     ProfileLinkPostsComponent,
     ProfileLinkCommentsComponent,
@@ -122,7 +121,8 @@ const routes: Routes = [
     TestareStorageComponent,
     ViewTopicsComponent,
     TopicShortComponent,
-    CommunityCreateComponent
+    CommunityCreateComponent,
+    UserServiceComponent
   ],
   imports: [
     BrowserModule,

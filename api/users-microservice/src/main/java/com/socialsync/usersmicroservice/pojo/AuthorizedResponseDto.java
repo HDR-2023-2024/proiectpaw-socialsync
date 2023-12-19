@@ -11,4 +11,5 @@ public class AuthorizedResponseDto {
     private String token;
     private String username;
     private String photoId;
+    private String id;
 }
