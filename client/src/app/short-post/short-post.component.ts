@@ -57,6 +57,10 @@ export class ShortPostComponent {
             if (error.status == 401) {
               this.router.navigate(['/unauthorized']);
             }
+            if (error.status == 403) {
+              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.router.navigate(['/login']);
+            }
           }
         );
     } else {
@@ -72,6 +76,10 @@ export class ShortPostComponent {
             console.error('Eroare:', error);
             if (error.status == 401) {
               this.router.navigate(['/unauthorized']);
+            }
+            if (error.status == 403) {
+              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.router.navigate(['/login']);
             }
           }
         );
@@ -103,6 +111,10 @@ export class ShortPostComponent {
             if (error.status == 401) {
               this.router.navigate(['/unauthorized']);
             }
+            if (error.status == 403) {
+              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.router.navigate(['/login']);
+            }
           }
         );
     } else {
@@ -120,6 +132,10 @@ export class ShortPostComponent {
             console.error('Eroare:', error);
             if (error.status == 401) {
               this.router.navigate(['/unauthorized']);
+            }
+            if (error.status == 403) {
+              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.router.navigate(['/login']);
             }
           }
         );

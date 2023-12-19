@@ -39,7 +39,11 @@ public class AuthorizationController {
                 AuthorizedInfo result = this.jwtService.decodeToken(authorizationHeader);
                 System.out.println(result.getId() + " " + result.getRole());
                 return new ResponseEntity<>(result, HttpStatus.OK);
-            } catch (Exception ex) {
+            }catch (io.jsonwebtoken.ExpiredJwtException ex){
+                System.out.print(ex.getMessage());
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+            catch (Exception ex) {
                 System.out.println(ex.getMessage());
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
