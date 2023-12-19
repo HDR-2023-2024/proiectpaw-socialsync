@@ -11,11 +11,13 @@ export class CommunityCreateComponent {
   constructor(private http: HttpClient) { }
   imageUrl: string | null = null;
 
-  community: any = {
-    name: '',
-    description: '',
-    photoId: ''
-  };
+  community: any | null = null;
+
+  ngOnInit() {
+    console.log("Ceva");
+  }
+
+
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
   selectedPhoto: File | null = null;
 

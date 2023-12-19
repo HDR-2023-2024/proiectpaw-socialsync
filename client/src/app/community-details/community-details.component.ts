@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommunityService } from '../community.service';
 import { Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-community-details',
@@ -11,12 +12,12 @@ import { Input } from '@angular/core';
 export class CommunityDetailsComponent {
   joined: boolean = false;
   isNotified : boolean = false;
-  @Input() data:any;
+  @Input() data:any | null = null;
   page= 0;
   communityId:string='';
   formattedDate?: string;
 
-  constructor(private route:ActivatedRoute, private communityService:CommunityService){}
+  constructor(private route:ActivatedRoute, private communityService:CommunityService,private router: Router){}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -49,4 +50,7 @@ export class CommunityDetailsComponent {
     return this.formattedDate;
   }
 
+  navigateToPost(topicId: string,topicName : string) {
+    this.router.navigate(['/create-post', topicId, topicName]);
+  }
 }

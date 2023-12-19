@@ -168,7 +168,7 @@ public class QueryService implements QueryServiceMethods {
         log.info("Handling post " + msgQ.getPost().getId());
         PostDocument postDocument = new PostDocument(msgQ.getPost());
         Optional<UserDocument> creator = userRepository.findById(msgQ.getPost().getCreatorId());
-        log.info(postDocument);
+        log.info(String.valueOf(postDocument));
         boolean parentTopicExists = topicRepository.existsById(postDocument.getTopicId());
 
         //boolean override = creator.isEmpty() && !parentTopicExists || (msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1"));

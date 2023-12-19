@@ -42,6 +42,7 @@ public class PostDocument {
         this.score = 0;
         this.timestampCreated = post.getTimestampCreated();
         this.timestampUpdated = post.getTimestampUpdated();
+        this.photos = post.getPhotos();
     }
 
     public void addUpvote(String userId) {

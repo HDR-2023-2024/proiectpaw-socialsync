@@ -76,7 +76,9 @@ const routes: Routes = [
   { path: "help", component: HelpSiteComponent},
   { path: "testare-storage", component: TestareStorageComponent},
   { path: "view-topics", component: ViewTopicsComponent},
-  { path: "create-topics", component: CommunityCreateComponent}
+  { path: "create-topics", component: CommunityCreateComponent},
+  { path: "create-post/:topicId/:topicName", component: CreatePostComponent }
+
 ];
 
 

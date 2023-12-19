@@ -13,8 +13,8 @@ export class TopicShortComponent {
   @Input() data: any
   constructor(public authService: AuthService, private router: Router, private http: HttpClient) { }
 
-  navigateToPost(postId: number) {
-    this.router.navigate(['/full-post', postId]);
+  navigateToCommunity(id: string) {
+    this.router.navigate(['community/', id]);
   }
 
   downvote() {

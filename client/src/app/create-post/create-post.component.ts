@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
-import { CreatePostService } from '../create-post.service';
-import { HttpResponse } from '@angular/common/http';
+import { Component, Input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { Input } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CreatePostService } from '../create-post.service';
+
+interface InputData {
+  stringName: string;
+}
 
 @Component({
   selector: 'app-create-post',
@@ -12,60 +15,80 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./create-post.component.css']
 })
 export class CreatePostComponent {
-  
-  @Input() data: any;
-  form?: NgForm;
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute,private createPost: CreatePostService) { }
+  imageUrls: any[] = [];
+  @Input() inputData: InputData | null = null; // in ce caut
 
-  editorConfig:AngularEditorConfig = {
-      editable: true,
-      spellcheck: true,
-      height: '15rem',
-      minHeight: '5rem',
-      placeholder: 'Enter text here...',
-      translate: 'no',
-      customClasses: [
-        {
-          name: "quote",
-          class: "quote",
-        },
-        {
-          name: 'redText',
-          class: 'redText'
-        },
-        {
-          name: "titleText",
-          class: "titleText",
-          tag: "h1",
-        },
-      ]
+  post: any = {
+
+    "id": -1,
+    "creatorId": -1,
+    "topicId": -1,
+    "title": '',
+    "content": '',
+    "upvotes": [],
+    "downvotes": [ ],
+    "photos": [],
+    "score": 0,
+    "timestampCreated": 0,
+    "timestampUpdated": 0
   }
 
-  title: string = '';
-  content: string = '';
-  url:string=' ';
-  photo:string=' ';
+  topicId: string | null = null;
+  topicName: string | null = null;
 
-  constructor(private createPostService: CreatePostService, private router:Router) {}
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      //  { path: "create-post/:topicId/:topicName", component: CreatePostComponent }
+      this.topicId = params['topicId'];
+      this.topicName = params['topicName'];
+    });
+  }
 
-  createPost(): void {
-    this.createPostService.addPost(this.title, this.content, this.photo).subscribe(
-      (response) => {
-          console.log('Postare creata cu succes.', response);
-          if (response instanceof HttpResponse) {
-            if (response.status === 201) {  
-              this.router.navigate(['/full-post', response.body.id]); 
-              console.log(response);
-            }
-          }
-      },
-      (error) => {
-          console.error('Eroare la creare.', error);
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
+  selectedPhoto: File | null = null;
+
+  saveChanges() {
+    this.post.photos = this.imageUrls;
+    this.post.topicId = this.topicId;
+    console.log(this.post);
+    this.createPost.addPost(this.post)
+  }
+
+  onPhotoChange(event: any) {
+    const fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      this.selectedPhoto = fileList[0];
+    }
+  }
+
+  uploadFiles() {
+    console.log("Apel incarcare poza!");
+    const fileInput = this.fileInputRef.nativeElement;
+    const files = fileInput.files;
+
+    if (files && files.length > 0) {
+      const formData = new FormData();
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]);
       }
-    ); 
-  }
 
-  clearForm(form: NgForm): void {
-    form.resetForm();
+      this.http.post<any>('http://localhost:8086/api/v1/storage/upload-multipartFile', formData)
+        .subscribe(
+          (data: any[]) => {
+            //console.log(data);
+            if (data && data.length > 0) {
+              this.imageUrls = data.map(item => item.url);
+              console.log(this.imageUrls);
+            }
+          },
+          error => {
+            console.error('Eroare:', error);
+          }
+        );
+    } else {
+      console.error('Niciun fisier. selectat.');
+    }
   }
-  
 }

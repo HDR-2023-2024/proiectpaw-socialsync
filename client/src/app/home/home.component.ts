@@ -42,7 +42,7 @@ export class HomeComponent {
 
 
   redirectToPostPage(): void {
-    this.router.navigate(['/post']);
+    this.router.navigate(['/create-post']);
   }
 
   private handleScrollEnd(): void {
@@ -64,7 +64,15 @@ export class HomeComponent {
           if (this.myArr.length == oldSize) {
             this.page--;
           }
-          console.log(this.myArr.length);
+          var seenIds: Record<string, boolean> = {};
+          var filteredArr = this.myArr.filter(function (item: any) {
+            if (seenIds.hasOwnProperty(item.id)) {
+              return false;
+            }
+            seenIds[item.id] = true;
+            return true;
+          });
+          this.myArr = filteredArr;
         } else {
           console.log("Get goll");
         }
@@ -87,6 +95,15 @@ export class HomeComponent {
       (data) => {
         console.log('Datele de la server:', data);
         this.myArr = data;
+        var seenIds: Record<string, boolean> = {};
+          var filteredArr = this.myArr.filter(function (item: any) {
+            if (seenIds.hasOwnProperty(item.id)) {
+              return false;
+            }
+            seenIds[item.id] = true;
+            return true;
+          });
+          this.myArr = filteredArr;
       },
       (error) => {
         console.error('Eroare la incarcarea datelor:', error);
