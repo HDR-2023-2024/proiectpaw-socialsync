@@ -99,8 +99,31 @@ public class QueryService implements QueryServiceMethods {
                 .map(TopicSummaryDTO::new).toList();
     }
 
-    public List<TopicSummaryDTO> fetchTopicsByCreatorId(String id) {
-        return topicRepository.findByCreator_Id(id).stream().map(TopicSummaryDTO::new).toList();
+    public List<TopicSummaryDTO> fetchTopicsByCreatorId(String id, Integer page) {
+        try {
+            return topicRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(TopicSummaryDTO::new).toList().subList(page * 10, (page + 1) * 10);
+        } catch (IndexOutOfBoundsException ex) {
+            List<TopicSummaryDTO> list = topicRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(TopicSummaryDTO::new).toList();
+            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
+        }
+    }
+
+    public List<PostSummaryDTO> fetchPostsByCreatorId(String id, Integer page) {
+        try {
+            return postRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(postDocument -> toSummary(postDocument, Optional.of(id))).toList().subList(page * 10, (page + 1) * 10);
+        } catch (IndexOutOfBoundsException ex) {
+            List<PostSummaryDTO> list = postRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(PostSummaryDTO::new).toList();
+            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
+        }
+    }
+
+    public List<CommentDTO> fetchCommentsByCreatorId(String id, Integer page) {
+        try {
+            return commentRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(CommentDTO::new).toList().subList(page * 10, (page + 1) * 10);
+        } catch (IndexOutOfBoundsException ex) {
+            List<CommentDTO> list = commentRepository.findAll().stream().filter(p -> p.getCreator().getId().equals(id)).map(CommentDTO::new).toList();
+            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
+        }
     }
 
     public Optional<UserDocument> fetchUser(String id) {

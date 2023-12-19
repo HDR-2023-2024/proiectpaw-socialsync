@@ -16,7 +16,7 @@ public class Topic {
     private String name;
     private String description;
 
-    private Integer photoId;
+    private String photoId;
 
     private String creatorId;
 

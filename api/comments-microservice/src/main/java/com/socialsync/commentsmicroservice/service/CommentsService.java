@@ -2,8 +2,10 @@ package com.socialsync.commentsmicroservice.service;
 
 import com.google.gson.Gson;
 import com.socialsync.commentsmicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.commentsmicroservice.components.RabbitMqConnectionFactoryComponentNotify;
 import com.socialsync.commentsmicroservice.interfaces.CommentsServiceMethods;
 import com.socialsync.commentsmicroservice.pojo.Comment;
+import com.socialsync.commentsmicroservice.pojo.CommentNotification;
 import com.socialsync.commentsmicroservice.pojo.CommentQueueMessage;
 import com.socialsync.commentsmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.commentsmicroservice.repository.CommentRepository;
@@ -11,6 +13,7 @@ import com.socialsync.commentsmicroservice.util.exceptions.CommentNotFound;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,18 +32,30 @@ public class CommentsService implements CommentsServiceMethods {
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
 
+    private RabbitMqConnectionFactoryComponentNotify notifyFactory;
+
+    @Qualifier("rabbitTemplate")
     private AmqpTemplate amqpTemplate;
+
+    @Qualifier("rabbitTemplateNotify")
+    private AmqpTemplate amqpTemplateNotify;
 
     private Gson gson;
 
     @Bean
     void initTemplate() {
         this.amqpTemplate = conectionFactory.rabbitTemplate();
+        this.amqpTemplateNotify = notifyFactory.rabbitTemplateNotify();
     }
 
     private void sendMessage(CommentQueueMessage comment) {
         String json = gson.toJson(comment);
         this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
+    }
+
+    private void sendMessageNotification(CommentNotification comment) {
+        String json = gson.toJson(comment);
+        this.amqpTemplateNotify.convertAndSend(notifyFactory.getExchange(), notifyFactory.getRoutingKey(), json);
     }
 
     void deleteEverything() {
@@ -65,7 +80,7 @@ public class CommentsService implements CommentsServiceMethods {
         }
     }
 
-  /*  @Bean
+    @Bean
     @Scheduled(fixedDelay = 5000L)
     void newRandomComment() {
         List<String> reactie = List.of("NASPA", "MEH", "BUNA");
@@ -77,7 +92,7 @@ public class CommentsService implements CommentsServiceMethods {
         Comment comment = new Comment("-1", "-1", "POSTARE " + reactie.get(new Random().nextInt(reactie.size())) + " UNGA BUNGA!");
         addComment(comment);
     }
-*/
+
     @Override
     public HashMap<String, Comment> fetchAllComments() {
         HashMap<String, Comment> lista = new HashMap<>();
@@ -100,6 +115,7 @@ public class CommentsService implements CommentsServiceMethods {
         comment.setTimestampCreated(Instant.now().getEpochSecond());
         repository.insert(comment);
         sendMessage(new CommentQueueMessage(QueueMessageType.CREATE, comment));
+        sendMessageNotification(new CommentNotification(comment.getCreatorId(), comment.getPostId(), comment.getContent().substring(0, Math.min(comment.getContent().length(), 50))));
     }
 
     @Override

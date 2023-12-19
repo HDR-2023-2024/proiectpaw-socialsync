@@ -2,6 +2,8 @@ package com.socialsync.postsmicroservice.service;
 
 import com.google.gson.Gson;
 import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponentNotify;
+import com.socialsync.postsmicroservice.pojo.PostNotification;
 import com.socialsync.postsmicroservice.pojo.PostQueueMessage;
 import com.socialsync.postsmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.postsmicroservice.repository.PostRepository;
@@ -12,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -29,23 +32,34 @@ import java.util.*;
 @EnableScheduling
 public class PostsService implements PostsServiceMethods {
 
-
     private PostRepository repository;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
 
+    private RabbitMqConnectionFactoryComponentNotify notifyFactory;
+
+    @Qualifier("rabbitTemplate")
     private AmqpTemplate amqpTemplate;
+
+    @Qualifier("rabbitTemplateNotify")
+    private AmqpTemplate amqpTemplateNotify;
 
     private Gson gson;
 
     @Bean
     void initTemplate() {
         this.amqpTemplate = conectionFactory.rabbitTemplate();
+        this.amqpTemplateNotify = notifyFactory.rabbitTemplateNotify();
     }
 
     private void sendMessage(PostQueueMessage post) {
         String json = gson.toJson(post);
         this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
+    }
+
+    private void sendMessageNotification(PostNotification post) {
+        String json = gson.toJson(post);
+        this.amqpTemplateNotify.convertAndSend(notifyFactory.getExchange(), notifyFactory.getRoutingKey(), json);
     }
 
     void deleteEverything() {
@@ -168,14 +182,13 @@ public class PostsService implements PostsServiceMethods {
 
         for (int i = 0;i < 100; i++) {
             String titlu = titluPostare.get(new Random().nextInt(titluPostare.size()));
-            String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\". Praesent in gravida dolor. Proin vel metus sapien. Suspendisse luctus eget elit a suscipit. Pellentesque orci enim, accumsan vel nunc ut, porta dictum ex. Praesent semper eleifend ipsum vel dictum. Etiam et commodo orci, non rutrum nibh. Proin ultricies condimentum pretium. Donec et consequat lorem. Aliquam convallis scelerisque arcu, vitae interdum ligula molestie ut.\n" +
-                    "Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis ullamcorper egestas felis a tincidunt. Nullam ac neque laoreet nunc molestie maximus. Pellentesque odio massa, aliquam ornare nibh in, varius pretium erat. Cras commodo imperdiet cursus. Praesent vehicula quis risus et pharetra. Nullam ipsum ipsum, maximus id tellus ut, pharetra tempor justo. Duis rhoncus, elit pellentesque tempus commodo, quam est interdum ipsum, quis fermentum turpis diam sed felis. Vestibulum id mi id nisl egestas sagittis. Sed sit amet tincidunt justo, ac gravida nunc. Donec lacinia sapien dolor, a sagittis nulla sollicitudin et. Aenean eu nisl laoreet, elementum tortor sit amet, auctor tortor. Nullam feugiat libero ut libero semper, eget cursus nisi tempus.";
+            String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";
             Post post = new Post("-1", "-1", titlu, continut);
             addPost(post);
         }
     }
 
-  /*  @Bean
+    @Bean
     @Scheduled(fixedDelay = 5000L)
     void newRandomPost() {
         log.info("We have " + repository.findAll().size() + " posts");
@@ -184,14 +197,13 @@ public class PostsService implements PostsServiceMethods {
 //            deleteEverything();
 
         String titlu = titluPostare.get(new Random().nextInt(titluPostare.size()));
-        String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\". Praesent in gravida dolor. Proin vel metus sapien. Suspendisse luctus eget elit a suscipit. Pellentesque orci enim, accumsan vel nunc ut, porta dictum ex. Praesent semper eleifend ipsum vel dictum. Etiam et commodo orci, non rutrum nibh. Proin ultricies condimentum pretium. Donec et consequat lorem. Aliquam convallis scelerisque arcu, vitae interdum ligula molestie ut.\n" +
-                "Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis ullamcorper egestas felis a tincidunt. Nullam ac neque laoreet nunc molestie maximus. Pellentesque odio massa, aliquam ornare nibh in, varius pretium erat. Cras commodo imperdiet cursus. Praesent vehicula quis risus et pharetra. Nullam ipsum ipsum, maximus id tellus ut, pharetra tempor justo. Duis rhoncus, elit pellentesque tempus commodo, quam est interdum ipsum, quis fermentum turpis diam sed felis. Vestibulum id mi id nisl egestas sagittis. Sed sit amet tincidunt justo, ac gravida nunc. Donec lacinia sapien dolor, a sagittis nulla sollicitudin et. Aenean eu nisl laoreet, elementum tortor sit amet, auctor tortor. Nullam feugiat libero ut libero semper, eget cursus nisi tempus.";
+        String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";
         Post post = new Post("-1", "-1", titlu, continut);
         addPost(post);
     }
-*/
-    /*@Bean
-    @Scheduled(initialDelay = 1000L,fixedDelay = 3000)
+
+    @Bean
+    @Scheduled(initialDelay = 1000L,fixedDelay = 100)
     @SneakyThrows
     void randomLikeDislike() {
         boolean like = Math.random() < 0.5;
@@ -205,6 +217,7 @@ public class PostsService implements PostsServiceMethods {
             upvotePost(randomPost.getId(), "-1");
             upvotePost(randomPost.getId(), "-1");
             upvotePost(randomPost.getId(), "-1");
+
         }
         else
         {
@@ -216,7 +229,7 @@ public class PostsService implements PostsServiceMethods {
             downvotePost(randomPost.getId(), "-1");
             downvotePost(randomPost.getId(), "-1");
         }
-    }*/
+    }
 
     @Override
     public HashMap<String, Post> fetchAllPosts() {
@@ -236,13 +249,13 @@ public class PostsService implements PostsServiceMethods {
     }
 
     @Override
-    public Post addPost(Post post)  {
+    public void addPost(Post post)  {
         post.setTimestampCreated(Instant.now().getEpochSecond());
         repository.insert(post);
-        Post postInBD = repository.findById(post.getId()).get();
-        sendMessage(new PostQueueMessage(QueueMessageType.CREATE, postInBD));
+        sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
 
-        return postInBD;
+        // notificare care ajunge la admin-ul unui topic
+        sendMessageNotification(new PostNotification(post.getCreatorId(), post.getTopicId(), QueueMessageType.CREATE,post.getId(), post.getTitle().substring(0, Math.min(post.getTitle().length(), 50))));
     }
 
     @Override
@@ -281,16 +294,14 @@ public class PostsService implements PostsServiceMethods {
         Optional<Post> post = repository.findById(postId);
 
         if (post.isPresent()) {
-            if (!post.get().getUpvotes().contains(userId)) {
-                post.get().getUpvotes().add(userId);
-                post.get().getDownvotes().remove(userId);
-            }
-            else
-                post.get().getUpvotes().remove(userId);
+            post.get().getUpvotes().add(userId);
+            post.get().getDownvotes().remove(userId);
 
             repository.save(post.get());
 
             sendMessage(new PostQueueMessage(QueueMessageType.UPVOTE, new Post(postId, userId, post.get().getTopicId())));
+            // notificare care ajunge la creatorul postarii
+            sendMessageNotification(new PostNotification(post.get().getCreatorId(), post.get().getTopicId(), QueueMessageType.UPVOTE,post.get().getId(), post.get().getTitle().substring(0, Math.min(post.get().getTitle().length(), 50))));
 //            sendMessage(new PostQueueMessage(QueueMessageType.UPVOTE, new Post(postId, userId, "657ca7e2fb8e4725915e20c9")));
         }
         else
@@ -302,17 +313,14 @@ public class PostsService implements PostsServiceMethods {
         Optional<Post> post = repository.findById(postId);
 
         if (post.isPresent()) {
-            if (!post.get().getDownvotes().contains(userId)) {
-                post.get().getDownvotes().add(userId);
-                post.get().getUpvotes().remove(userId);
-            }
-            else
-                post.get().getDownvotes().remove(userId);
+            post.get().getDownvotes().add(userId);
+            post.get().getUpvotes().remove(userId);
 
             repository.save(post.get());
 
             sendMessage(new PostQueueMessage(QueueMessageType.DOWNVOTE, new Post(postId, userId, post.get().getTopicId())));
 //            sendMessage(new PostQueueMessage(QueueMessageType.DOWNVOTE, new Post(postId, userId, "657ca7e2fb8e4725915e20c9")));
+            sendMessageNotification(new PostNotification(post.get().getCreatorId(), post.get().getTopicId(), QueueMessageType.DOWNVOTE,post.get().getId(), post.get().getTitle().substring(0, Math.min(post.get().getTitle().length(), 50))));
         }
         else
             throw new PostNotFound("Post not found.");

@@ -6,11 +6,10 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RabbitMqConnectionFactoryComponent {
+public class RabbitMqConnectionFactoryComponentNotify {
     @Value("${spring.rabbitmq.host}")
     private String host;
 
@@ -24,15 +23,15 @@ public class RabbitMqConnectionFactoryComponent {
     private String password;
 
     @Getter
-    @Value("${socialsync.rabbitmq.exchange}")
+    @Value("${socialsync.rabbitmq.exchange.n}")
     private String exchange;
 
     @Getter
-    @Value("${socialsync.rabbitmq.routingkey}")
+    @Value("${socialsync.rabbitmq.routingkey.n}")
     private String routingKey;
 
     @Bean
-    private ConnectionFactory connectionFactory() {
+    private ConnectionFactory notifyConnectionFactory() {  // Rename the method
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
         connectionFactory.setHost(this.host);
         connectionFactory.setUsername(this.username);
@@ -42,8 +41,7 @@ public class RabbitMqConnectionFactoryComponent {
     }
 
     @Bean
-    @Primary
-    public RabbitTemplate rabbitTemplate() {
-        return new RabbitTemplate(connectionFactory());
+    public RabbitTemplate rabbitTemplateNotify() {  // Update the method name
+        return new RabbitTemplate(notifyConnectionFactory());
     }
 }
