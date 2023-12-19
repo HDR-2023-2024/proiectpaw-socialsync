@@ -1,9 +1,9 @@
 .container{
-    background-color: #F0F2F5;
+    background-color: #ffffff;
 }
 
 .post-container{
-    background-color: #FFFF;
+    background-color: #ffffff;
 }
 
 .avatar-short-post {
@@ -24,4 +24,8 @@
   .reaction-box-like{
     background-color: #8888883f;
     border-radius: 20px;
+  }
+
+  .col-1{
+    background-color: #ffffff;
   }
