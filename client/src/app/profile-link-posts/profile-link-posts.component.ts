@@ -50,19 +50,23 @@ export class ProfileLinkPostsComponent {
   }
 
   private handleScrollEnd(): void {
-    this.page++;
+    if (this.myArr.length > 10) {
+      this.page++;
+    }
     let url = "";
     url = 'http://localhost:8086/api/v1/query/users/' + this.authService.getId() + '/posts?page=' + this.page.toString();
     let oldSize = this.myArr.length;
+    let headers = new HttpHeaders({
+      'Authorization': this.authService.getToken()
+    });
     this.dataService.getDataSync(url)
       .then((data: any[]) => {
         if (data !== undefined) {
           for (const item of data) {
             this.myArr.push(item);
           }
-          if (this.myArr.length == oldSize) {
-            this.page--;
-          }
+
+
           var seenIds: Record<string, boolean> = {};
           var filteredArr = this.myArr.filter(function (item: any) {
             if (seenIds.hasOwnProperty(item.id)) {
@@ -72,6 +76,11 @@ export class ProfileLinkPostsComponent {
             return true;
           });
           this.myArr = filteredArr;
+          console.log(oldSize)
+          console.log(this.myArr.length)
+          if (this.myArr.length == oldSize) {
+            this.page--;
+          }
         } else {
           console.log("Get goll");
         }
@@ -84,7 +93,6 @@ export class ProfileLinkPostsComponent {
   loadDataOnPageLoad(): void {
     let url;
     url = 'http://localhost:8086/api/v1/query/users/' + this.authService.getId() + '/posts?page=' + this.page.toString();
-
     this.dataService.getData(url).subscribe(
       (data) => {
         console.log('Datele de la server:', data);

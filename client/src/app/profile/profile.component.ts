@@ -13,7 +13,7 @@ export class ProfileComponent {
   myNavLinks = [
     { label: 'Profile', Component: ProfileLinkProfileComponent, active: true },
     { label: 'Posts', Component: ProfileLinkPostsComponent, active: false },
-    { label: 'Comments', Component: ProfileLinkCommentsComponent, active: false },
+   // { label: 'Comments', Component: ProfileLinkCommentsComponent, active: false },
   //  { label: 'Saved', Component: ProfileLinkSavedComponent, active: false },
   ];
 
