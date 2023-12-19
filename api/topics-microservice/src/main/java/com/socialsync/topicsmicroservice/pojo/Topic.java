@@ -23,9 +23,10 @@ public class Topic {
     private Long timestampCreated;
     private Long timestampUpdated;
 
-    public Topic(String name, String description, Boolean ageRestriction, String creatorId) {
+    public Topic(String name, String description, String photoId, String creatorId) {
         this.name = name;
         this.description = description;
         this.creatorId = creatorId;
+        this.photoId = photoId;
     }
 }

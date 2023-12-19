@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { CreateTopicService } from '../create-topic.service';
 
 @Component({
   selector: 'app-community-create',
@@ -8,10 +9,14 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./community-create.component.css']
 })
 export class CommunityCreateComponent {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private createTopic: CreateTopicService) { }
   imageUrl: string | null = null;
 
-  community: any | null = null;
+  community = {
+    name: '',
+    description: '',
+    photoId: ''
+  }
 
   ngOnInit() {
     console.log("Ceva");
@@ -22,8 +27,9 @@ export class CommunityCreateComponent {
   selectedPhoto: File | null = null;
 
   saveChanges() {
-    this.community.photoId = this.imageUrl;
+    this.community.photoId = this.imageUrl != null ? this.imageUrl : '';
     console.log('Changes saved:', this.community, 'Selected photo:', this.selectedPhoto);
+    this.createTopic.saveTopic(this.community.name, this.community.description, this.community.photoId);
   }
 
   onPhotoChange(event: any) {

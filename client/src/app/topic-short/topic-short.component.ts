@@ -54,4 +54,9 @@ export class TopicShortComponent {
         }
       );
   }
+
+  convertTimestampToDateTime(timestamp: number) {
+    var date = new Date(timestamp * 1000);
+    return date.toLocaleString();
+  }
 }

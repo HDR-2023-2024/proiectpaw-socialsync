@@ -42,7 +42,7 @@ export class ViewTopicsComponent {
 
 
   redirectToCreateTopicPage(): void {
-    //this.router.navigate(['/post']);
+    this.router.navigate(['/create-topics']);
   }
 
   private handleScrollEnd(): void {
@@ -65,7 +65,15 @@ export class ViewTopicsComponent {
         if(this.myArr.length == oldSize){
           this.page--;
         }
-
+        var seenIds: Record<string, boolean> = {};
+        var filteredArr = this.myArr.filter(function (item: any) {
+          if (seenIds.hasOwnProperty(item.id)) {
+            return false;
+          }
+          seenIds[item.id] = true;
+          return true;
+        });
+        this.myArr = filteredArr;
         console.log(this.myArr.length);
       } else {
         console.log("Get goll");
@@ -89,6 +97,15 @@ export class ViewTopicsComponent {
       (data) => {
         console.log('Datele de la server:', data);
         this.myArr = data;
+        var seenIds: Record<string, boolean> = {};
+          var filteredArr = this.myArr.filter(function (item: any) {
+            if (seenIds.hasOwnProperty(item.id)) {
+              return false;
+            }
+            seenIds[item.id] = true;
+            return true;
+          });
+          this.myArr = filteredArr;
       },
       (error) => {
         console.error('Eroare la incarcarea datelor:', error);
