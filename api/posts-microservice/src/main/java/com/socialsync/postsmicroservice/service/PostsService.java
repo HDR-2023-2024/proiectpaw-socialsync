@@ -202,7 +202,7 @@ public class PostsService implements PostsServiceMethods {
         addPost(post);
     }
 
-    @Bean
+ /*   @Bean
     @Scheduled(initialDelay = 1000L,fixedDelay = 100)
     @SneakyThrows
     void randomLikeDislike() {
@@ -229,7 +229,7 @@ public class PostsService implements PostsServiceMethods {
             downvotePost(randomPost.getId(), "-1");
             downvotePost(randomPost.getId(), "-1");
         }
-    }
+    }*/
 
     @Override
     public HashMap<String, Post> fetchAllPosts() {

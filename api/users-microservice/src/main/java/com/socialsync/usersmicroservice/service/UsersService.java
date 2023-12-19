@@ -94,7 +94,7 @@ public class UsersService implements UsersServiceMethods {
     }
 
 
-   /* @Scheduled(fixedDelay = 30000L)
+    @Scheduled(fixedDelay = 30000L)
     public void newRandomUser() throws NotAcceptableException {
         log.info("We have " + repository.findAll().size() + " users!");
         if (repository.findAll().size() > 50)
@@ -108,7 +108,7 @@ public class UsersService implements UsersServiceMethods {
         newUser.setRole(randomUser.getRole());
         newUser.setGender(randomUser.getGender());
         addUser(newUser);
-    }*/
+    }
 
     @Bean
     void initTemplate() {
