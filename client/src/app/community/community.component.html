@@ -9,7 +9,7 @@
         
             <div class="d-flex justify-content-center align-items-center">
                 <img class="avatar-short-post"
-                    src="{{data != null && data?.image != null ? data?.image : 'assets/images/Group-of-People.jpg'}}">
+                    src="{{data != null && data?.photoId != null ? data?.photoId : 'assets/images/Group-of-People.jpg'}}">
                 <h2 class="ms-3">{{data?.name}}</h2>
                 <button type="button" class="btn ms-3" id="join-btn" (click)="toggleJoinState()">{{ joined ? 'Părăsește'
                     :
