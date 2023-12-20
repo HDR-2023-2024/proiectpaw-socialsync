@@ -46,3 +46,9 @@
   position: absolute;
   right: 10%;
 }
+
+.butoane {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: flex-end;
+}

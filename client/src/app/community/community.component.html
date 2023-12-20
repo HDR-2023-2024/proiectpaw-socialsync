@@ -6,15 +6,15 @@
     <div class="col-lg-10 col-12 m-0 p-0 content d-flex justify-content-center">
         <div class="container-fluid mt-5">
             <nav class="container-1 row m-0 p-0">
-
                 <div class="d-flex justify-content-center align-items-center">
                     <img class="avatar-short-post"
-                    src="{{(data?.photoId != undefined && data?.photoId != null ) ? data.photoId : 'assets/images/Group-of-People.jpg'}}">               
+                        src="{{(data?.photoId != undefined && data?.photoId != null ) ? data.photoId : 'assets/images/Group-of-People.jpg'}}">
                     <h2 class="ms-3">{{data?.name}}</h2>
                     <button type="button" class="btn ms-3" id="join-btn" *ngIf="authService.isUserLoggedIn()"
                         (click)="toggleJoinState()">{{ joined ? 'Părăsește'
                         :
                         'Alătură-te' }}</button>
+                  
                     <!-- <div class="d-flex reaction-box-like mb-0" (click)="toggleNotifyState()">
                 <p class="reaction my-auto mx-2 mb-1">
                     <svg *ngIf="!isNotified" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16"> 
@@ -27,6 +27,16 @@
         -->
                 </div>
             </nav>
+            <div class="butoane d-flex  justify-content-end">
+                <div>
+                    <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deletePost()"
+                        *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">Ștergere</button>
+                </div>
+                <div>
+                    <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="editPost()"
+                        *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">Editare</button>
+                </div>
+            </div>
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 col-12">
@@ -40,6 +50,7 @@
                                     <option value="com-asc">Comentarii (Ascendent)</option>
                                     <option value="com-desc">Comentarii (Descendent)</option>
                                 </select>
+
                             </div>
                             <div *ngFor="let post of posts">
                                 <app-short-post class="mx-auto" [data]="post"></app-short-post>

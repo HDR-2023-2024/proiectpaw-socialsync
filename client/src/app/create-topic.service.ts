@@ -41,4 +41,25 @@ export class CreateTopicService {
       }
     );
   }
+
+  delete(id : string) {
+    const token = this.storage.get('Token');
+
+    const headers = new HttpHeaders({
+      'Authorization': token
+    });
+
+    return this.http.delete<any>("http://localhost:8086/api/v1/topics/" + id  , { headers: headers }).subscribe(
+      data => {
+        alert("Topicul a fost ștears cu succes!");
+        this.router.navigate(['/view-topics']);
+      },
+      error => {
+        console.error('Eroare:', error);
+        if (error.status == 401) {
+          this.router.navigate(['/unauthorized']);
+        }
+      }
+    );
+  }
 }

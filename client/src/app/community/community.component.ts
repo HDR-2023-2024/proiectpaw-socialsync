@@ -3,7 +3,7 @@ import { CommunityService } from '../community.service';
 import { Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
-
+import { CreateTopicService } from '../create-topic.service';
 @Component({
   selector: 'app-community',
   templateUrl: './community.component.html',
@@ -19,7 +19,7 @@ export class CommunityComponent {
   postId:string='';
   selectedSortOption: string = ' ';
 
-  constructor(private route:ActivatedRoute, private communityService:CommunityService, public authService: AuthService){}
+  constructor(private route:ActivatedRoute, private communityService:CommunityService, public authService: AuthService,private createTopic: CreateTopicService){}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -62,6 +62,14 @@ export class CommunityComponent {
         console.error('Eroare la încărcarea datelor.', error);
       }
     );
+  }
+
+  deletePost(){
+    this.createTopic.delete(this.data.id);
+  }
+
+  editPost(){
+
   }
 }
 

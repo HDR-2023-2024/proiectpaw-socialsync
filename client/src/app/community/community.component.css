@@ -47,3 +47,19 @@ p {
     font-size: 16px; 
 }
   
+.create-post-btn {
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    background-color: #de1738;
+    border-radius: 24px;
+    color: #fff;
+    height: 36px;
+    font-size: 1.0em;
+    text-align: end;
+}
+
+.butoane{
+  position: absolute;
+  right: 13%;
+}
