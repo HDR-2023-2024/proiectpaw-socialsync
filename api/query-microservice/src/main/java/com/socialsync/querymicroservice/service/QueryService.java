@@ -59,7 +59,7 @@ public class QueryService implements QueryServiceMethods {
                     .stream()
                     .filter(p -> p.getPostId().equals(id))
                     .map(CommentDTO::new).toList();
-            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
+            return list.subList(page == 0 ? page : Math.max(page - 10, 0), list.size());
         }
     }
 
@@ -126,7 +126,7 @@ public class QueryService implements QueryServiceMethods {
                     .filter(p -> p.getCreator().getId().equals(id))
                     .map(TopicSummaryDTO::new)
                     .toList();
-            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
+            return list.subList(page == 0 ? page : Math.max(page - 10, 0), list.size());
         }
     }
 
@@ -146,7 +146,7 @@ public class QueryService implements QueryServiceMethods {
                     .filter(p -> p.getCreator().getId().equals(id))
                     .map(postDocument -> toSummary(postDocument, Optional.of(id)))
                     .toList();
-            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
+            return list.subList(page == 0 ? page : Math.max(page - 10, 0), list.size());
         }
     }
 
@@ -166,7 +166,7 @@ public class QueryService implements QueryServiceMethods {
                     .filter(p -> p.getCreator().getId().equals(id))
                     .map(CommentDTO::new)
                     .toList();
-            return list.subList(Math.max(list.size() - 10, 0), Math.max(list.size() - 1, 0));
+            return list.subList(page == 0 ? page : Math.max(page - 10, 0), list.size());
         }
     }
 
