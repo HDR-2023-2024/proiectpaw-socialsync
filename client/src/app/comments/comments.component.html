@@ -1,18 +1,30 @@
 <div class="post-comment">
-    <form class="d-flex flex-column" *ngIf="authService.isUserLoggedIn()" (ngSubmit)="addComment(commentContent.value)">
-      <div class="form-group">
-        <textarea class="form-control" placeholder="What are your thoughts?" #commentContent></textarea>
-      </div>
-      <button class="btn btn-outline-dark align-self-end mt-3" type="submit">Add comment</button>
-    </form>
-  </div>
+  <form class="d-flex flex-column" *ngIf="authService.isUserLoggedIn()" (ngSubmit)="addComment(commentContent.value)">
+    <div class="form-group">
+      <textarea class="form-control" placeholder="What are your thoughts?" #commentContent></textarea>
+    </div>
+    <button class="btn btn-outline-dark align-self-end mt-3" type="submit">Add comment</button>
+  </form>
+</div>
 <div class="comment-container">
-    <div class="comment" *ngFor="let comment of comments; let i = index">
-        <div class="d-flex">
-                <img class="avatar-short-post mx-0" src="{{comment.creator?.photoId || 'assets/images/avatar.png'}}">
-                <p class="my-auto ms-2"> {{comment.creator?.username || 'Nume utilizator necunoscut'}} • {{convertTimestampToDateTime(comment.timestampCreated)}}
-            </div>
-            <b class="d-flex m-auto ms-5 mt-1">{{ comment.content }}</b>
-            <br>   
-        </div>
+  <div class="comment my-5 py-4 px-2" *ngFor="let comment of comments; let i = index">
+    <div class="d-flex">
+      <img class="avatar-short-post mx-0" 
+      src="{{comment.creator?.photoId != null && comment.creator?.photoId.length > 1 ? comment.creator?.photoId : 'assets/images/avatar/' + comment.creator?.photoId[comment.creator?.photoId.length - 1] + '.png'}}">
+      <p class="my-auto ms-2"> {{comment.creator?.username || 'Nume utilizator necunoscut'}} •
+        {{convertTimestampToDateTime(comment.timestampCreated)}}
+    </div>
+    <b class="d-flex m-auto ms-5 mt-1">{{ comment.content }}</b>
+    <div class="butoane d-flex  flex-end">
+      <div>
+        <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deleteComment(comment.id)"
+          *ngIf="authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id">Ștergere</button>
+      </div>
+      <div>
+        <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="editComment(comment.id)"
+          *ngIf="authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id">Editare</button>
+      </div>
+    </div>
+    <br>
+  </div>
 </div>
