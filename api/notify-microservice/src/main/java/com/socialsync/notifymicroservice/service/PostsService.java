@@ -1,9 +1,11 @@
 package com.socialsync.notifymicroservice.service;
 
 import com.socialsync.notifymicroservice.pojo.Comment;
+import com.socialsync.notifymicroservice.pojo.PersistentPost;
 import com.socialsync.notifymicroservice.pojo.Post;
 import com.socialsync.notifymicroservice.pojo.PostQueueMessage;
 import com.socialsync.notifymicroservice.repositories.CommentRepository;
+import com.socialsync.notifymicroservice.repositories.PersistentPostRepository;
 import com.socialsync.notifymicroservice.repositories.PostRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,27 +20,16 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PostsService {
     private PostRepository postRepository;
+    private PersistentPostRepository persistentPostRepository;
 
     // Notificarile nevazute ale unui user pentru postarile create de el
     public List<Post> getAllNewPostNotifUser (String user_id) {
         List<Post> userPosts = postRepository.findPostsByCreatorId(user_id);
-
-        List<Post> unseenPosts = userPosts.stream()
-                .filter(post -> !post.getSeen())
-                .collect(Collectors.toList());
-
-        for (Post post : unseenPosts) {
-            post.setSeen(true);
-            postRepository.save(post);
-        }
-
-        return unseenPosts;
+        // delete the seen post notifications
+        postRepository.deleteAll(userPosts);
+        return userPosts;
     }
 
-    // numele unei postari dupa id
-    public String getPostName (String post_id) {
-        return postRepository.findPostsByPostId(post_id).stream().findFirst().get().getTitle();
-    }
 
     // slavare
     public void savePost(PostQueueMessage postQueueMessage){
@@ -48,8 +39,9 @@ public class PostsService {
         post.setCreatorId(postQueueMessage.getCreator_id());
         post.setMessageType(postQueueMessage.getMessageType());
         post.setTopicId(postQueueMessage.getTopic_id());
-        post.setSeen(false);
 
+        // save in permanent repo too
+        persistentPostRepository.save(new PersistentPost(post.getPostId(), post.getTitle(), post.getCreatorId()));
         postRepository.save(post);
     }
 }

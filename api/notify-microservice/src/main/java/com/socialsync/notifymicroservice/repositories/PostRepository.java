@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends MongoRepository<Post, String> {
     List<Post> findPostsByCreatorId(String creator_id); // toate postarile cuiva
-    List<Post> findPostsByPostId( String post_id);
 }

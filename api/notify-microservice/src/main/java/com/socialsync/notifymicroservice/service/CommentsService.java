@@ -1,8 +1,11 @@
 package com.socialsync.notifymicroservice.service;
 
 import com.socialsync.notifymicroservice.pojo.Comment;
+import com.socialsync.notifymicroservice.pojo.CommentQueueMessage;
+import com.socialsync.notifymicroservice.pojo.PersistentPost;
 import com.socialsync.notifymicroservice.pojo.Post;
 import com.socialsync.notifymicroservice.repositories.CommentRepository;
+import com.socialsync.notifymicroservice.repositories.PersistentPostRepository;
 import com.socialsync.notifymicroservice.repositories.PostRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,32 +21,34 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CommentsService {
     private CommentRepository commentRepository;
-    private PostRepository postRepository;
+    private PersistentPostRepository persistentPostRepository;
 
     // Comentariile la postarea a carui creator este user-ul
     public List<Comment> getAllNewCommentUser(String user_id) {
         // 1. Fetch posts by the creator
-        List<Post> posts = postRepository.findPostsByCreatorId(user_id);
+        List<PersistentPost> posts = persistentPostRepository.getPersistentPostsByCreatorId(user_id);
 
         // 2. Iterate through the posts and fetch unseen comments for each post
         List<Comment> allUnseenComments = new ArrayList<>();
-        for (Post post : posts) {
+        for (PersistentPost post : posts) {
             List<Comment> postComments = commentRepository.getCommentsByPostId(post.getPostId());
-
-            // 4. Filter unseen comments and add them to the result list
-            List<Comment> unseenComments = postComments.stream()
-                    .filter(comment -> !comment.getSeen())
-                    .collect(Collectors.toList());
-
-            // 3. Update the 'seen' flag for the fetched comments
-            for (Comment comment : unseenComments) {
-                comment.setSeen(true);
-                commentRepository.save(comment);
-            }
-
-            allUnseenComments.addAll(unseenComments);
+            allUnseenComments.addAll(postComments);
         }
+        // 3. Delete the fetched comments
+        commentRepository.deleteAll(allUnseenComments);
 
         return allUnseenComments;
+    }
+
+    public void saveComment(CommentQueueMessage commentQueueMessage) {
+        Comment comment = new Comment();
+        comment.setComm(commentQueueMessage.getComm());
+        comment.setPostId(commentQueueMessage.getPost_id());
+        comment.setUserId(commentQueueMessage.getUser_id());
+        // agregare pe titlu
+        log.info("Post id comm" + commentQueueMessage.getPost_id());
+        comment.setPostTitle(persistentPostRepository.getPersistentPostByPostId(commentQueueMessage.getPost_id()).getTitle());
+
+        commentRepository.save(comment);
     }
 }

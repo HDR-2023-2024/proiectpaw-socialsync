@@ -21,5 +21,4 @@ public class Post {
     private QueueMessageType messageType;
     private String postId;
     private String title;
-    private Boolean seen = false;
 }

@@ -18,6 +18,6 @@ public class Comment {
     private String id;
     private String userId;
     private String postId;
+    private String postTitle;
     private String comm;
-    private Boolean seen = false;
 }

@@ -2,6 +2,7 @@ package com.socialsync.notifymicroservice.api;
 
 import com.google.gson.Gson;
 import com.socialsync.notifymicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.notifymicroservice.dto.ContactForm;
 import com.socialsync.notifymicroservice.pojo.Comment;
 import com.socialsync.notifymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.notifymicroservice.pojo.Post;
@@ -44,13 +45,13 @@ public class EmailController {
 
     private final EmailService emailService;
 
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue.comments}")
-    void receiveCommentMessageComment(String msg) {
+    /*@RabbitListener(queues = "${socialsync.rabbitmq.queue.comments}")
+    void receiveQueueMessageComment(String msg) {
         CommentQueueMessage msgQ = gson.fromJson(msg, CommentQueueMessage.class);
 
         try {
             log.info(msgQ.getPost_id().toString());
-            //postsService.savePost(msgQ);
+            commentsService.saveComment(msgQ);
         }
         catch (RuntimeException ex) {
             log.error(ex.getMessage());
@@ -58,7 +59,7 @@ public class EmailController {
     }
 
     @RabbitListener(queues = "${socialsync.rabbitmq.queue.posts}")
-    void receiveCommentMessagePost(String msg) {
+    void receiveQueueMessagePost(String msg) {
         PostQueueMessage msgQ = gson.fromJson(msg, PostQueueMessage.class);
 
         try {
@@ -68,7 +69,7 @@ public class EmailController {
         catch (RuntimeException ex) {
             log.error(ex.getMessage());
         }
-    }
+    }*/
 
     @Autowired
     public EmailController(EmailService emailService, RabbitMqConnectionFactoryComponent conectionFactory, Gson gson, PostsService postsService, CommentsService commentsService) {
@@ -79,20 +80,23 @@ public class EmailController {
         this.commentsService = commentsService;
     }
 
-
-    @GetMapping("/send")
-    public String sendTestEmail() {
-        String to = "maria-gabriela.fodor@student.tuiasi.ro"; // Replace with the actual recipient email address
-        String subject = "Test Email";
-        String text = "This is a test email sent from Spring Boot.";
-
+    @PostMapping("/send/{admin_mail}")
+    public ResponseEntity<?> sendTestEmail(
+            @PathVariable String admin_mail,
+            @RequestBody ContactForm contactFormModel) {
+        String to = admin_mail;
+        String subject = contactFormModel.getSubject();
+        String text = "Name: " + contactFormModel.getNume() + "\n" +
+                "Surname: " + contactFormModel.getPrenume() + "\n" +
+                "Message: " + contactFormModel.getMessage() + "\n" +
+                "Mail: " + contactFormModel.getEmail();
+        log.info("Email text: {}", text);
         try {
             emailService.sendEmail(to, subject, text);
-            emailService.sendEmail("madalina-elena.boaca@student.tuiasi.ro", subject, text);
-            return "Email sent successfully!";
+            return new ResponseEntity<>("Email send successfuly!", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return "Failed to send email. Check the console for errors.";
+            return new ResponseEntity<>("Failed to send email. Check the console for errors.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -100,22 +104,7 @@ public class EmailController {
     public ResponseEntity<?> getNotificationsPosts(@PathVariable String user_id) {
         try {
             List<Post> notificationsPost = postsService.getAllNewPostNotifUser(user_id);
-
-            // Add the "title" field to each post
-            List<Map<String, Object>> postsWithTitle = new ArrayList<>();
-            for (Post post : notificationsPost) {
-                Map<String, Object> postWithTitle = new LinkedHashMap<>();
-                postWithTitle.put("id", post.getId());
-                postWithTitle.put("creatorId", post.getCreatorId());
-                postWithTitle.put("topicId", post.getTopicId());
-                postWithTitle.put("messageType", post.getMessageType());
-                postWithTitle.put("postId", post.getPostId());
-                postWithTitle.put("title", postsService.getPostName(post.getPostId())); // Replace "color" with "title"
-                postWithTitle.put("seen", post.getSeen());
-                postsWithTitle.add(postWithTitle);
-            }
-
-            return new ResponseEntity<>(postsWithTitle, HttpStatus.OK);
+            return new ResponseEntity<>(notificationsPost, HttpStatus.OK);
         } catch (Exception e) {
             // Handle the exception appropriately
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

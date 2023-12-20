@@ -12,4 +12,5 @@ import lombok.ToString;
 public class CommentQueueMessage {
     private String user_id;
     private String post_id;
+    private String comm;
 }
