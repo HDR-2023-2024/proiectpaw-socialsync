@@ -64,7 +64,7 @@ export class CommentsComponent {
           return true;
         });
         this.comments = filteredArr;
-        this.comments = this.comments.reverse();
+       // this.comments = this.comments.reverse();
         if (oldSize == this.comments.length) {
           this.page--;
           if (this.page < 0) {
@@ -112,5 +112,17 @@ export class CommentsComponent {
   convertTimestampToDateTime(timestamp: number) {
     var date = new Date(timestamp * 1000);
     return date.toLocaleString();
+  }
+
+  deleteComment(id : string){
+    this.commentService.deletePost(id);
+    const index = this.comments.findIndex(comment => comment.id === id);
+    if (index !== -1) {
+      this.comments.splice(index, 1);
+    }
+  }
+
+  editComment(id : number){
+
   }
 }

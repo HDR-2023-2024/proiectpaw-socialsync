@@ -27,7 +27,7 @@
         -->
                 </div>
             </nav>
-            <div class="butoane d-flex  justify-content-end">
+            <div class="butoane d-flex  flex-end">
                 <div>
                     <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deletePost()"
                         *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">Ștergere</button>

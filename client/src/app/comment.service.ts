@@ -6,13 +6,14 @@ import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
 
-  constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private router: Router, private authService: AuthService) {}
+  constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private router: Router, private authService: AuthService,private location: Location) {}
 
   getComment(postId: string, page: string): Observable<any> {
     return this.http.get('http://localhost:8086/api/v1/query/posts/'+postId+'/comments'+ '?page=' + String(page));
@@ -40,6 +41,27 @@ export class CommentService {
       catchError(error => {
         return of(error);
       })
+    );
+  }
+
+  deletePost(id : string) {
+    const token = this.storage.get('Token');
+
+    const headers = new HttpHeaders({
+      'Authorization': token
+    });
+
+    return this.http.delete<any>("http://localhost:8086/api/v1/comments/" + id  , { headers: headers }).subscribe(
+      data => {
+        //alert("Comentariu șters cu succes!");
+        //window.location.reload();
+      },
+      error => {
+        console.error('Eroare:', error);
+        if (error.status == 401) {
+          this.router.navigate(['/unauthorized']);
+        }
+      }
     );
   }
 }
