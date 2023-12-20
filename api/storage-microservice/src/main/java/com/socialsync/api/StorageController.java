@@ -1,9 +1,6 @@
 package com.socialsync.api;
 
-import com.socialsync.pojo.ErrorClass;
-import com.socialsync.pojo.FileInfo;
-import com.socialsync.pojo.JsonFile;
-import com.socialsync.pojo.UrlDto;
+import com.socialsync.pojo.*;
 import com.socialsync.repository.FileRepository;
 import com.socialsync.service.StorageService;
 import lombok.AllArgsConstructor;
@@ -16,10 +13,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/storage")
@@ -115,8 +109,8 @@ public class StorageController {
         }
     }
 
-    @GetMapping("/get-file-names")
-    public List<String> getFileNamesByIds(@RequestBody List<String> ids) {
-        return storageService.getFileNamesByIds(ids);
+    @PostMapping("/get-file-names")
+    public List<Map.Entry<String, String>> getFileNamesByIds(@RequestBody ListUrl listUrl) {
+        return storageService.getFileNamesByIds(listUrl.getElements());
     }
 }

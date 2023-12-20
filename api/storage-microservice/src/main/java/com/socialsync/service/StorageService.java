@@ -6,16 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.socialsync.pojo.FileInfo;
 import org.springframework.stereotype.Service;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class StorageService {
     @Autowired
     private FileRepository fileInfoRepository;
 
-    public List<String> getFileNamesByIds(List<String> ids) {
+    public List<Map.Entry<String, String>> getFileNamesByIds(List<String> ids) {
         return this.fileInfoRepository.findAllById(ids).stream()
-                .map(FileInfo::getFilename)
-                .toList();
+                .map(fileInfo -> new AbstractMap.SimpleEntry<>(fileInfo.getId(), fileInfo.getFilename()))
+                .collect(Collectors.toList());
     }
 }

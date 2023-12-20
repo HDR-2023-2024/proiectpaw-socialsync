@@ -181,7 +181,7 @@ export class FullPostComponent {
   }
 
   editPost(){
-
+    this.router.navigate(['edit-post/', this.data.id]);
   }
   
 }

@@ -48,6 +48,7 @@ import { CommunityCreateComponent } from './community-create/community-create.co
 import { UserServiceComponent } from './user-service/user-service.component';
 import { CarouselFullPostComponent } from './carousel-full-post/carousel-full-post.component';
 import { HelpPageComponent } from './help-page/help-page.component';
+import { EditPostComponent } from './edit-post/edit-post.component';
 
 
 const routes: Routes = [
@@ -79,7 +80,8 @@ const routes: Routes = [
   { path: "create-topics", component: CommunityCreateComponent},
   { path: "create-post/:topicId/:topicName", component: CreatePostComponent },
   { path: "help", component: HelpPageComponent },
-  { path: "help-s", component: HelpSiteComponent }
+  { path: "help-s", component: HelpSiteComponent },
+  { path: "edit-post/:postId", component: EditPostComponent }
 ];
 
 
@@ -127,7 +129,8 @@ const routes: Routes = [
     CommunityCreateComponent,
     UserServiceComponent,
     CarouselFullPostComponent,
-    HelpPageComponent
+    HelpPageComponent,
+    EditPostComponent
   ],
   imports: [
     BrowserModule,
