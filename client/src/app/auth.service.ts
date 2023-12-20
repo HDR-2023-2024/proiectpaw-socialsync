@@ -48,25 +48,21 @@ export class AuthService {
   }
 
   getToken(): string {
-    return this.storage.get("Token") ;
+    return this.storage.get("Token");
   }
 
   getId(): string {
-    return this.storage.get("Id") ;
+    return this.storage.get("Id");
   }
 
   getAvatar() {
-      if (this.storage.get("PhotoId") == null) {
-        return "assets/images/avatar.png"
-      } else {
-        return this.storage.get("PhotoId") ;
-      }
+      return this.storage.get("PhotoId").length > 1  ?  this.storage.get("PhotoId")  : 'assets/images/avatar/' + this.getId()[this.getId().length - 1] + '.png' ;
   }
 
   getUsername() {
-    return  this.storage.get("Username") ;
+    return this.storage.get("Username");
   }
-  
+
 }
 
 export interface ApiResponse {

@@ -9,7 +9,8 @@
 <div class="comment-container">
   <div class="comment my-5 py-4 px-2" *ngFor="let comment of comments; let i = index">
     <div class="d-flex">
-      <img class="avatar-short-post mx-0" src="{{comment.creator?.photoId || 'assets/images/avatar.png'}}">
+      <img class="avatar-short-post mx-0" 
+      src="{{comment.creator?.photoId != null && comment.creator?.photoId.length > 1 ? comment.creator?.photoId : 'assets/images/avatar/' + comment.creator?.photoId[comment.creator?.photoId.length - 1] + '.png'}}">
       <p class="my-auto ms-2"> {{comment.creator?.username || 'Nume utilizator necunoscut'}} •
         {{convertTimestampToDateTime(comment.timestampCreated)}}
     </div>

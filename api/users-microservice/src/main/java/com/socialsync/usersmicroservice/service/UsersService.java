@@ -139,6 +139,10 @@ public class UsersService implements UsersServiceMethods {
     public void addUser(User user) throws NotAcceptableException {
         user.setPassword(this.passwordEncoder().encode(user.getPassword()));
         try {
+            if(user.getPhotoId() == null){
+                Random rand = new Random();
+                user.setPhotoId(String.valueOf(rand.nextInt(10)));
+            }
             repository.save(user);
             sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
         } catch (Exception ex) {
@@ -155,6 +159,10 @@ public class UsersService implements UsersServiceMethods {
         Optional<User> userInDb = repository.findById(id);
         if (userInDb.isPresent()) {
             try {
+                if(user.getPhotoId() == null){
+                    Random rand = new Random();
+                    user.setPhotoId(String.valueOf(rand.nextInt(10)));
+                }
                 repository.updateUser(id, user.getUsername(), user.getEmail(), user.getRole(), user.getGender(),user.getDescription(),user.getPhotoId());
                 sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, new User(id, user.getUsername(), null, user.getEmail(), user.getGender(),user.getPhotoId(),user.getDescription(), user.getRole())));
             } catch (Exception ex) {

@@ -2,10 +2,11 @@
     <div class="row h-100">
         <div class="col post-container">
             <div class="d-flex mt-5">
-                <img class="avatar-short-post mx-0" src="{{data.creator?.photoId || 'assets/images/avatar.png'}}">
+                <img class="avatar-short-post mx-0" 
+                src="{{data.creator?.photoId != null && data.creator?.photoId.length > 1 ? data.creator?.photoId : 'assets/images/avatar/' + data.creator?.photoId[data.creator?.photoId.length - 1] + '.png'}}">
                 <p class="my-auto ms-2"> {{data.creator?.username || 'Nume utilizator necunoscut'}} •
                     {{convertTimestampToDateTime(data.timestampCreated)}}</p>
-                <div class="butoane d-flex justify-content-end">
+                <div class="butoane d-flex">
                     <div>
                         <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deletePost()"
                             *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">Ștergere</button>
