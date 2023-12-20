@@ -117,7 +117,7 @@ public class QueryController {
         if (post.isPresent()) {
             PostDTO postResponse = new PostDTO(
                     post.get(),
-                    queryService.fetchPostComments(post.get().getId(), page),
+                    queryService.fetchPostComments(post.get().getId(), parsePage(page)),
                     new PostTopicSummaryDTO(queryService.fetchTopic(post.get().getTopicId()).orElseThrow(() -> new TopicException("Topic not found for post " + post.get().getId()))));
 
             if (userId.isPresent())
@@ -140,13 +140,13 @@ public class QueryController {
     public ResponseEntity<?> fetchPostComments(@PathVariable String id, @NotNull @RequestParam Integer page) {
         log.info(id);
         return ResponseEntity
-                .ok(queryService.fetchPostComments(id, page));
+                .ok(queryService.fetchPostComments(id, parsePage(page)));
     }
 
     @GetMapping("/topics")
     public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page, Optional<String> query) {
         return query.map(s -> ResponseEntity
-                    .ok(queryService.searchTopicsByName(s, page)))
+                    .ok(queryService.searchTopicsByName(s, parsePage(page))))
                 .orElseGet(() -> ResponseEntity
                     .ok(queryService.fetchAllTopics(parsePage(page))));
     }
@@ -162,13 +162,13 @@ public class QueryController {
     @GetMapping("/topics/{id}/posts")
     public ResponseEntity<?> fetchTopicPosts(@PathVariable String id, @NotNull @RequestParam Integer page, @RequestHeader("X-User-Id") Optional<String> userId) {
         return ResponseEntity
-                .ok(queryService.fetchTopicPosts(id, page, userId));
+                .ok(queryService.fetchTopicPosts(id, parsePage(page), userId));
     }
 
     @GetMapping("/users")
     public ResponseEntity<?> fetchUsers(@NotNull @RequestParam Integer page, Optional<String> query) {
         return query.map(s -> ResponseEntity
-                    .ok(queryService.searchUsersByUsername(s, page)))
+                    .ok(queryService.searchUsersByUsername(s, parsePage(page))))
                 .orElseGet(() -> ResponseEntity
                     .ok(queryService.fetchAllUsers(parsePage(page))));
 
@@ -184,20 +184,20 @@ public class QueryController {
 
     @GetMapping("/users/{id}/topics")
     public ResponseEntity<?> fetchUserTopics(@PathVariable String id, @NotNull @RequestParam Integer page) {
-        return ResponseEntity.ok(queryService.fetchTopicsByCreatorId(id, page));
+        return ResponseEntity.ok(queryService.fetchTopicsByCreatorId(id, parsePage(page)));
     }
 
     @GetMapping("/users/{id}/posts")
     public ResponseEntity<?> fetchUserPosts(@PathVariable String id, @NotNull @RequestParam Integer page) {
-        return ResponseEntity.ok(queryService.fetchPostsByCreatorId(id, page));
+        return ResponseEntity.ok(queryService.fetchPostsByCreatorId(id, parsePage(page)));
     }
 
     @GetMapping("/users/{id}/comments")
     public ResponseEntity<?> fetchUserComments(@PathVariable String id, @NotNull @RequestParam Integer page) {
-        return ResponseEntity.ok(queryService.fetchCommentsByCreatorId(id, page));
+        return ResponseEntity.ok(queryService.fetchCommentsByCreatorId(id, parsePage(page)));
     }
 
     private static Integer parsePage(Integer page) {
-        return page == 0 ? page : page < 0 ? 0 : page - 1;
+        return page == 0 ? page : page < 0 ? 0 : page ;
     }
 }
