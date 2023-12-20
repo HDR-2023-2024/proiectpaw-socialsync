@@ -32,6 +32,7 @@ profilePhoto = '../../assets/images/profile_pic.jpg';
       (data) => {
         console.log('Datele de la server:', data);
         this.data = data;
+        this.profilePhoto = this.authService.getAvatar();
       },
       (error) => {
         console.error('Eroare la incarcarea datelor:', error);

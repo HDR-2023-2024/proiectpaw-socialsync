@@ -18,6 +18,6 @@
         <!--{{community[0].membersCount}}-->
     </p>
     <hr>
-    <button type="button" class="btn ms-5" id="create-btn"  (click)="navigateToPost(data.id,data.name)">Creează o postare</button>
+    <button type="button" class="btn ms-5" id="create-btn" *ngIf="authService.isUserLoggedIn()" (click)="navigateToPost(data.id,data.name)">Creează o postare</button>
   </div>
   

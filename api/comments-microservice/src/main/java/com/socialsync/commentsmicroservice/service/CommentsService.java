@@ -80,7 +80,7 @@ public class CommentsService implements CommentsServiceMethods {
         }
     }
 
-    @Bean
+  /*  @Bean
     @Scheduled(fixedDelay = 5000L)
     void newRandomComment() {
         List<String> reactie = List.of("NASPA", "MEH", "BUNA");
@@ -92,7 +92,7 @@ public class CommentsService implements CommentsServiceMethods {
         Comment comment = new Comment("-1", "-1", "POSTARE " + reactie.get(new Random().nextInt(reactie.size())) + " UNGA BUNGA!");
         addComment(comment);
     }
-
+*/
     @Override
     public HashMap<String, Comment> fetchAllComments() {
         HashMap<String, Comment> lista = new HashMap<>();

@@ -2,9 +2,11 @@
     <div class="container-flex chart mx-1 justify-content-center align-items-center ">
         <div class="d-flex px-2 pt-2">
             <img class="avatar-short-post mx-0" src="{{data.creator?.photoId || 'assets/images/avatar.png'}}">
-            <p class="my-auto ms-2"> {{data.creator?.username || 'Nume utilizator necunoscut'}} • {{data.timestampCreated}}
+            <p class="my-auto ms-2"> {{data.creator?.username || 'Nume utilizator necunoscut'}} • {{data.timestampCreated}} 
             </p>
         </div>
+        <a class="ms-5" (click)="navigateToCommunity(data.topic.id)">În: {{data.topic.title}}</a>
+        <br>
         <br>
         <h4 class="mx-0  px-2 shortOver" (click)="navigateToPost(data.id)">{{data.title}} </h4>
         <p class="mx-0 text-sm-lg px-2 shortOver" (click)="navigateToPost(data.id)">

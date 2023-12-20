@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommunityService } from '../community.service';
 import { Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-community-details',
@@ -17,7 +18,7 @@ export class CommunityDetailsComponent {
   communityId:string='';
   formattedDate?: string;
 
-  constructor(private route:ActivatedRoute, private communityService:CommunityService,private router: Router){}
+  constructor(private route:ActivatedRoute, private communityService:CommunityService,private router: Router, public authService: AuthService){}
 
   ngOnInit() {
     this.route.params.subscribe(params => {

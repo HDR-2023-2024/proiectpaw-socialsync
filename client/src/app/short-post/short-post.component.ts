@@ -21,7 +21,7 @@ export class ShortPostComponent {
   ngOnInit() {
     var timestamp = this.data?.timestampCreated;
 
-    var date = new Date(timestamp);
+    var date = new Date(timestamp * 1000);
 
     var year = date.getFullYear();
     var month = ("0" + (date.getMonth() + 1)).slice(-2); 
@@ -30,7 +30,7 @@ export class ShortPostComponent {
     var minutes = ("0" + date.getMinutes()).slice(-2);
     var formattedDate = year + "-" + month + "-" + day + " " + hours + ":" + minutes;
 
-    console.log(formattedDate);
+    //console.log(formattedDate);
     this.data.timestampCreated = formattedDate;
   }
 
@@ -142,5 +142,8 @@ export class ShortPostComponent {
     }
   }
 
+  navigateToCommunity(id: string) {
+    this.router.navigate(['community/', id]);
+  }
 
 }

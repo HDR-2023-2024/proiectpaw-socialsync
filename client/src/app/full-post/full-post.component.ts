@@ -4,6 +4,7 @@ import { FullPostService } from '../full-post.service';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { CreatePostService } from '../create-post.service';
 
 @Component({
   selector: 'app-full-post',
@@ -12,17 +13,41 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 })
 export class FullPostComponent {
 
-  @Input() data: any;
+  data: any = {
+    
+      id: '',
+      "creator": {
+          "id": '',
+          "photoId": '',
+          "username": "",
+          "role": ""
+      },
+      "topic": {
+          "id": "",
+          "title": "",
+          "photoId": ""
+      },
+      "title": "",
+      "content": "",
+      "likedByUser": false,
+      "dislikedByUser": false,
+      "comments": [
+      ],
+      "photos": [],
+      "score": -1,
+      "timestampCreated": 1703055619
+  
+  }
+
   private page = 0;
   postId: string = '';
 
-  constructor(private route: ActivatedRoute, private postService: FullPostService,public authService: AuthService, private http: HttpClient, private router: Router) { }
+  constructor(private route: ActivatedRoute, private postService: FullPostService, public authService: AuthService, private http: HttpClient, private router: Router, private createPostService : CreatePostService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.postId = params['id'];
       this.loadPostDetails();
-      console.log(this.postId);
     });
   }
 
@@ -151,5 +176,11 @@ export class FullPostComponent {
         );
     }
   }
+  deletePost(){
+    this.createPostService.deletePost(this.data.id);
+  }
 
+  editPost(){
+
+  }
 }

@@ -46,6 +46,8 @@ import { ViewTopicsComponent } from './view-topics/view-topics.component';
 import { TopicShortComponent } from './topic-short/topic-short.component';
 import { CommunityCreateComponent } from './community-create/community-create.component';
 import { UserServiceComponent } from './user-service/user-service.component';
+import { CarouselFullPostComponent } from './carousel-full-post/carousel-full-post.component';
+import { HelpPageComponent } from './help-page/help-page.component';
 
 
 const routes: Routes = [
@@ -72,12 +74,12 @@ const routes: Routes = [
   { path: "create-account", component: CreateAccountComponent },
   { path: "see-posts", component: ProfileLinkPostsComponent},
   { path: "c-e", component: CommunityEditComponent},
-  { path: "help", component: HelpSiteComponent},
   { path: "testare-storage", component: TestareStorageComponent},
   { path: "view-topics", component: ViewTopicsComponent},
   { path: "create-topics", component: CommunityCreateComponent},
-  { path: "create-post/:topicId/:topicName", component: CreatePostComponent }
-
+  { path: "create-post/:topicId/:topicName", component: CreatePostComponent },
+  { path: "help", component: HelpPageComponent },
+  { path: "help-s", component: HelpSiteComponent }
 ];
 
 
@@ -91,9 +93,10 @@ const routes: Routes = [
     NavbarHorizontallyComponent,
     NavbarHorizontallyItemComponent,
     ShortPostComponent,
+    CreatePostComponent,
     CarouselComponent,
     PostComponent,
-    CreatePostComponent,
+   PostComponent,
     HomeMenuComponent,
     FullPostComponent,
     FullPostPageComponent,
@@ -122,7 +125,9 @@ const routes: Routes = [
     ViewTopicsComponent,
     TopicShortComponent,
     CommunityCreateComponent,
-    UserServiceComponent
+    UserServiceComponent,
+    CarouselFullPostComponent,
+    HelpPageComponent
   ],
   imports: [
     BrowserModule,

@@ -73,7 +73,7 @@ export class NavbarDisconnectedComponent implements OnInit {
       console.log("Cautare in topicuri!");
       this.router.navigate(['/view-topics', { query: inputValue }]);
     } else if (this.inputData != null && this.inputData.stringName.includes("uti")) {
-      console.log("Cautare in postari!")
+      console.log("Cautare in utilizatori!")
       this.router.navigate(['/home', { query: inputValue }]);
     }else{
       console.log("Cautare in postari!")

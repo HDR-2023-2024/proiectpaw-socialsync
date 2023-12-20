@@ -4,13 +4,15 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
 
-  constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService) {}
+  constructor(private http: HttpClient, @Inject(LOCAL_STORAGE) private storage: StorageService, private router: Router, private authService: AuthService) {}
 
   getComment(postId: string, page: string): Observable<any> {
     return this.http.get('http://localhost:8086/api/v1/query/posts/'+postId+'/comments'+ '?page=' + String(page));
@@ -20,11 +22,15 @@ export class CommentService {
   postComment(postId:string, content: string): Observable<any> {
     
     const commentData = { postId, content };
-    const token = this.storage.get('Token'); 
+    const token = this.authService.getToken(); 
+    console.log(token);
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': token
     });
+    if(token == undefined){
+        this.router.navigate(['/unauthorized']);
+      
+    }
 
     return this.http.post<any>(this.apiUrl, commentData, { headers, observe: 'response' }).pipe(
       tap((response: HttpResponse<any>) => {

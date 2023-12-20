@@ -188,7 +188,7 @@ public class PostsService implements PostsServiceMethods {
         }
     }
 
-    @Bean
+   /* @Bean
     @Scheduled(fixedDelay = 5000L)
     void newRandomPost() {
         log.info("We have " + repository.findAll().size() + " posts");
@@ -200,7 +200,7 @@ public class PostsService implements PostsServiceMethods {
         String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";
         Post post = new Post("-1", "-1", titlu, continut);
         addPost(post);
-    }
+    }*/
 
  /*   @Bean
     @Scheduled(initialDelay = 1000L,fixedDelay = 100)

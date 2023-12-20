@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommunityService } from '../community.service';
 import { Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../auth.service';
+
 @Component({
   selector: 'app-community',
   templateUrl: './community.component.html',
@@ -11,13 +13,13 @@ import { ActivatedRoute } from '@angular/router';
 export class CommunityComponent {
   joined: boolean = false;
   isNotified : boolean = false;
-  @Input() data:any;
+  data:any;
   posts: any[]=[];
   page= 0;
   postId:string='';
   selectedSortOption: string = ' ';
 
-  constructor(private route:ActivatedRoute, private communityService:CommunityService){}
+  constructor(private route:ActivatedRoute, private communityService:CommunityService, public authService: AuthService){}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -38,8 +40,10 @@ export class CommunityComponent {
   loadData(): void {
     this.communityService.getCommunityById(this.postId, this.page.toString()).subscribe(
       (response) => {
-        console.log('Datele de la server:', response);
         this.data = response; 
+        if(this.data.photoId.length == 0){
+          this.data.photoId = null;
+        }
       },
       (error) => {
         console.error('Eroare la încărcarea datelor.', error);
@@ -50,8 +54,8 @@ export class CommunityComponent {
   loadPosts(): void {
     this.communityService.getCommunityPostsById(this.postId, this.page.toString()).subscribe(
       (response) => {
-        console.log(this.postId)
-        console.log('Datele de la server:', response);
+        //console.log(this.postId)
+       // console.log('Datele de la server:', response);
         this.posts = response; 
       },
       (error) => {

@@ -14,7 +14,7 @@ export class CommunityService {
   getData(page: string): Observable<any> {
     let headers = new HttpHeaders();
     if (this.authService.isUserLoggedIn()) {
-      console.log("ceva")
+     // console.log("ceva")
       headers = new HttpHeaders({
         'Authorization': this.authService.getToken()
       });
@@ -25,7 +25,7 @@ export class CommunityService {
   getCommunityById(postId:string, page: string): Observable<any> {
     let headers = new HttpHeaders();
     if (this.authService.isUserLoggedIn()) {
-      console.log("ceva")
+    //  console.log("ceva")
       headers = new HttpHeaders({
         'Authorization': this.authService.getToken()
       });
@@ -36,7 +36,7 @@ export class CommunityService {
   getCommunityPostsById(postId:string, page: string): Observable<any> {
     let headers = new HttpHeaders();
     if (this.authService.isUserLoggedIn()) {
-      console.log("ceva")
+   //   console.log("ceva")
       headers = new HttpHeaders({
         'Authorization': this.authService.getToken()
       });

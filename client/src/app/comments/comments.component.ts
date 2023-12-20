@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommentService } from '../comment.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-comments',
@@ -19,7 +20,8 @@ export class CommentsComponent {
   constructor(
     private route: ActivatedRoute,
     private commentService: CommentService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -69,5 +71,11 @@ export class CommentsComponent {
         console.error('Eroare la creare.', error);
       }
     ); 
+  }
+
+   
+  convertTimestampToDateTime(timestamp: number) {
+    var date = new Date(timestamp * 1000);
+    return date.toLocaleString();
   }
 }

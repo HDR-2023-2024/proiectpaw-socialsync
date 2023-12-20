@@ -52,7 +52,7 @@ export class CreatePostComponent {
     this.post.photos = this.imageUrls;
     this.post.topicId = this.topicId;
     console.log(this.post);
-    this.createPost.addPost(this.post)
+    let data = this.createPost.addPost(this.post)
   }
 
   onPhotoChange(event: any) {
@@ -91,4 +91,6 @@ export class CreatePostComponent {
       console.error('Niciun fisier. selectat.');
     }
   }
+
+
 }

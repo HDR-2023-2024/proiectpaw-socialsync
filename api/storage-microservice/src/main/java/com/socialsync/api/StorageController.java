@@ -5,7 +5,9 @@ import com.socialsync.pojo.FileInfo;
 import com.socialsync.pojo.JsonFile;
 import com.socialsync.pojo.UrlDto;
 import com.socialsync.repository.FileRepository;
+import com.socialsync.service.StorageService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class StorageController {
     private FileRepository fileRepository;
+    private StorageService storageService;
 
     @GetMapping("/img/{id}")
     public ResponseEntity<byte[]> getMemoryFileByIdImg(@PathVariable("id") String id) {
@@ -110,5 +113,10 @@ public class StorageController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/get-file-names")
+    public List<String> getFileNamesByIds(@RequestBody List<String> ids) {
+        return storageService.getFileNamesByIds(ids);
     }
 }

@@ -62,7 +62,9 @@
     width: 32px;
     height: 32px;
     border-radius: 20px;
-  }
+    border: 2px solid #FF4433; 
+}
+
 
   #userMenu{
     position: fixed;
