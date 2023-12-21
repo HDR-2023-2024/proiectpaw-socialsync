@@ -20,10 +20,11 @@
         <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deleteComment(comment.id)"
           *ngIf="authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id">Ștergere</button>
       </div>
-      <div>
+    <!--  <div>
         <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="editComment(comment.id)"
           *ngIf="authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id">Editare</button>
       </div>
+    -->
     </div>
     <br>
   </div>

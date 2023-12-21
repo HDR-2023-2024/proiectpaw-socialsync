@@ -23,4 +23,8 @@ cd storage-microservice
 ./mvnw clean
 ./mvnw install
 cd ..
+cd notify-microservice
+./mvnw clean
+./mvnw install
+cd ..
 docker compose up

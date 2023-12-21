@@ -9,10 +9,10 @@
                 <form (ngSubmit)="onSubmit()" #myForm="ngForm" class="formContact p-5 mx-auto col-12">
                     <h1 class="mb-0 text-center">Contact</h1>
                     <label for="fname">Nume*</label><br>
-                    <input type="text" id="fname" name="fname" [(ngModel)]="formData.fname" required><br><br>
+                    <input type="text" id="fname" name="fname" [(ngModel)]="formData.nume" required><br><br>
 
                     <label for="lname">Prenume*</label><br>
-                    <input type="text" id="lname" name="lname" [(ngModel)]="formData.lname" required><br><br>
+                    <input type="text" id="lname" name="lname" [(ngModel)]="formData.prenume" required><br><br>
 
                     <label for="lname">E-mail*</label><br>
                     <input type="email" id="email" name="email" [(ngModel)]="formData.email" required><br><br>
