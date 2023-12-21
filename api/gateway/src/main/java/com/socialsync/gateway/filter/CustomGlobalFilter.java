@@ -41,7 +41,7 @@ public class CustomGlobalFilter {
                     new Pair<>("/api/v1/topics", HttpMethod.GET),
                     new Pair<>("/query/", HttpMethod.GET),
                     new Pair<>("/api/v1/storage/", HttpMethod.GET),
-                    //new Pair<>("/api/v1/storage/", HttpMethod.POST),
+                    new Pair<>("/api/v1/storage/", HttpMethod.POST),
                     new Pair<>("/notification/send/",HttpMethod.POST)
             ));
 

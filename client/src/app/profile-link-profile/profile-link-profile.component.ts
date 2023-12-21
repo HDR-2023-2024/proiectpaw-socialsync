@@ -49,6 +49,7 @@ export class ProfileLinkProfileComponent {
       .subscribe(
         data => {
           this.storage.set("PhotoId",this.data.photoId);
+          alert("Modificările au fost făcute cu succs!")
         },
       );
   }

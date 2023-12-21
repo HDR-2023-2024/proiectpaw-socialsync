@@ -119,6 +119,7 @@ export class CommentsComponent {
     const index = this.comments.findIndex(comment => comment.id === id);
     if (index !== -1) {
       this.comments.splice(index, 1);
+      alert("Comentariu șters cu succes!")
     }
   }
 

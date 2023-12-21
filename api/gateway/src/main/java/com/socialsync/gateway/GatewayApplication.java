@@ -205,11 +205,17 @@ public class GatewayApplication {
                         .path("/api/v1/query/posts/**")
                         .uri("http://localhost:8085"))
                 .route("posts", r -> r
+                        .path("/api/v1/posts/**")
+                        .uri("http://localhost:8080"))
+                .route("posts", r -> r
                         .path("/api/v1/query/topics/**")
                         .uri("http://localhost:8085"))
                 .route("motify", r -> r
                         .path("/notification/**")
                         .uri("http://localhost:8090"))
+                .route("users", r -> r
+                        .path("/api/v1/query/users/**")
+                        .uri("http://localhost:8085"))
                 .build();
 
     }
