@@ -56,3 +56,13 @@ a{
 a:hover{
   cursor: pointer;
 }
+
+svg{
+  width: 16px;
+  height: 16px;
+}
+
+p{
+  text-align: justify;
+  text-justify: inter-word;
+}

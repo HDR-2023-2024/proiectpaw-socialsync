@@ -32,7 +32,7 @@ export class CreateAccountComponent {
   isValid = false;
 
   onSubmit() {
-    this.createAccount.saveUser(this.myFormData.username, this.myFormData.email, this.myFormData.password,this.myFormData.photoId, this.myFormData.gender)
+    this.createAccount.saveUser(this.myFormData.username, this.myFormData.email, this.myFormData.password, this.myFormData.photoId, this.myFormData.gender)
       .subscribe(
         response => {
           console.log('Create account:', response);
@@ -81,7 +81,7 @@ export class CreateAccountComponent {
           data => {
             console.log(data);
             if (data && data.length > 0) {
-              this.imageUrl =  data[0].url; 
+              this.imageUrl = data[0].url;
               this.myFormData.photoId = data[0].url;
             }
           },

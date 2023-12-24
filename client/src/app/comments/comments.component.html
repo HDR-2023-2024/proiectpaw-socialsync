@@ -14,10 +14,10 @@
       <p class="my-auto ms-2"> {{comment.creator?.username || 'Nume utilizator necunoscut'}} •
         {{convertTimestampToDateTime(comment.timestampCreated)}}
     </div>
-    <b class="d-flex m-auto ms-5 mt-1">{{ comment.content }}</b>
+    <p class="d-flex m-auto mx-5 mt-1">{{ comment.content }}</p>
     <div class="butoane d-flex  flex-end">
       <div>
-        <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deleteComment(comment.id)"
+        <button type="button" class="btn px-3 mx-3 pt-2  edit-comment-btn" (click)="deleteComment(comment.id)"
           *ngIf="authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id">Ștergere</button>
       </div>
     <!--  <div>

@@ -1,7 +1,7 @@
 .chart {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    box-shadow: 1px 2px #8888885d;
+    box-shadow: 2px 4px #8888885d;
   }
   
   /*.chart:hover {
@@ -44,4 +44,9 @@
   
   .shortOver:hover{
     cursor: pointer;
+  }
+
+  p{
+    text-align: justify;
+  text-justify: inter-word;
   }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommunityService } from '../community.service';
 import { Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CreateTopicService } from '../create-topic.service';
 @Component({
@@ -19,7 +19,7 @@ export class CommunityComponent {
   postId:string='';
   selectedSortOption: string = ' ';
 
-  constructor(private route:ActivatedRoute, private communityService:CommunityService, public authService: AuthService,private createTopic: CreateTopicService){}
+  constructor(private route:ActivatedRoute, private communityService:CommunityService, public authService: AuthService,private createTopic: CreateTopicService,private router:Router){}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -42,11 +42,13 @@ export class CommunityComponent {
       (response) => {
         this.data = response; 
         if(this.data.photoId.length == 0){
+          // pentru afisare poza implicita
           this.data.photoId = null;
         }
       },
       (error) => {
-        console.error('Eroare la încărcarea datelor.', error);
+        console.log(error);
+        this.router.navigate(['/internal-server-error']);
       }
     );
   }
@@ -54,12 +56,11 @@ export class CommunityComponent {
   loadPosts(): void {
     this.communityService.getCommunityPostsById(this.postId, this.page.toString()).subscribe(
       (response) => {
-        //console.log(this.postId)
-       // console.log('Datele de la server:', response);
         this.posts = response; 
       },
       (error) => {
-        console.error('Eroare la încărcarea datelor.', error);
+        console.log(error);
+        this.router.navigate(['/internal-server-error']);
       }
     );
   }

@@ -9,7 +9,6 @@
 }
 
 .navbar-horizontally{
-   /* border-right: 2px solid rgba(0, 0, 0, 1);*/
     height: 100vh;
     margin-top: 40px;
 }
@@ -44,4 +43,9 @@ a:hover{
 
 .hrefButton{
     text-align: start;
+}
+
+svg{
+    width: 24px;
+    height: 24px;;
 }

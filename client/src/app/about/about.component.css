@@ -1,16 +1,12 @@
-.content {
-    background-color: blueviolet;
-}
-
 .description {
-    padding-top: 15%;
+    padding-top: 10%;
 }
 
-p{
+p {
     font-size: 1em;
 }
 
-#imgAbout{
+#imgAbout {
     max-width: 100%;
     max-height: 100%;
     width: auto;
@@ -19,18 +15,17 @@ p{
 
 p {
     font-family: Arial, sans-serif;
-  }
+}
 
-  @media (min-width: 992px) {
-   
-    p{
+@media (min-width: 992px) {
+
+    p {
         font-size: 1.5em;
     }
 
-    #imgAbout{
-        padding-top: 10%;
+    #imgAbout {
+        padding-top:0%;
         width: 90%;
         height: 70%;
     }
-  
-  }
+}

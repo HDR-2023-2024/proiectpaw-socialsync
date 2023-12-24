@@ -22,36 +22,3 @@ img {
     height: 32vh;
     border-radius: 20px;
 }
-
-.image-container {
-    position: relative;
-    display: inline-block;
-    z-index: -1;
-}
-
-
-.image-container:hover {
-    transform: scale(1.02);
-}
-
-.image-container img {
-    display: block;
-}
-
-.image-text {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    color: #fff;
-    padding: 5px;
-
-}
-
-.image-text-author {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    color: #fff;
-    padding: 5px;
-    font-style: italic;
-}

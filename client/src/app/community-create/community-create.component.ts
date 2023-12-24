@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CreateTopicService } from '../create-topic.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-community-create',
@@ -9,7 +10,7 @@ import { CreateTopicService } from '../create-topic.service';
   styleUrls: ['./community-create.component.css']
 })
 export class CommunityCreateComponent {
-  constructor(private http: HttpClient, private createTopic: CreateTopicService) { }
+  constructor(private http: HttpClient, private createTopic: CreateTopicService,private router: Router) { }
   imageUrl: string | null = null;
 
   community = {
@@ -19,7 +20,6 @@ export class CommunityCreateComponent {
   }
 
   ngOnInit() {
-    console.log("Ceva");
   }
 
 
@@ -40,7 +40,6 @@ export class CommunityCreateComponent {
   }
 
   uploadFiles() {
-    console.log("Apel incarcare poza!");
     const fileInput = this.fileInputRef.nativeElement;
     const files = fileInput.files;
 
@@ -60,6 +59,7 @@ export class CommunityCreateComponent {
             }
           },
           error => {
+            this.router.navigate(['/internal-server-error']);
             console.error('Eroare:', error);
           }
         );

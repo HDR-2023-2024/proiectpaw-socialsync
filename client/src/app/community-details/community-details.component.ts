@@ -24,18 +24,19 @@ export class CommunityDetailsComponent {
     this.route.params.subscribe(params => {
       this.communityId = params['id'];
       this.loadData();
-      console.log(this.communityId);
+      //console.log(this.communityId);
     });
   }
 
   loadData(): void {
     this.communityService.getCommunityById(this.communityId, this.page.toString()).subscribe(
       (response) => {
-        console.log('Datele de la server:', response);
+       // console.log('Datele de la server:', response);
         this.data = response; 
       },
       (error) => {
-        console.error('Eroare la încărcarea datelor.', error);
+        this.router.navigate(['/internal-server-error']);
+        console.error('Eroare la incarcarea datelor.', error);
       }
     );
   }

@@ -12,7 +12,8 @@
                     <div class="file-input-wrapper d-flex align-items-center justify-content-center">
                         <input type="file" #fileInput style="display: none" (change)="uploadFiles()">
                         <button class="round-button" (click)="fileInput.click()">
-                            <img class="imgprofile" src="{{ myFormData.photoId != null ? myFormData.photoId : 'assets/images/pngwing.com.png'}}"
+                            <img class="imgprofile"
+                                src="{{ myFormData.photoId != null ? myFormData.photoId : 'assets/images/pngwing.com.png'}}"
                                 alt="" height="36" width="40">
                         </button>
                     </div>
@@ -29,12 +30,12 @@
                     </select>
                     <br><br>
                     <label for="pass">Parola*</label><br>
-                    <input type="text" id="pass" name="pass" [(ngModel)]="myFormData.password"
+                    <input type="password" id="pass" name="pass" [(ngModel)]="myFormData.password"
                         (ngModelChange)="onPasswordChange()" required><br><br>
 
 
                     <label for="pass2">Repetare parolă*</label><br>
-                    <input type="text" id="pass2" name="pass2" [(ngModel)]="myFormData.password2"
+                    <input type="password" id="pass2" name="pass2" [(ngModel)]="myFormData.password2"
                         (ngModelChange)="onPasswordChange()" required><br><br>
 
 

@@ -15,7 +15,7 @@ interface InputData {
   styleUrls: ['./create-post.component.css']
 })
 export class CreatePostComponent {
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute,private createPost: CreatePostService) { }
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private createPost: CreatePostService) { }
   imageUrls: any[] = [];
   @Input() inputData: InputData | null = null; // in ce caut
 
@@ -27,7 +27,7 @@ export class CreatePostComponent {
     "title": '',
     "content": '',
     "upvotes": [],
-    "downvotes": [ ],
+    "downvotes": [],
     "photos": [],
     "score": 0,
     "timestampCreated": 0,
@@ -51,8 +51,8 @@ export class CreatePostComponent {
   saveChanges() {
     this.post.photos = this.imageUrls;
     this.post.topicId = this.topicId;
-    console.log(this.post);
-    let data = this.createPost.addPost(this.post)
+    //console.log(this.post);
+    this.createPost.addPost(this.post)
   }
 
   onPhotoChange(event: any) {
@@ -63,7 +63,7 @@ export class CreatePostComponent {
   }
 
   uploadFiles() {
-    console.log("Apel incarcare poza!");
+    //console.log("Apel incarcare poza!");
     const fileInput = this.fileInputRef.nativeElement;
     const files = fileInput.files;
 
@@ -85,10 +85,13 @@ export class CreatePostComponent {
           },
           error => {
             console.error('Eroare:', error);
+            if (error.status === 500) {
+              this.router.navigate(['/internal-server-error']);
+            }
           }
         );
     } else {
-      console.error('Niciun fisier. selectat.');
+      console.error('Niciun fisier selectat.');
     }
   }
 

@@ -23,6 +23,7 @@ export class ContactComponent {
   };
 
   constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private http: HttpClient, private router: Router) { }
+  // + email de trimis
   private loginUrl = 'http://localhost:8086/notification/send/madalina-elena.boaca%40student.tuiasi.ro';
   onSubmit() {
     this.send()
@@ -49,8 +50,7 @@ export class ContactComponent {
     };
     return this.http.post(this.loginUrl, postData, { observe: 'response' }).pipe(
       tap((response: HttpResponse<any>) => {
-        console.log(response.body)
-       
+        //console.log(response.body)
         return response;
       }),
       catchError(error => {

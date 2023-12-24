@@ -12,7 +12,7 @@ export class CarouselFullPostComponent {
   @Input() myArr: any[] = [];
 
   ngOnInit(){
-    console.log("Datele pozei: " + this.myArr[0] +"      " +  this.myArr[1]);
+   // console.log("Datele pozei: " + this.myArr[0] +"      " +  this.myArr[1]);
   }
 
   next() {

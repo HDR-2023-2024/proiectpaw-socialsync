@@ -27,7 +27,8 @@ p {
     margin-left: 20%;
 }
 
-input,select {
+input,
+select {
     width: 100%;
     border: 1px solid rgb(0, 0, 0);
     border-radius: 20px;
@@ -52,14 +53,15 @@ input,select {
         width: 60%;
         margin-top: -120px;
     }
+
     #imgcontact {
         margin-top: -120px;
     }
 }
 
-#errorCreateAccount{
+#errorCreateAccount {
     font-size: 1em;
-    text-align:end;
+    text-align: end;
     color: #ff0000;
 }
 
@@ -67,17 +69,17 @@ input,select {
     position: relative;
     overflow: hidden;
     display: inline-block;
-  }
-  
-  .file-input-wrapper input[type=file] {
+}
+
+.file-input-wrapper input[type=file] {
     font-size: 100px;
     position: absolute;
     left: 0;
     top: 0;
     opacity: 0;
-  }
-  
-   .imgprofile {
+}
+
+.imgprofile {
     width: 80px;
     height: 80px;
     border-radius: 50%;
@@ -88,16 +90,14 @@ input,select {
     font-size: 14px;
     text-align: center;
     line-height: 50px;
-  }
-  
+}
 
-
-  svg{
+svg {
     width: 40px;
     height: 40px;
-  }
+}
 
-  button{
+button {
     border: 0px;
     background-color: #fff;
-  }
+}

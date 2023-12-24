@@ -14,35 +14,35 @@ import { CreatePostService } from '../create-post.service';
 export class FullPostComponent {
 
   data: any = {
-    
-      id: '',
-      "creator": {
-          "id": '',
-          "photoId": '',
-          "username": "",
-          "role": ""
-      },
-      "topic": {
-          "id": "",
-          "title": "",
-          "photoId": ""
-      },
+
+    id: '',
+    "creator": {
+      "id": '',
+      "photoId": '',
+      "username": "",
+      "role": ""
+    },
+    "topic": {
+      "id": "",
       "title": "",
-      "content": "",
-      "likedByUser": false,
-      "dislikedByUser": false,
-      "comments": [
-      ],
-      "photos": [],
-      "score": -1,
-      "timestampCreated": 1703055619
-  
+      "photoId": ""
+    },
+    "title": "",
+    "content": "",
+    "likedByUser": false,
+    "dislikedByUser": false,
+    "comments": [
+    ],
+    "photos": [],
+    "score": -1,
+    "timestampCreated": 0
+
   }
 
   private page = 0;
   postId: string = '';
 
-  constructor(private route: ActivatedRoute, private postService: FullPostService, public authService: AuthService, private http: HttpClient, private router: Router, private createPostService : CreatePostService) { }
+  constructor(private route: ActivatedRoute, private postService: FullPostService, public authService: AuthService, private http: HttpClient, private router: Router, private createPostService: CreatePostService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -54,12 +54,14 @@ export class FullPostComponent {
   loadPostDetails() {
     this.postService.getData(this.postId, this.page.toString()).subscribe(
       (data) => {
-        console.log('Datele de la server:', data);
+        //console.log('Datele de la server:', data);
         this.data = data;
-        console.log("hei");
       },
       (error) => {
         console.error('Eroare la incarcarea datelor:', error);
+        if (error.status === 500) {
+          this.router.navigate(['/internal-server-error']);
+        }
       }
     );
   }
@@ -96,6 +98,9 @@ export class FullPostComponent {
               alert('Sesiunea a expirat este necesară reautentificarea.');
               this.router.navigate(['/login']);
             }
+            if (error.status === 500) {
+              this.router.navigate(['/internal-server-error']);
+            }
           }
         );
     } else {
@@ -116,10 +121,13 @@ export class FullPostComponent {
               alert('Sesiunea a expirat este necesară reautentificarea.');
               this.router.navigate(['/login']);
             }
+            if (error.status === 500) {
+              this.router.navigate(['/internal-server-error']);
+            }
           }
         );
     }
-    console.log(this.data.dislikedByUser)
+    //console.log(this.data.dislikedByUser)
   }
 
 
@@ -150,6 +158,9 @@ export class FullPostComponent {
               alert('Sesiunea a expirat este necesară reautentificarea.');
               this.router.navigate(['/login']);
             }
+            if (error.status === 500) {
+              this.router.navigate(['/internal-server-error']);
+            }
           }
         );
     } else {
@@ -172,16 +183,19 @@ export class FullPostComponent {
               alert('Sesiunea a expirat este necesară reautentificarea.');
               this.router.navigate(['/login']);
             }
+            if (error.status === 500) {
+              this.router.navigate(['/internal-server-error']);
+            }
           }
         );
     }
   }
-  deletePost(){
+  deletePost() {
     this.createPostService.deletePost(this.data.id);
   }
 
-  editPost(){
+  editPost() {
     this.router.navigate(['edit-post/', this.data.id]);
   }
-  
+
 }

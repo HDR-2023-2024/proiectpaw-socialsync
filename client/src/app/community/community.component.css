@@ -17,28 +17,6 @@
     color: #ffffff;
 }
 
-.reaction{
-    font-size: 1.2em;
-    color: #000;
-}
-  
-.reaction-arrow:hover {
-    color: #FF4433;  
-    cursor: pointer;
-}
-  
-.reaction-box-like{
-    background-color: #F0F2F5;
-    border: 1px solid  #FF4433;
-    border-radius: 20px;
-}
-  
-.members{
-    width: 200px; 
-    border: 1px solid #ccc; 
-    background-color: #F0F2F5;
-}
-
 h3 {
     font-size: 15px; 
 }

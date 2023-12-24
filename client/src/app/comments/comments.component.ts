@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommentService } from '../comment.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { ScroolServiceService } from '../scrool-service.service';
@@ -24,7 +24,8 @@ export class CommentsComponent {
     private commentService: CommentService,
     private fb: FormBuilder,
     public authService: AuthService,
-    private scrollService: ScroolServiceService
+    private scrollService: ScroolServiceService,
+    private router: Router
   ) { }
 
 
@@ -44,18 +45,19 @@ export class CommentsComponent {
     });
   }
 
+  // noile comentarii cand e scrool la final
   handleScrollEnd() {
     this.page++;
-    console.log(this.page);
-    let oldSize = this.comments.length;
+    //console.log(this.page);
+    let oldSize = this.comments.length; // daca raman pe pagina 0 
     this.commentService.getComment(this.postId, this.page.toString()).subscribe(
       (data) => {
-        console.log('Datele de la server:', data);
-
+        //console.log('Datele de la server:', data);
         for (const item of data) {
           this.comments.push(item);
         }
         var seenIds: Record<string, boolean> = {};
+        // filtrare duplicate
         var filteredArr = this.comments.filter(function (item: any) {
           if (seenIds.hasOwnProperty(item.id)) {
             return false;
@@ -64,7 +66,7 @@ export class CommentsComponent {
           return true;
         });
         this.comments = filteredArr;
-       // this.comments = this.comments.reverse();
+        //this.comments = this.comments.reverse();
         if (oldSize == this.comments.length) {
           this.page--;
           if (this.page < 0) {
@@ -73,6 +75,7 @@ export class CommentsComponent {
         }
       },
       (error) => {
+        this.router.navigate(['/internal-server-error']);
         console.error('Eroare la incarcarea comentariilor:', error);
       }
     );
@@ -81,10 +84,11 @@ export class CommentsComponent {
   addComment(content: string) {
     this.commentService.postComment(this.postId, content).subscribe(
       (response) => {
-        console.log('Comentariu creat cu succes.', response);
+        //console.log('Comentariu creat cu succes.', response);
         this.ngOnInit();
       },
       (error) => {
+        this.router.navigate(['/internal-server-error']);
         console.error('Eroare la creare.', error);
       }
     );
@@ -93,21 +97,6 @@ export class CommentsComponent {
   toggleReplyTextarea(index: number) {
     this.showReplyTextarea[index] = !this.showReplyTextarea[index];
   }
-
-
-  addReplies(content: string) {
-    this.commentService.postComment(this.postId, content).subscribe(
-      (response) => {
-        console.log('Comentariu creat cu succes.', response);
-        this.ngOnInit();
-
-      },
-      (error) => {
-        console.error('Eroare la creare.', error);
-      }
-    );
-  }
-
 
   convertTimestampToDateTime(timestamp: number) {
     var date = new Date(timestamp * 1000);
