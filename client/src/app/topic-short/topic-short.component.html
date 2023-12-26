@@ -4,11 +4,12 @@
             <h4 class="my-auto px-2 large-text">{{ data.name }}&nbsp;&nbsp;•</h4>
             <span class="my-auto px-2 small-text">{{ data.timestampCreated | date:'short' }}</span>
         </div>
-        
-        <p class="mx-0  px-2 shortOver" (click)="navigateToCommunity(data.id)">By {{data.creator?.username || 'Nume utilizator necunoscut'}} </p>
-     
+
+        <p class="mx-0  px-2 shortOver" (click)="navigateToCommunity(data.id)">By {{data.creator?.username || 'Nume
+            utilizator necunoscut'}} </p>
+
         <p class="mx-0 text-sm-lg px-2 shortOver" (click)="navigateToCommunity(data.id)">
             {{ data.description ? data.description.substring(0, 500) + '...' : '' }}
-          </p>
+        </p>
     </div>
 </div>

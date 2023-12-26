@@ -16,7 +16,7 @@
   object-fit: cover;
 }
 
-.circle{
+.circle {
   z-index: 2;
   margin-top: -1rem;
   border-radius: 50%;
@@ -35,7 +35,7 @@ svg {
   margin-top: 20px;
 }
 
-.round-button{
+.round-button {
   border: 0px;
   background-color: #fff;
 }

@@ -1,24 +1,17 @@
-p{
+p {
     font-size: 1.25em;
 }
 
-.subitem:hover{
-    color: #FF4433;  
+.subitem:hover {
+    color: #FF4433;
     text-decoration: underline;
 }
 
-.subitem{
+.subitem {
     font-size: 1em;
     color: #000000;
 }
 
-img{
+img {
     width: 20%;
 }
-/*
-.item-menu:hover{
-    transform: scale(1.04);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}*/
-

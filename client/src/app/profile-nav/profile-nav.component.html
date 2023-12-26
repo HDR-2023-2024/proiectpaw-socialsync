@@ -8,6 +8,5 @@
 <div *ngFor="let tab of navComponents; let i = index">
   <div *ngIf="i === activeTab">
     <div *ngComponentOutlet="tab.Component"></div>
-    </div>
+  </div>
 </div>
-

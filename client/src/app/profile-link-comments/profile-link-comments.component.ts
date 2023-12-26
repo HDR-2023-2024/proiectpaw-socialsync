@@ -58,7 +58,7 @@ export class ProfileLinkCommentsComponent {
       saved: true
     }
   ];
-  
+
 
   navigateToPost(postId: number) {
     this.router.navigate(['/full-post', postId]);

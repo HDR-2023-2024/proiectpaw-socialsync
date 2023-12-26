@@ -1,18 +1,22 @@
 .nav-link {
   color: black;
 }
+
 .col {
   width: 100%;
 }
-.nav-link.active{
+
+.nav-link.active {
   color: #FF4433;
 }
+
 .nav-tabs {
   display: flex;
   justify-content: space-evenly;
   width: 100%;
 }
-.div{
+
+.div {
   padding: 0;
   margin: 0;
 }

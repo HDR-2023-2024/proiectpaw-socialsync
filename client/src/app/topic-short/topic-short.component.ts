@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { HttpClient ,HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -17,46 +17,4 @@ export class TopicShortComponent {
     this.router.navigate(['community/', id]);
   }
 
-  downvote() {
-    //console.log("downvote");
-    const headers = new HttpHeaders({
-      'Authorization': this.authService.getToken() 
-    });
-    this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/downvote", '', { headers: headers })
-      .subscribe(
-        data => {
-          //console.log(data);
-          this.data.score--; 
-        },
-        error => {
-          console.error('Eroare:', error);
-        }
-      );
-  }
-  
-  upvote() {
-    //console.log("upvote");
-    const headers = new HttpHeaders({
-      'Authorization': this.authService.getToken() 
-    });
-  
-    this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/upvote", '', { headers: headers })
-      .subscribe(
-        data => {
-          //console.log(data);
-          this.data.score++; 
-        },
-        error => {
-          console.error('Eroare:', error);
-          if (error.status == 401) {
-            this.router.navigate(['/unauthorized']);
-          }
-        }
-      );
-  }
-
-  convertTimestampToDateTime(timestamp: number) {
-    var date = new Date(timestamp * 1000);
-    return date.toLocaleString();
-  }
 }

@@ -20,16 +20,22 @@ export class LoginComponent {
     this.authService.login(this.formData.username, this.formData.password)
       .subscribe(
         response => {
-          console.log('Login sresponse:', response);
-          if(response.status === 200){
+          console.log('Login response:', response);
+          if (response.status === 200) {
             this.router.navigate(['/home']);
           }
-          else if(response.status === 401){
+          else if (response.status === 401) {
+            this.loginMsg = "Datele de autentificare sunt invalide!"
+          }
+          else if (response.status === 406) {
             this.loginMsg = "Datele de autentificare sunt invalide!"
           }
         },
         error => {
-          if(error.status === 401){
+          if (error.status === 401) {
+            this.loginMsg = "Datele de autentificare sunt invalide!"
+          }
+          if (error.status === 406) {
             this.loginMsg = "Datele de autentificare sunt invalide!"
           }
         }

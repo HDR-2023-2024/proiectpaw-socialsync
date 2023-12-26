@@ -68,15 +68,12 @@ export class NavbarDisconnectedComponent implements OnInit {
       alert("Nu se poate căuta după o singură literă.");
       return;
     }
-    
+
     if (this.inputData != null && this.inputData.stringName.includes("com")) {
-      console.log("Cautare in topicuri!");
       this.router.navigate(['/view-topics', { query: inputValue }]);
     } else if (this.inputData != null && this.inputData.stringName.includes("uti")) {
-      console.log("Cautare in utilizatori!")
       this.router.navigate(['/home', { query: inputValue }]);
-    }else{
-      console.log("Cautare in postari!")
+    } else {
       this.router.navigate(['/home', { query: inputValue }]);
     }
   }

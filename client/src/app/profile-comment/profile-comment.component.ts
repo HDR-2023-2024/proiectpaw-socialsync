@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
@@ -9,7 +9,7 @@ import { AuthService } from '../auth.service';
 })
 
 export class ProfileCommentComponent {
-  constructor(public authService: AuthService,private router: Router) { }
+  constructor(public authService: AuthService, private router: Router) { }
 
   @Input() data: any;
   navigateToPost(postId: number) {

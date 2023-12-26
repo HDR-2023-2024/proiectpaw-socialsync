@@ -6,17 +6,18 @@
         </div>
         <div class="row col-lg-10 col-12 m-0 p-0">
             <div class="col-12 col-lg-6  vh-80 div-contact m-0 p-0 ">
-                <form  #myForm="ngForm" class="formContact p-5 mx-auto col-12">
+                <form #myForm="ngForm" class="formContact p-5 mx-auto col-12">
                     <h1 class="mb-0 text-center">Conectare</h1>
                     <br>
                     <label for="fname">Nume de utilizator*</label><br>
                     <input type="text" id="fname" name="fname" [(ngModel)]="formData.username" required><br><br>
 
                     <label for="padd">Parola*</label><br>
-                    <input type="text" id="pass" name="pass" [(ngModel)]="formData.password" required><br><br>
+                    <input type="password" id="pass" name="pass" [(ngModel)]="formData.password" required><br><br>
                     <p class="text-danger text-right" id="loginErrMsg">{{loginMsg}}</p>
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn contact-btn" [disabled]="!myForm.valid" (click)=" onLoginClick()">Conectare</button>
+                        <button type="submit" class="btn contact-btn" [disabled]="!myForm.valid"
+                            (click)=" onLoginClick()">Conectare</button>
                     </div>
                 </form>
             </div>

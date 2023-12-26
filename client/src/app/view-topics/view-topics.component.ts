@@ -14,17 +14,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ViewTopicsComponent {
   private page = 0;
-  private query : string | null = null;
+  private query: string | null = null;
 
 
-  constructor(public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService,private route: ActivatedRoute) {
+  constructor(public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
       this.query = params['query'];
       this.page = 0;
-      console.log('Valoarea primita:', this.query);
+      //console.log('Valoarea primita:', this.query);
       this.loadDataOnPageLoad();
     });
-   }
+  }
 
   myArr: any[] = []
 
@@ -47,10 +47,10 @@ export class ViewTopicsComponent {
 
   private handleScrollEnd(): void {
     this.page++;
-    let url  = "";
+    let url = "";
 
     if (this.query == null || this.query.length == 0) {
-      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() ;
+      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString();
     }
     else {
       url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + "&query=" + this.query;
@@ -58,27 +58,27 @@ export class ViewTopicsComponent {
     let oldSize = this.myArr.length;
     this.dataService.getDataSyncTopics(url)
       .then((data: any[]) => {
-      if (data !== undefined) {
-        for (const item of data) {
-          this.myArr.push(item);
-        }
-        if(this.myArr.length == oldSize){
-          this.page--;
-        }
-        var seenIds: Record<string, boolean> = {};
-        var filteredArr = this.myArr.filter(function (item: any) {
-          if (seenIds.hasOwnProperty(item.id)) {
-            return false;
+        if (data !== undefined) {
+          for (const item of data) {
+            this.myArr.push(item);
           }
-          seenIds[item.id] = true;
-          return true;
-        });
-        this.myArr = filteredArr;
-        console.log(this.myArr.length);
-      } else {
-        console.log("Get goll");
-      }
-    })
+          if (this.myArr.length == oldSize) {
+            this.page--;
+          }
+          var seenIds: Record<string, boolean> = {};
+          var filteredArr = this.myArr.filter(function (item: any) {
+            if (seenIds.hasOwnProperty(item.id)) {
+              return false;
+            }
+            seenIds[item.id] = true;
+            return true;
+          });
+          this.myArr = filteredArr;
+          console.log(this.myArr.length);
+        } else {
+          console.log("Get goll");
+        }
+      })
       .catch(error => {
         console.error('Eroare:', error);
       });
@@ -88,7 +88,7 @@ export class ViewTopicsComponent {
     let url;
 
     if (this.query == null || this.query.length == 0) {
-      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() ;
+      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString();
     }
     else {
       url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + "&query=" + this.query;
@@ -98,14 +98,14 @@ export class ViewTopicsComponent {
         console.log('Datele de la server:', data);
         this.myArr = data;
         var seenIds: Record<string, boolean> = {};
-          var filteredArr = this.myArr.filter(function (item: any) {
-            if (seenIds.hasOwnProperty(item.id)) {
-              return false;
-            }
-            seenIds[item.id] = true;
-            return true;
-          });
-          this.myArr = filteredArr;
+        var filteredArr = this.myArr.filter(function (item: any) {
+          if (seenIds.hasOwnProperty(item.id)) {
+            return false;
+          }
+          seenIds[item.id] = true;
+          return true;
+        });
+        this.myArr = filteredArr;
       },
       (error) => {
         console.error('Eroare la incarcarea datelor:', error);

@@ -30,7 +30,7 @@ export class ProfileLinkProfileComponent {
   ngOnInit() {
     this.userServ.getData(this.authService.getId()).subscribe(
       (data) => {
-        console.log('Datele de la server:', data);
+        //console.log('Datele de la server:', data);
         this.data = data;
       },
       (error) => {
@@ -45,11 +45,11 @@ export class ProfileLinkProfileComponent {
       'Authorization': this.authService.getToken()
     });
     console.log(this.data);
-    this.http.put<any>("http://localhost:8086/api/v1/users",this.data, { headers: headers })
+    this.http.put<any>("http://localhost:8086/api/v1/users", this.data, { headers: headers })
       .subscribe(
         data => {
-          this.storage.set("PhotoId",this.data.photoId);
-          alert("Modificările au fost făcute cu succs!")
+          this.storage.set("PhotoId", this.data.photoId);
+          alert("Modificările au fost făcute cu succes!")
         },
       );
   }

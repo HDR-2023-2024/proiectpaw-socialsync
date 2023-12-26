@@ -1,4 +1,4 @@
-import { Component ,Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-navbar-horizontally-item',
@@ -12,8 +12,5 @@ export class NavbarHorizontallyItemComponent {
 
   toggleTopics() {
     this.isVisible = !this.isVisible;
-  }  
-  
-
-  
+  }
 }

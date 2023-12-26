@@ -1,13 +1,9 @@
 #navbar-disconnected {
-    background-color:  #fef9f8 ;
+    background-color: #fef9f8;
     height: 60px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin: 0px;
     padding: 0px;
-}
-
-#settings-black:hover {
-    cursor: pointer;
 }
 
 #search-icon-small:hover {
@@ -48,11 +44,11 @@
     margin-right: 16px;
 }
 
-.submenu{
+.submenu {
     font-size: 2em;
 }
 
-.navbar-ico{
+.navbar-ico {
     font-size: 1.5em;
     width: 32px;
     height: 32px;
@@ -62,20 +58,20 @@
     width: 32px;
     height: 32px;
     border-radius: 20px;
-    border: 2px solid #FF4433; 
+    border: 2px solid #FF4433;
 }
 
 
-  #userMenu{
+#userMenu {
     position: fixed;
     top: 60px;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     box-shadow: 1px 2px #8888885d;
     background-color: #fff;
-  }
+}
 
-  a{
+a {
     color: #000;
     text-decoration: none;
-  }
+}

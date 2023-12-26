@@ -1,52 +1,18 @@
 .chart {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    box-shadow: 2px 4px #8888885d;
-  }
-  
-  /*.chart:hover {
-    transform: scale(1.02);
-    box-shadow: 2px 5px #8888885d;
-  }
-  */
-  
-  .avatar-short-post {
-    width: 32px;
-    height: 32px;
-  }
-  
-  
-  .reaction{
-    font-size: 1.0em;
-    color: #000;
-  }
-  
-  .reaction:hover{
-    cursor: pointer;
-  }
-  
-  .reaction-value{
-    cursor: default;
-  }
-  
-  .disableReaction:hover{
-    cursor: default;
-  }
-  
-  .reaction-box-like{
-    background-color: #8888883f;
-    border-radius: 20px;
-  }
-  
-  .shortPostClass{
-    width: 100%;
-  }
-  
-  .shortOver:hover{
-    cursor: pointer;
-  }
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 2px 4px #8888885d;
+}
 
-  p{
-    text-align: justify;
+.shortPostClass {
+  width: 100%;
+}
+
+.shortOver:hover {
+  cursor: pointer;
+}
+
+p {
+  text-align: justify;
   text-justify: inter-word;
-  }
+}

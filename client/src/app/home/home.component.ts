@@ -21,7 +21,6 @@ export class HomeComponent {
     this.route.params.subscribe(params => {
       this.query = params['query'];
       this.page = 0;
-      console.log('Valoarea primita:', this.query);
       this.loadDataOnPageLoad();
     });
   }
@@ -78,6 +77,7 @@ export class HomeComponent {
         }
       })
       .catch(error => {
+        this.router.navigate(['/internal-server-error']);
         console.error('Eroare:', error);
       });
   }
@@ -93,20 +93,21 @@ export class HomeComponent {
 
     this.dataService.getData(url).subscribe(
       (data) => {
-        console.log('Datele de la server:', data);
+        //console.log('Datele de la server:', data);
         this.myArr = data;
         var seenIds: Record<string, boolean> = {};
-          var filteredArr = this.myArr.filter(function (item: any) {
-            if (seenIds.hasOwnProperty(item.id)) {
-              return false;
-            }
-            seenIds[item.id] = true;
-            return true;
-          });
-          this.myArr = filteredArr;
+        var filteredArr = this.myArr.filter(function (item: any) {
+          if (seenIds.hasOwnProperty(item.id)) {
+            return false;
+          }
+          seenIds[item.id] = true;
+          return true;
+        });
+        this.myArr = filteredArr;
       },
       (error) => {
         console.error('Eroare la incarcarea datelor:', error);
+        this.router.navigate(['/internal-server-error']);
       }
     );
   }

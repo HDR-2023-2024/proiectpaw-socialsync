@@ -1,4 +1,4 @@
-img{
+img {
     margin-top: 15%;
     max-width: 40%;
     max-height: 50%;
@@ -7,13 +7,13 @@ img{
 }
 
 @media (min-width: 992px) {
-   
-    img{
+
+    img {
         margin-top: 5%;
-        max-width:  20%;
+        max-width: 20%;
         max-height: 50%;
         width: auto;
         height: auto;
     }
-  
-  }
+
+}

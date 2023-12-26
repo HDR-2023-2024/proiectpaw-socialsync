@@ -1,20 +1,19 @@
 <div class="container mt-4">
-    <h2>Editează profilul</h2>
-    <form>
-      <div class="form-group">
-        <label for="lastName">Nume de utilizator</label>
-        <input type="text" class="form-control" id="lastName" [(ngModel)]="data.username" name="lastName">
-      </div>
-  
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" [(ngModel)]="data.email" name="email">
-      </div>
-      <div class="form-group">
-        <label for="email">Desciere</label>
-        <input type="email" class="form-control" id="description" [(ngModel)]="data.description" name="description">
-      </div>
-      <button type="submit" class="btn btn-primary" (click)="updateUser()"  >Salvează modificările</button>
-    </form>
-  </div>
-  
+  <h2>Editează profilul</h2>
+  <form>
+    <div class="form-group">
+      <label for="lastName">Nume de utilizator</label>
+      <input type="text" class="form-control" id="lastName" [(ngModel)]="data.username" name="lastName">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" [(ngModel)]="data.email" name="email">
+    </div>
+    <div class="form-group">
+      <label for="email">Desciere</label>
+      <input type="email" class="form-control" id="description" [(ngModel)]="data.description" name="description">
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="updateUser()">Salvează modificările</button>
+  </form>
+</div>

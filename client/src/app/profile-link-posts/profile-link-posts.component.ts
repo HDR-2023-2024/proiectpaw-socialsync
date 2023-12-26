@@ -18,7 +18,7 @@ export class ProfileLinkPostsComponent {
     this.route.params.subscribe(params => {
       this.query = params['query'];
       this.page = 0;
-      console.log('Valoarea primita:', this.query);
+      //console.log('Valoarea primita:', this.query);
       this.loadDataOnPageLoad();
     });
   }
@@ -66,7 +66,6 @@ export class ProfileLinkPostsComponent {
             this.myArr.push(item);
           }
 
-
           var seenIds: Record<string, boolean> = {};
           var filteredArr = this.myArr.filter(function (item: any) {
             if (seenIds.hasOwnProperty(item.id)) {
@@ -86,6 +85,7 @@ export class ProfileLinkPostsComponent {
         }
       })
       .catch(error => {
+        this.router.navigate(['/internal-server-error']);
         console.error('Eroare:', error);
       });
   }
@@ -108,6 +108,7 @@ export class ProfileLinkPostsComponent {
         this.myArr = filteredArr;
       },
       (error) => {
+        this.router.navigate(['/internal-server-error']);
         console.error('Eroare la incarcarea datelor:', error);
       }
     );

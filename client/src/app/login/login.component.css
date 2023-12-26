@@ -51,12 +51,13 @@ input {
         width: 60%;
         margin-top: -120px;
     }
+
     #imgcontact {
         margin-top: -120px;
     }
 }
 
-#loginErrMsg{
+#loginErrMsg {
     font-size: 1em;
     text-align: end;
 }
