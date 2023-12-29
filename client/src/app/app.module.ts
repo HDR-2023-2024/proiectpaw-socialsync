@@ -45,7 +45,8 @@ import { CommunityCreateComponent } from './community-create/community-create.co
 import { CarouselFullPostComponent } from './carousel-full-post/carousel-full-post.component';
 import { HelpPageComponent } from './help-page/help-page.component';
 import { EditPostComponent } from './edit-post/edit-post.component';
-
+import { PopupComponentComponent } from './popup-component/popup-component.component';
+import { PopupServiceService } from './popup-service.service';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
@@ -119,7 +120,8 @@ const routes: Routes = [
     CommunityCreateComponent,
     CarouselFullPostComponent,
     HelpPageComponent,
-    EditPostComponent
+    EditPostComponent,
+    PopupComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -130,7 +132,7 @@ const routes: Routes = [
     FormsModule
   ],
   exports: [RouterModule],
-  providers: [],
+  providers: [PopupServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

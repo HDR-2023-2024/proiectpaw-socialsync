@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { PopupServiceService } from '../popup-service.service';
 
 interface InputData {
   stringName: string;
@@ -31,7 +32,7 @@ export class NavbarDisconnectedComponent implements OnInit {
   isHomeLink: boolean = false;
   isShowUserMenu = false;
 
-  constructor(private router: Router, public authService: AuthService) { }
+  constructor(private router: Router, public authService: AuthService, private popupService: PopupServiceService) { }
 
 
   navigateMobileMenu() {
@@ -54,6 +55,7 @@ export class NavbarDisconnectedComponent implements OnInit {
 
   onLogOutClick() {
     this.authService.logout();
+    this.popupService.showPopup('V-ați delogat cu succes! &#128515;');
     this.isShowUserMenu = false;
   }
 
@@ -65,7 +67,7 @@ export class NavbarDisconnectedComponent implements OnInit {
     const searchInput = document.getElementById("search-input") as HTMLInputElement;
     const inputValue = searchInput.value;
     if (inputValue.length == 1) {
-      alert("Nu se poate căuta după o singură literă.");
+      this.popupService.showPopup('Nu se poate căuta după o singură literă!<br> Vă rugăm să introduceți cel puțin două!<br> &#128513;');
       return;
     }
 
