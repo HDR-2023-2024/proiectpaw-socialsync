@@ -14,6 +14,7 @@ import { ViewChild, ElementRef } from '@angular/core';
 export class CreateAccountComponent {
   imageUrl: string | null = null;
   dataForm: FormData | null = null;
+  formData: FormData | null = null;
 
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
@@ -70,13 +71,13 @@ export class CreateAccountComponent {
     const files = fileInput.files;
 
     if (files && files.length > 0) {
-      const formData = new FormData();
+      this.formData = new FormData();
 
       for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i]);
+        this.formData.append('files', files[i]);
       }
 
-      this.http.post<any>('http://localhost:8086/api/v1/storage/upload-multipartFile', formData)
+      this.http.post<any>('http://localhost:8086/api/v1/storage/upload-multipartFile', this.formData)
         .subscribe(
           data => {
             console.log(data);

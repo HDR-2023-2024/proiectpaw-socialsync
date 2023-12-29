@@ -4,9 +4,14 @@ import { ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { CreatePostService } from '../create-post.service';
+import { StorageService } from '../storage.service';
 
 interface InputData {
   stringName: string;
+}
+
+interface FileObject {
+  [key: string]: string;
 }
 
 @Component({
@@ -15,9 +20,10 @@ interface InputData {
   styleUrls: ['./create-post.component.css']
 })
 export class CreatePostComponent {
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private createPost: CreatePostService) { }
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private createPost: CreatePostService, private storageService: StorageService) { }
   imageUrls: any[] = [];
   @Input() inputData: InputData | null = null; // in ce caut
+  files: any[] = [];
 
   post: any = {
 
@@ -52,6 +58,10 @@ export class CreatePostComponent {
     this.post.photos = this.imageUrls;
     this.post.topicId = this.topicId;
     //console.log(this.post);
+    const transformedUrls: string[] = this.files.map((obj: any) => {
+      return obj.url;
+    });
+    this.post.photos = transformedUrls;
     this.createPost.addPost(this.post)
   }
 
@@ -77,23 +87,49 @@ export class CreatePostComponent {
       this.http.post<any>('http://localhost:8086/api/v1/storage/upload-multipartFile', formData)
         .subscribe(
           (data: any[]) => {
-            //console.log(data);
+            console.log(data);
             if (data && data.length > 0) {
               this.imageUrls = data.map(item => item.url);
-              console.log(this.imageUrls);
+              const modifiedPhotos = this.imageUrls.map((i: string) => {
+                if (i.startsWith("http://localhost:8088/api/v1/storage/img/")) {
+                  return i.slice("http://localhost:8088/api/v1/storage/img/".length);
+                }
+                return i;
+              });
+              this.storageService.getData({ "elements": modifiedPhotos }).subscribe(
+                (data) => {
+                  const transformedArray = data.map((obj: any) => {
+                    const uuid = Object.keys(obj)[0] as keyof FileObject;
+                    const name = obj[uuid];
+                    return {
+                      url: `http://localhost:8088/api/v1/storage/img/${uuid}`,
+                      name: name
+                    };
+                  });
+
+                  transformedArray.forEach((url: string) => {
+                    this.files.push(url);
+                  });
+
+             
+                },
+                (error) => {
+                  console.error('Eroare la incarcarea datelor:', error);
+                }
+              );
+
             }
           },
           error => {
             console.error('Eroare:', error);
-            if (error.status === 500) {
-              this.router.navigate(['/internal-server-error']);
-            }
           }
         );
-    } else {
-      console.error('Niciun fisier selectat.');
     }
   }
 
-
+  deleteFile(i: number) {
+    this.files.splice(i, 1);
+  }
 }
+
+

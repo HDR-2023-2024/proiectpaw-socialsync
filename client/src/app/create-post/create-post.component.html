@@ -19,6 +19,10 @@
                     </div>
                     <div class="form-group">
                         <label for="photo">Fotografile postări:</label>
+                        <div *ngFor="let file of files; let i = index">
+                            {{ file.name }}
+                            <button (click)="deleteFile(i)">X</button>
+                        </div>
                         <div class="file-input-wrapper d-flex ">
                             <input type="file" #fileInput style="display: none" (change)="uploadFiles()"
                                 accept="image/*" multiple>
