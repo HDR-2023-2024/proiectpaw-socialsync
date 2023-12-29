@@ -9,22 +9,24 @@
 <div class="comment-container">
   <div class="comment my-5 py-4 px-2" *ngFor="let comment of comments; let i = index">
     <div class="d-flex">
-      <img class="avatar-short-post mx-0" 
-      src="{{comment.creator?.photoId != null && comment.creator?.photoId.length > 1 ? comment.creator?.photoId : 'assets/images/avatar/' + comment.creator?.photoId[comment.creator?.photoId.length - 1] + '.png'}}">
+      <img class="avatar-short-post mx-0"
+        src="{{comment.creator?.photoId != null && comment.creator?.photoId.length > 1 ? comment.creator?.photoId : 'assets/images/avatar/' + comment.creator?.photoId[comment.creator?.photoId.length - 1] + '.png'}}">
       <p class="my-auto ms-2"> {{comment.creator?.username || 'Nume utilizator necunoscut'}} •
         {{convertTimestampToDateTime(comment.timestampCreated)}}
     </div>
-    <p class="d-flex m-auto mx-5 mt-1">{{ comment.content }}</p>
+    <input class="d-flex m-auto mx-5 mt-1" 
+      [disabled]="!(authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id)"
+      [(ngModel)]="comment.content">
     <div class="butoane d-flex  flex-end">
       <div>
         <button type="button" class="btn px-3 mx-3 pt-2  edit-comment-btn" (click)="deleteComment(comment.id)"
           *ngIf="authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id">Ștergere</button>
       </div>
-    <!--  <div>
-        <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="editComment(comment.id)"
-          *ngIf="authService.isUserLoggedIn() &&  authService.getId() == comment.creator?.id">Editare</button>
+      <div>
+        <button type="button" class="btn px-3 mx-3 pt-2 edit-comment-btn" (click)="editComment(comment.id,comment.content)"
+          *ngIf="authService.isUserLoggedIn() && authService.getId() == comment.creator?.id">Editare
+        </button>
       </div>
-    -->
     </div>
     <br>
   </div>

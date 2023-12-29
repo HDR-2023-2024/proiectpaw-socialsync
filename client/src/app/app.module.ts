@@ -68,7 +68,7 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "create-account", component: CreateAccountComponent },
   { path: "see-posts", component: ProfileLinkPostsComponent},
-  { path: "c-e", component: CommunityEditComponent},
+  { path: "edit-topic/:topicId", component: CommunityEditComponent},
   { path: "view-topics", component: ViewTopicsComponent},
   { path: "create-topics", component: CommunityCreateComponent},
   { path: "create-post/:topicId/:topicName", component: CreatePostComponent },

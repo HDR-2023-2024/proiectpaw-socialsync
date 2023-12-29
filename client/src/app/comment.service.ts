@@ -44,7 +44,7 @@ export class CommentService {
     );
   }
 
-  deletePost(id : string) {
+  deleteComm(id : string) {
     const token = this.storage.get('Token');
 
     const headers = new HttpHeaders({
@@ -62,6 +62,31 @@ export class CommentService {
           this.router.navigate(['/unauthorized']);
         }
       }
+    );
+  }
+
+  updateComment(commentId:string, content: string): Observable<any> {
+    
+    const commentData = { commentId, content };
+    console.log(content);
+    const token = this.authService.getToken(); 
+    console.log(token);
+    const headers = new HttpHeaders({
+      'Authorization': token
+    });
+    if(token == undefined){
+        this.router.navigate(['/unauthorized']);
+      
+    }
+
+    return this.http.put<any>("http://localhost:8086/api/v1/comments/" + commentId, commentData, { headers, observe: 'response' }).pipe(
+      tap((response: HttpResponse<any>) => {
+        console.log(response);
+        return response;
+      }),
+      catchError(error => {
+        return of(error);
+      })
     );
   }
 }

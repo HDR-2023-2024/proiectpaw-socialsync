@@ -12,7 +12,6 @@ import { debounceTime, filter } from 'rxjs/operators';
   styleUrls: ['./comments.component.css']
 })
 export class CommentsComponent {
-
   @Input() comments: any[] = [];
   @Input() replies: any[] = [];
   private page: number = 0;
@@ -104,7 +103,7 @@ export class CommentsComponent {
   }
 
   deleteComment(id : string){
-    this.commentService.deletePost(id);
+    this.commentService.deleteComm(id);
     const index = this.comments.findIndex(comment => comment.id === id);
     if (index !== -1) {
       this.comments.splice(index, 1);
@@ -112,7 +111,18 @@ export class CommentsComponent {
     }
   }
 
-  editComment(id : number){
-
+  editComment(commentId: number,editedComment : string){
+  
+    console.log(editedComment);
+    this.commentService.updateComment(String(commentId), editedComment).subscribe(
+      (response) => {
+        console.log("Comentariu modificat cu succs")
+        this.ngOnInit();
+      },
+      (error) => {
+        this.router.navigate(['/internal-server-error'])
+        console.error('Eroare la creare.', error);
+      }
+    );
   }
 }

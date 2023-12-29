@@ -18,6 +18,7 @@ export class CommunityCreateComponent {
     description: '',
     photoId: ''
   }
+  photoName : string = '';
 
   ngOnInit() {
   }
@@ -49,7 +50,8 @@ export class CommunityCreateComponent {
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
       }
-
+   
+      this.photoName = files[0].name;
       this.http.post<any>('http://localhost:8086/api/v1/storage/upload-multipartFile', formData)
         .subscribe(
           data => {

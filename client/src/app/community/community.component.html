@@ -18,12 +18,12 @@
             </nav>
             <div class="butoane d-flex ">
                 <div>
-                    <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deletePost()"
-                        *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">Ștergere</button>
+                    <button type="button" class="btn px-3 mx-3 pt-2  create-post-btn" (click)="deleteTopic()"
+                        *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator.id">Ștergere</button>
                 </div>
                 <div>
-                    <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="editPost()"
-                        *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">Editare</button>
+                    <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="editTopic()"
+                        *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator.id">Editare</button>
                 </div>
             </div>
             <div class="container">

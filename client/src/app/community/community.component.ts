@@ -41,6 +41,7 @@ export class CommunityComponent {
     this.communityService.getCommunityById(this.postId, this.page.toString()).subscribe(
       (response) => {
         this.data = response; 
+        console.log(this.data);
         if(this.data.photoId.length == 0){
           // pentru afisare poza implicita
           this.data.photoId = null;
@@ -65,12 +66,12 @@ export class CommunityComponent {
     );
   }
 
-  deletePost(){
+  deleteTopic(){
     this.createTopic.delete(this.data.id);
   }
 
-  editPost(){
-
+  editTopic(){
+    this.router.navigate(['edit-topic/', this.data.id]);
   }
 }
 
