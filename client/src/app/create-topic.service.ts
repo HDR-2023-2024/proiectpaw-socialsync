@@ -62,4 +62,24 @@ export class CreateTopicService {
       }
     );
   }
+
+  updatePost(post: any) {
+    const token = this.storage.get('Token');
+
+    const headers = new HttpHeaders({
+      'Authorization': token
+    });
+    console.log(post)
+    return this.http.put<any>("http://localhost:8086/api/v1/topics/" + post.id, post, { headers: headers }).subscribe(
+      data => {
+      
+      },
+      error => {
+        console.error('Eroare:', error);
+        if (error.status == 401) {
+          this.router.navigate(['/unauthorized']);
+        }
+      }
+    );
+  }
 }

@@ -61,6 +61,7 @@ export class CommunityEditComponent {
     this.communityService.getCommunityById(this.community.id, '0').subscribe(
       (data) => {
         this.community = data;
+        this.community.creatorId = data.creator.id;
         console.log(data)
 
         if (this.community.photoId && this.community.photoId.startsWith("http://localhost:8088/api/v1/storage/img/")) {
@@ -110,6 +111,7 @@ export class CommunityEditComponent {
         .subscribe(
           data => {
             console.log(data);
+            this.community.photoId = data[0].url;
           },
           error => {
             this.router.navigate(['/internal-server-error']);
@@ -119,5 +121,11 @@ export class CommunityEditComponent {
     } else {
       console.error('Niciun fisier. selectat.');
     }
+  }
+
+  saveChangesTopic() {
+    console.log(this.community);
+    this.createTopic.updatePost(this.community);
+    this.router.navigate(['community/', this.community.id]);
   }
 }
