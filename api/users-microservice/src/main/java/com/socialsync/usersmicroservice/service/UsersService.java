@@ -146,9 +146,9 @@ public class UsersService implements UsersServiceMethods {
             repository.save(user);
             sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
         } catch (Exception ex) {
-            if (ex.getMessage().contains("uk_email")) {
+            if (ex.getMessage().contains("UK_ob8kqyqqgmefl0aco34akdtpe")) {
                 throw new NotAcceptableException("There is already a user with this email.");
-            } else if (ex.getMessage().contains("uk_username")) {
+            } else if (ex.getMessage().contains("UK_sb8bbouer5wak8vyiiy4pf2bx")) {
                 throw new NotAcceptableException("There is already a user with this username.");
             }
         }

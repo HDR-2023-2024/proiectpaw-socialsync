@@ -22,7 +22,7 @@ public class AuthorizationService {
     public String getJwt(AuthorizedInfo authorizedInfo) throws UnauthorizedException {
         HttpEntity<AuthorizedInfo> requestEntity = new HttpEntity<>(authorizedInfo);
         try {
-            String url = "http://authorization-microservice:8087/api/v1/authorization/generateJWT";
+            String url = "http://localhost:8087/api/v1/authorization/generateJWT";
             ResponseEntity<Void> responseEntity = restTemplate.exchange(
                     url,
                     HttpMethod.POST,
