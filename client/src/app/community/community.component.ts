@@ -4,6 +4,8 @@ import { Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CreateTopicService } from '../create-topic.service';
+import { PopupServiceService } from '../popup-service.service';
+
 @Component({
   selector: 'app-community',
   templateUrl: './community.component.html',
@@ -19,7 +21,7 @@ export class CommunityComponent {
   postId:string='';
   selectedSortOption: string = ' ';
 
-  constructor(private route:ActivatedRoute, private communityService:CommunityService, public authService: AuthService,private createTopic: CreateTopicService,private router:Router){}
+  constructor(private route:ActivatedRoute, private communityService:CommunityService, public authService: AuthService,private createTopic: CreateTopicService,private router:Router, private popupService: PopupServiceService){}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -68,6 +70,7 @@ export class CommunityComponent {
 
   deleteTopic(){
     this.createTopic.delete(this.data.id);
+    this.popupService.showPopup('Comunitate ștearsă cu succes.');
   }
 
   editTopic(){

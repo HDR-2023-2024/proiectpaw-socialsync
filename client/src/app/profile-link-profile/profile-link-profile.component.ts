@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { UserServiceService } from '../user-service.service';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { PopupServiceService } from '../popup-service.service';
 
 @Component({
   selector: 'app-profile-link-profile',
@@ -14,7 +15,7 @@ import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 })
 export class ProfileLinkProfileComponent {
 
-  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private userServ: UserServiceService, public authService: AuthService, private http: HttpClient) { }
+  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private userServ: UserServiceService, public authService: AuthService, private http: HttpClient ,private popupService: PopupServiceService) { }
 
 
   data = {
@@ -49,7 +50,7 @@ export class ProfileLinkProfileComponent {
       .subscribe(
         data => {
           this.storage.set("PhotoId", this.data.photoId);
-          alert("Modificările au fost făcute cu succes!")
+          this.popupService.showPopup("Modificările au fost făcute cu succes!");
         },
       );
   }

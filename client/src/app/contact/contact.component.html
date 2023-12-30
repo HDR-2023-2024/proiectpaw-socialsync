@@ -22,15 +22,17 @@
 
                     <label for="lname">Mesaj*</label><br>
                     <input type="text" id="message" name="message" [(ngModel)]="formData.message" required><br><br>
-                    <br>
+                    <p id="wait">{{messageWait}}</p>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn contact-btn" [disabled]="!myForm.valid">Submit</button>
                     </div>
+        
                 </form>
             </div>
             <div class="col-0 col-lg-6 div-contact">
                 <img src="assets/images/contact.jpg" id="imgcontact" class=" d-none d-lg-block">
             </div>
+            <app-popup-component></app-popup-component>
         </div>
     </div>
 </div>

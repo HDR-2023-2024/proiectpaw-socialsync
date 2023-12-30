@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+import { PopupServiceService } from '../popup-service.service';
 
 @Component({
   selector: 'app-contact',
@@ -21,17 +21,22 @@ export class ContactComponent {
     subject: '',
     message: ''
   };
+  messageWait = '';
 
-  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private http: HttpClient, private router: Router) { }
+  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private http: HttpClient, private router: Router,private popupService: PopupServiceService) { }
   // + email de trimis
   private loginUrl = 'http://localhost:8086/notification/send/madalina-elena.boaca%40student.tuiasi.ro';
+ 
   onSubmit() {
+    this.messageWait = "Se trimite...";
     this.send()
       .subscribe(
         response => {
           console.log('Create account:', response);
           if (response.status === 200) {
-            alert("Mesaj trimis cu succes!");
+          
+            this.popupService.showPopup("Mesaj trimis cu succes!");
+            this.messageWait = '';
           }
         },
         error => {

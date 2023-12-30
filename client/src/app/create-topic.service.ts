@@ -51,8 +51,7 @@ export class CreateTopicService {
 
     return this.http.delete<any>("http://localhost:8086/api/v1/topics/" + id  , { headers: headers }).subscribe(
       data => {
-        alert("Topicul a fost ștears cu succes!");
-        this.router.navigate(['/view-topics']);
+       // this.router.navigate(['/view-topics']);
       },
       error => {
         console.error('Eroare:', error);

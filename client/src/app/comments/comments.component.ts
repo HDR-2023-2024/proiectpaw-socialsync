@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { ScroolServiceService } from '../scrool-service.service';
 import { debounceTime, filter } from 'rxjs/operators';
+import { PopupServiceService } from '../popup-service.service';
 
 @Component({
   selector: 'app-comments',
@@ -24,7 +25,8 @@ export class CommentsComponent {
     private fb: FormBuilder,
     public authService: AuthService,
     private scrollService: ScroolServiceService,
-    private router: Router
+    private router: Router,
+    private popupService: PopupServiceService
   ) { }
 
 
@@ -107,7 +109,7 @@ export class CommentsComponent {
     const index = this.comments.findIndex(comment => comment.id === id);
     if (index !== -1) {
       this.comments.splice(index, 1);
-      alert("Comentariu șters cu succes!")
+      this.popupService.showPopup("Comentariu șters cu succes!");
     }
   }
 

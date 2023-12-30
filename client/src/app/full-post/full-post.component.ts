@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { CreatePostService } from '../create-post.service';
+import { PopupServiceService } from '../popup-service.service';
 
 @Component({
   selector: 'app-full-post',
@@ -42,7 +43,7 @@ export class FullPostComponent {
   private page = 0;
   postId: string = '';
 
-  constructor(private route: ActivatedRoute, private postService: FullPostService, public authService: AuthService, private http: HttpClient, private router: Router, private createPostService: CreatePostService) { }
+  constructor(private route: ActivatedRoute, private postService: FullPostService, public authService: AuthService, private http: HttpClient, private router: Router, private createPostService: CreatePostService, private popupService: PopupServiceService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -74,7 +75,7 @@ export class FullPostComponent {
   downvote() {
     //console.log("downvote");
     if (!this.authService.getToken()) {
-      alert('Este necesară autentificarea pentru a vota. Vă rugăm să vă autentificați.');
+      this.popupService.showPopup('Este necesară autentificarea pentru a vota. Vă rugăm să vă autentificați.');
       return;
     }
     const headers = new HttpHeaders({
@@ -95,7 +96,7 @@ export class FullPostComponent {
               this.router.navigate(['/unauthorized']);
             }
             if (error.status == 403) {
-              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.popupService.showPopup('Sesiunea a expirat este necesară reautentificarea.');
               this.router.navigate(['/login']);
             }
             if (error.status === 500) {
@@ -118,7 +119,8 @@ export class FullPostComponent {
               this.router.navigate(['/unauthorized']);
             }
             if (error.status == 403) {
-              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.popupService.showPopup('Sesiunea a expirat este necesară reautentificarea.');
+
               this.router.navigate(['/login']);
             }
             if (error.status === 500) {
@@ -133,7 +135,7 @@ export class FullPostComponent {
 
   upvote() {
     if (!this.authService.getToken()) {
-      alert('Este necesară autentificarea pentru a vota. Vă rugăm să vă autentificați.');
+      this.popupService.showPopup('Este necesară autentificarea pentru a vota. Vă rugăm să vă autentificați.');
       return;
     }
     const headers = new HttpHeaders({
@@ -155,7 +157,7 @@ export class FullPostComponent {
               this.router.navigate(['/unauthorized']);
             }
             if (error.status == 403) {
-              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.popupService.showPopup('Sesiunea a expirat este necesară reautentificarea.');
               this.router.navigate(['/login']);
             }
             if (error.status === 500) {
@@ -180,7 +182,7 @@ export class FullPostComponent {
               this.router.navigate(['/unauthorized']);
             }
             if (error.status == 403) {
-              alert('Sesiunea a expirat este necesară reautentificarea.');
+              this.popupService.showPopup('Sesiunea a expirat este necesară reautentificarea.');
               this.router.navigate(['/login']);
             }
             if (error.status === 500) {
@@ -192,6 +194,9 @@ export class FullPostComponent {
   }
   deletePost() {
     this.createPostService.deletePost(this.data.id);
+    this.popupService.showPopup('Postarea a fost ștearsă cu succes.');
+    // this.router.navigate(['/home']);
+
   }
 
   editPost() {

@@ -26,6 +26,7 @@
         <button type="button" class="btn px-3 mx-3 pt-2 edit-comment-btn" (click)="editComment(comment.id,comment.content)"
           *ngIf="authService.isUserLoggedIn() && authService.getId() == comment.creator?.id">Editare
         </button>
+        <app-popup-component></app-popup-component>
       </div>
     </div>
     <br>

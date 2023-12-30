@@ -41,8 +41,7 @@ export class CreatePostService {
 
     return this.http.delete<any>("http://localhost:8086/api/v1/posts/" + id  , { headers: headers }).subscribe(
       data => {
-        alert("Postarea a fost ștearsă cu succes!");
-        this.router.navigate(['/home']);
+      
       },
       error => {
         console.error('Eroare:', error);

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PopupServiceService } from '../popup-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-popup-component',
@@ -12,11 +13,10 @@ export class PopupComponentComponent {
   message = '';
   private popupSubscription: Subscription;
 
-  constructor(private popupService: PopupServiceService) {
+  constructor(private popupService: PopupServiceService, private router: Router) {
     this.popupSubscription = this.popupService.getPopupObservable().subscribe(
   
       data => {
-        console.log("Apelare afisare!");
         if (data.type === 'show') {
           this.message = data.message;
           this.isVisible = true;
@@ -29,6 +29,11 @@ export class PopupComponentComponent {
 
   closePopup() {
     this.popupService.hidePopup();
+    if(this.message.includes("Postarea a fost ștearsă")){
+      this.router.navigate(['/home']);
+    }else if(this.message.includes("Comunitate ștearsă cu succes")){
+      this.router.navigate(['/view-topics']);
+    }
   }
 
  

@@ -53,8 +53,6 @@ export class CommentService {
 
     return this.http.delete<any>("http://localhost:8086/api/v1/comments/" + id  , { headers: headers }).subscribe(
       data => {
-        //alert("Comentariu șters cu succes!");
-        //window.location.reload();
       },
       error => {
         console.error('Eroare:', error);

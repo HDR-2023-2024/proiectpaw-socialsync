@@ -19,4 +19,5 @@ export class PopupServiceService {
   getPopupObservable() {
     return this.popupSubject.asObservable();
   }
+
 }
