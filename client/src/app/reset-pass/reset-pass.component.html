@@ -1,0 +1,25 @@
+<app-navbar-disconnected></app-navbar-disconnected>
+<div class="container-fluid m-0 p-0 mt-lg-0 overflow-hidden">
+    <div class="row m-0 p-0">
+        <div class="full-div col-lg-2 col-sm-0  m-0 p-0 d-none d-sm-block">
+            <app-navbar-horizontally></app-navbar-horizontally>
+        </div>
+        <div class="row col-lg-10 col-12 m-0 p-0">
+            <div class="col-12 col-lg-6  vh-80 div-contact m-0 p-0 ">
+                <form  #myForm="ngForm" class="resetPass p-5 mx-auto col-12">
+                    <h1 class="mb-0 text-center">Resetare parola</h1>
+                    <br>
+                    <label for="email">Adresa de email*</label>
+                    <input type="text" id="email" name="email"  [(ngModel)]="formData.email" required>
+                    <p>{{message}}</p>
+                    <div class="d-flex justify-content-center mt-3">
+                        <button type="submit" class="btn reset-btn" (click)="sendCode()" [disabled]="!myForm.valid" >Trimite</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-0 col-lg-6 div-contact m-0 p-0">
+                <img src="assets/images/reset-password.svg" id="imgReset" class=" d-none d-lg-block">
+            </div>
+        </div>
+    </div>
+</div>
