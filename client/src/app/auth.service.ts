@@ -56,7 +56,7 @@ export class AuthService {
   }
 
   getAvatar() {
-      return this.storage.get("PhotoId").length > 1  ?  this.storage.get("PhotoId")  : 'assets/images/avatar/' + this.getId()[this.getId().length - 1] + '.png' ;
+      return this.storage.get("PhotoId").length > 1  ?  this.storage.get("PhotoId")  : 'assets/images/avatar/' + this.storage.get("PhotoId")[this.storage.get("PhotoId").length - 1] + '.png' ;
   }
 
   getUsername() {

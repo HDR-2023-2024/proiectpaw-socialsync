@@ -14,8 +14,10 @@ import java.beans.Transient;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,String> {
+public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUsername(String s);
+
+    Optional<User> findByEmail(String s);
 
     @Modifying
     @Query("UPDATE User u SET u.username = :username, u.email = :email, u.role = :role, u.gender = :gender, u.description = :description, u.photoId = :photoId WHERE u.id = :id")

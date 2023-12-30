@@ -42,7 +42,9 @@ public class CustomGlobalFilter {
                     new Pair<>("/query/", HttpMethod.GET),
                     new Pair<>("/api/v1/storage/", HttpMethod.GET),
                     new Pair<>("/api/v1/storage/", HttpMethod.POST),
-                    new Pair<>("/notification/send/",HttpMethod.POST)
+                    new Pair<>("/notification/send/",HttpMethod.POST),
+                    new Pair<>("/api/v1/users/validateCode",HttpMethod.POST),
+                    new Pair<>("/api/v1/users/sendCodeResetPassword",HttpMethod.POST)
             ));
 
             System.out.println("Executing custom filter for route: " + requestUri);

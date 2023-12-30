@@ -47,6 +47,9 @@ import { HelpPageComponent } from './help-page/help-page.component';
 import { EditPostComponent } from './edit-post/edit-post.component';
 import { PopupComponentComponent } from './popup-component/popup-component.component';
 import { PopupServiceService } from './popup-service.service';
+import { FormPasswordsComponent } from './form-passwords/form-passwords.component';
+import { ResetComponent } from './reset/reset.component';
+import { ResetPassComponent } from './reset-pass/reset-pass.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
@@ -75,7 +78,10 @@ const routes: Routes = [
   { path: "create-post/:topicId/:topicName", component: CreatePostComponent },
   { path: "help", component: HelpPageComponent },
   { path: "help-s", component: HelpSiteComponent },
-  { path: "edit-post/:postId", component: EditPostComponent }
+  { path: "edit-post/:postId", component: EditPostComponent },
+  { path: "reset", component: ResetComponent },
+  { path: "reset-pass", component: ResetPassComponent },
+  { path: "form-password", component: FormPasswordsComponent }
 ];
 
 
@@ -121,7 +127,10 @@ const routes: Routes = [
     CarouselFullPostComponent,
     HelpPageComponent,
     EditPostComponent,
-    PopupComponentComponent
+    PopupComponentComponent,
+    FormPasswordsComponent,
+    ResetComponent,
+    ResetPassComponent
   ],
   imports: [
     BrowserModule,

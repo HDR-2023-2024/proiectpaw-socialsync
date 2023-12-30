@@ -15,7 +15,7 @@ export class PopupComponentComponent {
 
   constructor(private popupService: PopupServiceService, private router: Router) {
     this.popupSubscription = this.popupService.getPopupObservable().subscribe(
-  
+
       data => {
         if (data.type === 'show') {
           this.message = data.message;
@@ -29,12 +29,15 @@ export class PopupComponentComponent {
 
   closePopup() {
     this.popupService.hidePopup();
-    if(this.message.includes("Postarea a fost ștearsă")){
+    if (this.message.includes("Postarea a fost ștearsă")) {
       this.router.navigate(['/home']);
-    }else if(this.message.includes("Comunitate ștearsă cu succes")){
+    } else if (this.message.includes("Comunitate ștearsă cu succes")) {
       this.router.navigate(['/view-topics']);
+    } else if (this.message.includes("Porolă resetată")) {
+      this.router.navigate(['/home']);
     }
   }
-
- 
 }
+
+
+

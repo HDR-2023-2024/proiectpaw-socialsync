@@ -61,3 +61,13 @@ input {
     font-size: 1em;
     text-align: end;
 }
+
+.container1 {
+    display: flex;
+    justify-content: flex-end;
+}
+
+a {
+    text-decoration: none;
+    color: #FF4433;
+}

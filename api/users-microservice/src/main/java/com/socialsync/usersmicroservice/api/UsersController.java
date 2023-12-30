@@ -1,5 +1,6 @@
 package com.socialsync.usersmicroservice.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rabbitmq.client.AMQP;
 import com.socialsync.usersmicroservice.exceptions.NotAcceptableException;
 import com.socialsync.usersmicroservice.exceptions.UnauthorizedException;
@@ -131,6 +132,26 @@ public class UsersController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PostMapping("/sendCodeResetPassword")
+    public ResponseEntity<?> sendCodeResetPassword(@RequestBody EmailDto emailDto) throws JsonProcessingException {
+        if(this.usersService.sendCodeResetPassword(emailDto.getEmail())){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/validateCode")
+    public ResponseEntity<?> validateCode(@RequestBody ValidateCode validateCode) {
+        try {
+            AuthorizedResponseDto s = this.usersService.validateCode(validateCode);
+
+            return new ResponseEntity<>(s, HttpStatus.OK);
+        }catch (UnauthorizedException unauthorizedException){
+            return new ResponseEntity<>("Codul de sutentificare este invalid", HttpStatus.UNAUTHORIZED);
         }
     }
 }

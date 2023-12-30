@@ -3,6 +3,7 @@ package com.socialsync.notifymicroservice.api;
 import com.google.gson.Gson;
 import com.socialsync.notifymicroservice.components.RabbitMqConnectionFactoryComponent;
 import com.socialsync.notifymicroservice.dto.ContactForm;
+import com.socialsync.notifymicroservice.dto.ResetPasswordDto;
 import com.socialsync.notifymicroservice.pojo.Comment;
 import com.socialsync.notifymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.notifymicroservice.pojo.Post;
@@ -121,5 +122,16 @@ public class EmailController {
 
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/send-reset-password")
+    public ResponseEntity<?> sendResetEmail(@RequestBody ResetPasswordDto resetPasswordDto) {
+        try {
+            emailService.sendEmail(resetPasswordDto.getDestination(), resetPasswordDto.getSubject(), resetPasswordDto.getMessage());
+            return new ResponseEntity<>("Email send successfuly!", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Failed to send email. Check the console for errors.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
