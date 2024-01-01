@@ -217,7 +217,7 @@ public class UsersService implements UsersServiceMethods {
         // cod de 6 cifre
         int code = random.nextInt(900000) + 100000;
 
-        String url = "http://notify-microservice:8090/notification/send-reset-password";
+        String url = "http://localhost:8090/notification/send-reset-password";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

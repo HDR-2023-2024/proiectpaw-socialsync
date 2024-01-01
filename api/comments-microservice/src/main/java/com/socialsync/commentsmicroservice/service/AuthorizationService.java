@@ -20,7 +20,7 @@ public class AuthorizationService {
         if(token.contains("Bearer ")) {
             HttpEntity<String> requestEntity = new HttpEntity<>(token.replace("Bearer ",""));
             try {
-                String url = "http://users-microservice:8082/api/v1/users/validateJWT";
+                String url = "http://authorization-microservice:8082/api/v1/users/validateJWT";
                 ResponseEntity<AuthorizedInfo> responseEntity = restTemplate.exchange(
                         url,
                         HttpMethod.POST,
