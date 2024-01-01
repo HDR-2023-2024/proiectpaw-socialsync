@@ -1,0 +1,632 @@
+{
+	"info": {
+		"_postman_id": "869130cc-fe59-4974-aa7e-a9d2befd7f55",
+		"name": "API-SocialSync",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30566059"
+	},
+	"item": [
+		{
+			"name": "Post Microservice",
+			"item": [
+				{
+					"name": "Get Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api}}/posts",
+							"host": [
+								"{{url-api}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Post By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api}}/posts/653912c93512f31175b9536b",
+							"host": [
+								"{{url-api}}"
+							],
+							"path": [
+								"posts",
+								"653912c93512f31175b9536b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"creatorId\": \"12369\",\n    \"topicId\": \"12379\",\n    \"title\": \"Test title\",\n    \"content\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-api}}/posts",
+							"host": [
+								"{{url-api}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Post",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"creatorId\": \"1234\",\n    \"topicId\": \"4123\",\n    \"title\": \"Test title UPDATED\",\n    \"content\": \"Lorem Ipsum sucks\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-api}}/posts/6539118937caf9210912e42a",
+							"host": [
+								"{{url-api}}"
+							],
+							"path": [
+								"posts",
+								"6539118937caf9210912e42a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Post",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url-api}}/posts/6539118937caf9210912e42a",
+							"host": [
+								"{{url-api}}"
+							],
+							"path": [
+								"posts",
+								"6539118937caf9210912e42a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment Microservice",
+			"item": [
+				{
+					"name": "Get Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-comments}}/comments",
+							"host": [
+								"{{url-api-comments}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Comment By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-comments}}/comments/653e3ec07a41aa40163bc7ad",
+							"host": [
+								"{{url-api-comments}}"
+							],
+							"path": [
+								"comments",
+								"653e3ec07a41aa40163bc7ad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"creatorId\": \"1\",\n    \"postId\": \"655d0ba5d745d1519b53101b\",\n    \"content\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-api-comments}}/comments",
+							"host": [
+								"{{url-api-comments}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"creatorId\": \"1234\",\n    \"postId\": \"4123\",\n    \"content\": \"Lorem Ipsum sucks\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-api}}/comments/653e3ec07a41aa40163bc7ad",
+							"host": [
+								"{{url-api}}"
+							],
+							"path": [
+								"comments",
+								"653e3ec07a41aa40163bc7ad"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url-api}}/comments/653e3ec07a41aa40163bc7ad",
+							"host": [
+								"{{url-api}}"
+							],
+							"path": [
+								"comments",
+								"653e3ec07a41aa40163bc7ad"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Query Microservice",
+			"item": [
+				{
+					"name": "Get Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/comments?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/posts?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Post By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/posts/657ac7ec06111011008df066?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"posts",
+								"657ac7ec06111011008df066"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Post Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/posts/6579a7e92c88de1a0ac238c7/comments?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"posts",
+								"6579a7e92c88de1a0ac238c7",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Topics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/topics?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"topics"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Topic By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/topics/657ac48b6ebfd459d80bf921?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"topics",
+								"657ac48b6ebfd459d80bf921"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Topic Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/topics/6579a7e88ebb63048cfba4e1/posts?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"topics",
+								"6579a7e88ebb63048cfba4e1",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Topic By Username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/topics?page=0&query=Cer",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"topics"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "query",
+									"value": "Cer"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/users?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/users/9d79dbdf-f637-4069-a4c6-8ca234ee0a6d",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"users",
+								"9d79dbdf-f637-4069-a4c6-8ca234ee0a6d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users By Username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/users?page=0&query=ma",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "query",
+									"value": "ma"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-query}}/query/user/d1753d65-b2ce-4d18-accd-3ed9816398bf/comments?page=0",
+							"host": [
+								"{{url-api-query}}"
+							],
+							"path": [
+								"query",
+								"user",
+								"d1753d65-b2ce-4d18-accd-3ed9816398bf",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Microservice",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"fabiano\",\n    \"password\": 1234,\n    \"email\": \"a@b.com\",\n    \"gender\": \"man\",\n    \"role\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-api-users}}/users",
+							"host": [
+								"{{url-api-users}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-users}}/users",
+							"host": [
+								"{{url-api-users}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Topic Microservice",
+			"item": [
+				{
+					"name": "Get Topic",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url-api-topic}}/topics",
+							"host": [
+								"{{url-api-topic}}"
+							],
+							"path": [
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Topic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"pisici\",\n    \"description\": \"pisici in salopete\",\n    \"ageRestriction\": false,\n    \"photoId\": 0,\n    \"creatorId\": \"4b536fd0-a6ac-4cd9-b615-ab87723a9e3a\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url-api-topic}}/topics",
+							"host": [
+								"{{url-api-topic}}"
+							],
+							"path": [
+								"topics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
