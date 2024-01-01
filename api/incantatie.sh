@@ -1,4 +1,5 @@
 #! /bin/bash
+
 cd posts-microservice
 ./mvnw clean
 ./mvnw install
