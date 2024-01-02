@@ -1,9 +1,12 @@
 package com.socialsync.api;
 
+import com.google.gson.Gson;
 import com.socialsync.pojo.*;
 import com.socialsync.repository.FileRepository;
 import com.socialsync.service.StorageService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +21,44 @@ import java.util.*;
 @RestController
 @RequestMapping("api/v1/storage")
 @AllArgsConstructor
+@Slf4j
 public class StorageController {
     private FileRepository fileRepository;
     private StorageService storageService;
+    private Gson gson;
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.topics}")
+    void receiveQueueMessageComment(String msg) {
+        String msgQ = gson.fromJson(msg, String.class);
+
+        try {
+            log.info(msgQ);
+        }
+        catch (RuntimeException ex) {
+            log.error(ex.getMessage());
+        }
+    }
+
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.posts}")
+    void receiveQueueMessagePost(String msg) {
+        String msgQ = gson.fromJson(msg, String.class);
+
+        try {
+            log.info(msgQ);
+        } catch (RuntimeException ex) {
+            log.error(ex.getMessage());
+        }
+    }
+
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.users}")
+    void receiveQueueMessageUsers(String msg) {
+        String msgQ = gson.fromJson(msg, String.class);
+
+        try {
+            log.info(msgQ);
+        } catch (RuntimeException ex) {
+            log.error(ex.getMessage());
+        }
+    }
 
     @GetMapping("/img/{id}")
     public ResponseEntity<byte[]> getMemoryFileByIdImg(@PathVariable("id") String id) {
