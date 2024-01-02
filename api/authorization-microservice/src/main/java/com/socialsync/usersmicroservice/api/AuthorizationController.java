@@ -53,4 +53,8 @@ public class AuthorizationController {
         }
     }
 
+    /*@RequestMapping("/greeting")
+    public @ResponseBody String greeting() {
+        return "Hello, World";
+    }*/
 }

@@ -6,6 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @ToString
+@Setter
 public class AuthorizedInfo {
     private String id;
     private String role;
