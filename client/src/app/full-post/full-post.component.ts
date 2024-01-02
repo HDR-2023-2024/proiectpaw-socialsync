@@ -81,6 +81,9 @@ export class FullPostComponent {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
     });
+    if (this.data.likedByUser) {
+      this.data.score--;
+    }
     if (this.data.dislikedByUser == false) {
       this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/downvote", '', { headers: headers })
         .subscribe(
@@ -142,6 +145,9 @@ export class FullPostComponent {
       'Authorization': this.authService.getToken()
     });
     //console.log("upvote");
+    if (this.data.dislikedByUser) {
+      this.data.score++;
+    }
     if (this.data.likedByUser == false) {
       this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/upvote", '', { headers: headers })
         .subscribe(

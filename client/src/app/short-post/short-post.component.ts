@@ -12,7 +12,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 export class ShortPostComponent {
   @Input() data: any;
 
-  constructor(public authService: AuthService, private http: HttpClient, private router: Router,private popupService: PopupServiceService) { }
+  constructor(public authService: AuthService, private http: HttpClient, private router: Router, private popupService: PopupServiceService) { }
 
   navigateToPost(postId: number) {
     this.router.navigate(['/full-post', postId]);
@@ -24,7 +24,7 @@ export class ShortPostComponent {
     var date = new Date(timestamp * 1000);
 
     var year = date.getFullYear();
-    var month = ("0" + (date.getMonth() + 1)).slice(-2); 
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
     var day = ("0" + date.getDate()).slice(-2);
     var hours = ("0" + date.getHours()).slice(-2);
     var minutes = ("0" + date.getMinutes()).slice(-2);
@@ -43,6 +43,9 @@ export class ShortPostComponent {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
     });
+    if (this.data.likedByUser) {
+      this.data.score--;
+    }
     if (this.data.dislikedByUser == false) {
       this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/downvote", '', { headers: headers })
         .subscribe(
@@ -69,6 +72,7 @@ export class ShortPostComponent {
           data => {
             //console.log(data);
             this.data.score++;
+
             this.data.dislikedByUser = false;
             this.data.likedByUser = false;
           },
@@ -84,6 +88,7 @@ export class ShortPostComponent {
           }
         );
     }
+  
     console.log(this.data.dislikedByUser)
   }
 
@@ -96,6 +101,9 @@ export class ShortPostComponent {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
     });
+    if (this.data.dislikedByUser) {
+      this.data.score++;
+    }
     //console.log("upvote");
     if (this.data.likedByUser == false) {
       this.http.put<any>("http://localhost:8086/api/v1/posts/" + this.data.id + "/upvote", '', { headers: headers })
@@ -140,6 +148,7 @@ export class ShortPostComponent {
           }
         );
     }
+    
   }
 
   navigateToCommunity(id: string) {
