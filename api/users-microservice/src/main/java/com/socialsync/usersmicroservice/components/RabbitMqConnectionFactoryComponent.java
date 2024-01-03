@@ -28,7 +28,19 @@ public class RabbitMqConnectionFactoryComponent {
 
     @Getter
     @Value("${socialsync.rabbitmq.routingkey}")
-    private String routingKey;
+    private String routingKeyTopics;
+
+    @Getter
+    @Value("${socialsync.rabbitmq.routingkey.ids1}")
+    private String routingKeyIdsForComments;
+
+    @Getter
+    @Value("${socialsync.rabbitmq.routingkey.ids2}")
+    private String routingKeyIdsForPosts;
+
+    @Getter
+    @Value("${socialsync.rabbitmq.routingkey.ids3}")
+    private String routingKeyIdsForTopics;
 
     @Bean
     private ConnectionFactory connectionFactory() {

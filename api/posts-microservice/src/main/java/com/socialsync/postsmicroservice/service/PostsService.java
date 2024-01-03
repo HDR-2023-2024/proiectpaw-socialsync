@@ -2,33 +2,26 @@ package com.socialsync.postsmicroservice.service;
 
 import com.google.gson.Gson;
 import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponent;
-import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponentImages;
-import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponentNotify;
-import com.socialsync.postsmicroservice.pojo.PhotoMessageDto;
-import com.socialsync.postsmicroservice.pojo.PostNotification;
-import com.socialsync.postsmicroservice.pojo.PostQueueMessage;
+import com.socialsync.postsmicroservice.interfaces.PostsServiceMethods;
+import com.socialsync.postsmicroservice.pojo.*;
 import com.socialsync.postsmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.postsmicroservice.repository.PostRepository;
-import com.socialsync.postsmicroservice.interfaces.PostsServiceMethods;
-import com.socialsync.postsmicroservice.pojo.Post;
+import com.socialsync.postsmicroservice.repository.TopicIdRepository;
+import com.socialsync.postsmicroservice.repository.UserIdRepository;
 import com.socialsync.postsmicroservice.util.exceptions.PostNotFound;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.*;
-
-import static java.rmi.server.LogStream.log;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 @AllArgsConstructor
 @Service
@@ -36,38 +29,82 @@ import static java.rmi.server.LogStream.log;
 @EnableScheduling
 public class PostsService implements PostsServiceMethods {
 
+    private UserIdRepository userIdRepository;
+
+    private TopicIdRepository topicIdRepository;
+
     private PostRepository repository;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
 
-    private RabbitMqConnectionFactoryComponentNotify notifyFactory;
-    private RabbitMqConnectionFactoryComponentImages imagesFactory;
-    @Qualifier("rabbitTemplate")
     private AmqpTemplate amqpTemplate;
-
-    @Qualifier("rabbitTemplateNotify")
-    private AmqpTemplate amqpTemplateNotify;
 
     private Gson gson;
 
     @Bean
     void initTemplate() {
         this.amqpTemplate = conectionFactory.rabbitTemplate();
-        this.amqpTemplateNotify = notifyFactory.rabbitTemplateNotify();
-        this.amqpTemplateImages = imagesFactory.rabbitTemplateImages();
+    }
+
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.userId}")
+    void userIdListener(String msg) {
+        try {
+            if (msg.startsWith("DEL")) {
+                String id = msg.split("#")[1];
+                log.info("Deleting user " + id);
+                userIdRepository.deleteById(id);
+            }
+            else {
+                log.info("New user " + msg);
+                userIdRepository.save(new User(msg));
+                populateDb();
+            }
+        } catch (Exception ex) {
+            log.info(ex.getMessage());
+        }
+    }
+
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.topicId}")
+    void topicIdListener(String msg) {
+        try {
+            if (msg.startsWith("DEL")) {
+                String id = msg.split("#")[1];
+                log.info("Deleting topic " + id);
+                topicIdRepository.deleteById(id);
+            }
+            else {
+                log.info("New topic " + msg);
+                topicIdRepository.save(new Topic(msg));
+                populateDb();
+            }
+        } catch (Exception ex) {
+            log.info(ex.getMessage());
+        }
     }
 
     private void sendMessage(PostQueueMessage post) {
         String json = gson.toJson(post);
-        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyPosts(), json);
     }
 
     private void sendMessageNotification(PostNotification post) {
         String json = gson.toJson(post);
-        this.amqpTemplateNotify.convertAndSend(notifyFactory.getExchange(), notifyFactory.getRoutingKey(), json);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyNotify(), json);
     }
 
+    private void sendMessageImage(PhotoMessageDto photoMessageDto) {
+        String json = gson.toJson(photoMessageDto);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyImages(), json);
+    }
+
+    private void sendId(String id) {
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyIds(), id);
+    }
+
+    @Bean
     void deleteEverything() {
+        userIdRepository.deleteAll();
+        topicIdRepository.deleteAll();
         repository.findAll().forEach(x -> {
             try {
                 deletePost(x.getId());
@@ -76,9 +113,6 @@ public class PostsService implements PostsServiceMethods {
             }
         });
     }
-
-    @Qualifier("rabbitTemplateImages")
-    private AmqpTemplate amqpTemplateImages;
 
     static List<String> titluPostare = List.of(
             "Orașul Ascuns",
@@ -184,21 +218,18 @@ public class PostsService implements PostsServiceMethods {
             "Aventura În Țara Minunilor"
     );
 
-    @Bean
     void populateDb() {
-        deleteEverything();
+        List<User> users = userIdRepository.findAll().stream().toList();
+        List<Topic> topics = topicIdRepository.findAll().stream().toList();
+        Random random = new Random();
 
-        for (int i = 0; i < 100; i++) {
+        if (users.size() > 1 && topics.size() > 1) {
             String titlu = titluPostare.get(new Random().nextInt(titluPostare.size()));
             String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";
-            Post post = new Post("-1", "-1", titlu, continut);
+            Post post = new Post(users.get(random.nextInt(users.size())).getId(), topics.get(random.nextInt(topics.size())).getId(), titlu, continut);
             addPost(post);
+            log.info("Created " + post);
         }
-    }
-
-    private void sendMessageImage(PhotoMessageDto photoMessageDto) {
-        String json = gson.toJson(photoMessageDto);
-        this.amqpTemplateImages.convertAndSend(imagesFactory.getExchange(), imagesFactory.getRoutingKey(), json);
     }
 
    /* @Bean
@@ -266,7 +297,7 @@ public class PostsService implements PostsServiceMethods {
         post.setTimestampCreated(Instant.now().getEpochSecond());
         repository.insert(post);
         sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
-
+        sendId(post.getId());
         // notificare care ajunge la admin-ul unui topic
         sendMessageNotification(new PostNotification(post.getCreatorId(), post.getTopicId(), QueueMessageType.CREATE, post.getId(), post.getTitle().substring(0, Math.min(post.getTitle().length(), 50))));
         if (post.getPhotos() != null) {
@@ -308,6 +339,7 @@ public class PostsService implements PostsServiceMethods {
                     sendMessageImage(new PhotoMessageDto("Insert",photo));
                 }
             }
+            sendId(post.getId());
             sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
             return new PostNotFound("Post not found. Created one instead.");
         });
@@ -322,11 +354,11 @@ public class PostsService implements PostsServiceMethods {
                     sendMessageImage(new PhotoMessageDto("Delete",photo));
                 }
             }
-        }
-        if (post.isPresent()) {
             repository.deleteById(id);
             sendMessage(new PostQueueMessage(QueueMessageType.DELETE, post.get()));
-        } else
+            sendId("DEL#" + post.get().getId());
+        }
+        else
             throw new PostNotFound("Post not found.");
     }
 

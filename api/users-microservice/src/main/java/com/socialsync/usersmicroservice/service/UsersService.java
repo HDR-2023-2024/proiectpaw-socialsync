@@ -83,9 +83,9 @@ public class UsersService implements UsersServiceMethods {
     @Bean
     public void populateDb() throws NotAcceptableException {
         deleteData();
-        for (User u : users
-        ) {
+        for (User u : users) {
             addUser(u);
+            log.info("Added " + u);
         }
     }
 
@@ -122,7 +122,13 @@ public class UsersService implements UsersServiceMethods {
 
     private void sendMessage(UserQueueMessage user) {
         String json = gson.toJson(user);
-        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyTopics(), json);
+    }
+
+    private void sendId(String id) {
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyIdsForComments(), id);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyIdsForPosts(), id);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyIdsForTopics(), id);
     }
 
     @Override
@@ -149,6 +155,7 @@ public class UsersService implements UsersServiceMethods {
                 user.setPhotoId(String.valueOf(rand.nextInt(10)));
             }
             repository.save(user);
+            sendId(user.getId());
             sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
         } catch (Exception ex) {
             if (ex.getMessage().contains("UK_ob8kqyqqgmefl0aco34akdtpe")) {
@@ -196,6 +203,7 @@ public class UsersService implements UsersServiceMethods {
         Optional<User> user = repository.findById(id);
         if (user.isPresent()) {
             repository.deleteById(id);
+            sendId("DEL#"+user.get().getId());
             sendMessage(new UserQueueMessage(QueueMessageType.DELETE, user.get()));
         } else
             throw new RuntimeException("Created one instead.");

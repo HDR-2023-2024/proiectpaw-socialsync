@@ -5,15 +5,17 @@ import com.socialsync.topicsmicroservice.components.RabbitMqConnectionFactoryCom
 import com.socialsync.topicsmicroservice.interfaces.TopicServiceMethods;
 import com.socialsync.topicsmicroservice.pojo.Topic;
 import com.socialsync.topicsmicroservice.pojo.TopicQueueMessage;
+import com.socialsync.topicsmicroservice.pojo.User;
 import com.socialsync.topicsmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.topicsmicroservice.repository.TopicRepository;
+import com.socialsync.topicsmicroservice.repository.UserIdRepository;
 import com.socialsync.topicsmicroservice.util.exceptions.TopicNotFound;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -27,6 +29,7 @@ import java.util.Random;
 @Slf4j
 @EnableScheduling
 public class TopicService implements TopicServiceMethods {
+    private UserIdRepository userIdRepository;
 
     private TopicRepository repository;
 
@@ -63,6 +66,24 @@ public class TopicService implements TopicServiceMethods {
                     "Sed eget lorem quis neque rutrum pretium. Nunc volutpat molestie lacus, id congue sapien mollis ut. Pellentesque at ex quis ante lobortis dapibus. Maecenas sodales rutrum augue sit amet lacinia. Duis tortor odio, volutpat et est sit amet, ultrices tincidunt elit. Maecenas eget orci quis purus euismod placerat non in nisl. Integer ac elit tempus ex faucibus lacinia.", "", "-1")
     );
 
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.userId}")
+    void userIdListener(String msg) {
+        try {
+            if (msg.startsWith("DEL")) {
+                String id = msg.split("#")[1];
+                log.info("Deleting user " + id);
+                userIdRepository.deleteById(id);
+            }
+            else {
+                log.info("New user " + msg);
+                userIdRepository.save(new User(msg));
+                populateDb();
+            }
+        } catch (Exception ex) {
+            log.info(ex.getMessage());
+        }
+    }
+
     @Bean
     void initTemplate() {
         this.amqpTemplate = conectionFactory.rabbitTemplate();
@@ -70,10 +91,16 @@ public class TopicService implements TopicServiceMethods {
 
     private void sendMessage(TopicQueueMessage topic) {
         String json = gson.toJson(topic);
-        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyTopics(), json);
     }
 
+    private void sendId(String id) {
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyIds(), id);
+    }
+
+    @Bean
     void deleteEverything() {
+        userIdRepository.deleteAll();
         repository.findAll().forEach(x -> {
             try {
                 deleteTopic(x.getId());
@@ -83,10 +110,17 @@ public class TopicService implements TopicServiceMethods {
         });
     }
 
-    @Bean
     void populateDb() {
-        deleteEverything();
-        listaTopicuri.forEach(this::addTopic);
+        List<User> users = userIdRepository.findAll().stream().toList();
+        Random random = new Random();
+
+        if (users.size() > 1) {
+            Topic topic = listaTopicuri.get(random.nextInt(listaTopicuri.size()));
+            Topic newTopic = new Topic(topic);
+            newTopic.setCreatorId(users.get(random.nextInt(users.size())).getId());
+            newTopic.setName(topic.getName() + random.nextInt());
+            addTopic(newTopic);
+        }
     }
 
   /*  @Bean
@@ -125,6 +159,7 @@ public class TopicService implements TopicServiceMethods {
     public void addTopic(Topic topic) {
         topic.setTimestampCreated(Instant.now().getEpochSecond());
         repository.save(topic);
+        sendId(topic.getId());
         sendMessage(new TopicQueueMessage(QueueMessageType.CREATE, topic));
     }
 
@@ -143,6 +178,7 @@ public class TopicService implements TopicServiceMethods {
             topic.setTimestampCreated(Instant.now().getEpochSecond());
             topic.setId(null);
             repository.insert(topic);
+            sendId(topic.getId());
             sendMessage(new TopicQueueMessage(QueueMessageType.CREATE, topic));
             return new TopicNotFound("Topic not found. Created one instead.");
         });
@@ -154,6 +190,7 @@ public class TopicService implements TopicServiceMethods {
 
         if (topic.isPresent()) {
             repository.deleteById(id);
+            sendId("DEL#" + topic.get().getId());
             sendMessage(new TopicQueueMessage(QueueMessageType.DELETE, topic.get()));
         } else
             throw new TopicNotFound("Topic not found.");

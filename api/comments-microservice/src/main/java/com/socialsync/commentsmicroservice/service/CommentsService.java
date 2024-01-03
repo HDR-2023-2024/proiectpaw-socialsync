@@ -2,17 +2,17 @@ package com.socialsync.commentsmicroservice.service;
 
 import com.google.gson.Gson;
 import com.socialsync.commentsmicroservice.components.RabbitMqConnectionFactoryComponent;
-import com.socialsync.commentsmicroservice.components.RabbitMqConnectionFactoryComponentNotify;
 import com.socialsync.commentsmicroservice.interfaces.CommentsServiceMethods;
-import com.socialsync.commentsmicroservice.pojo.Comment;
-import com.socialsync.commentsmicroservice.pojo.CommentNotification;
-import com.socialsync.commentsmicroservice.pojo.CommentQueueMessage;
+import com.socialsync.commentsmicroservice.pojo.*;
 import com.socialsync.commentsmicroservice.pojo.enums.QueueMessageType;
 import com.socialsync.commentsmicroservice.repository.CommentRepository;
+import com.socialsync.commentsmicroservice.repository.PostIdRepository;
+import com.socialsync.commentsmicroservice.repository.UserIdRepository;
 import com.socialsync.commentsmicroservice.util.exceptions.CommentNotFound;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -29,36 +29,70 @@ import java.util.*;
 public class CommentsService implements CommentsServiceMethods {
 
     private CommentRepository repository;
+    private PostIdRepository postIdRepository;
+    private UserIdRepository userIdRepository;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
 
-    private RabbitMqConnectionFactoryComponentNotify notifyFactory;
-
-    @Qualifier("rabbitTemplate")
     private AmqpTemplate amqpTemplate;
-
-    @Qualifier("rabbitTemplateNotify")
-    private AmqpTemplate amqpTemplateNotify;
 
     private Gson gson;
 
     @Bean
     void initTemplate() {
         this.amqpTemplate = conectionFactory.rabbitTemplate();
-        this.amqpTemplateNotify = notifyFactory.rabbitTemplateNotify();
+    }
+
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.postId}")
+    void postIdListener(String msg) {
+        try {
+            if (msg.startsWith("DEL")) {
+                String id = msg.split("#")[1];
+                log.info("Deleting post " + id);
+                postIdRepository.deleteById(id);
+            }
+            else {
+                log.info("New post " + msg);
+                postIdRepository.save(new Post(msg));
+                populateDb();
+            }
+        } catch (Exception ex) {
+            log.info(ex.getMessage());
+        }
+    }
+
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.userId}")
+    void userIdListener(String msg) {
+        try {
+            if (msg.startsWith("DEL")) {
+                String id = msg.split("#")[1];
+                log.info("Deleting user " + id);
+                userIdRepository.deleteById(id);
+            }
+            else {
+                log.info("New user " + msg);
+                userIdRepository.save(new User(msg));
+                populateDb();
+            }
+        } catch (Exception ex) {
+            log.info(ex.getMessage());
+        }
     }
 
     private void sendMessage(CommentQueueMessage comment) {
         String json = gson.toJson(comment);
-        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKey(), json);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyComments(), json);
     }
 
     private void sendMessageNotification(CommentNotification comment) {
         String json = gson.toJson(comment);
-        this.amqpTemplateNotify.convertAndSend(notifyFactory.getExchange(), notifyFactory.getRoutingKey(), json);
+        this.amqpTemplate.convertAndSend(conectionFactory.getExchange(), conectionFactory.getRoutingKeyNotify(), json);
     }
 
+    @Bean
     void deleteEverything() {
+        postIdRepository.deleteAll();
+        userIdRepository.deleteAll();
         repository.findAll().forEach(x -> {
             try {
                 deleteComment(x.getId());
@@ -68,15 +102,18 @@ public class CommentsService implements CommentsServiceMethods {
         });
     }
 
-    @Bean
     void populateDb() {
-        deleteEverything();
-
+        Random random = new Random();
         List<String> reactie = List.of("NASPA", "MEH", "BUNA");
 
-        for (int i = 0;i < 100; i++) {
-            Comment comment = new Comment("-1", "-1", "POSTARE " + reactie.get(new Random().nextInt(reactie.size())) + " UNGA BUNGA!");
+
+        List<Post> postsId = postIdRepository.findAll().stream().toList();
+        List<User> usersId = userIdRepository.findAll().stream().toList();
+
+        if (postsId.size() > 1 && usersId.size() > 1) {
+            Comment comment = new Comment(usersId.get(random.nextInt(usersId.size())).getId(), postsId.get(random.nextInt(postsId.size())).getId(), "POSTARE " + reactie.get(new Random().nextInt(reactie.size())) + " UNGA BUNGA!");
             addComment(comment);
+            log.info("Created " + comment);
         }
     }
 

@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -184,15 +183,10 @@ public class QueryService implements QueryServiceMethods {
         CommentDocument commentDocument = new CommentDocument(msgQ.getComment());
 
         boolean parentPostExists = postRepository.existsById(commentDocument.getPostId());
-        Optional<UserDocument> creator = userRepository.findById(msgQ.getComment().getCreatorId());
+        boolean creatorExists = userRepository.existsById(msgQ.getComment().getCreatorId());
 
-        boolean override = creator.isEmpty() && !parentPostExists && (msgQ.getComment().getCreatorId().equals("-1") || msgQ.getComment().getPostId().equals("-1"));
 
-        if (parentPostExists && creator.isPresent() || override) {
-            commentDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));
-            if (override)
-                commentDocument.setPostId(findRandomPostId());
-
+        if (parentPostExists && creatorExists) {
             log.info("Post and creator found for comment " + commentDocument.getId());
             boolean commentExists = commentRepository.existsById(commentDocument.getId());
             switch (msgQ.getType()) {
@@ -234,25 +228,20 @@ public class QueryService implements QueryServiceMethods {
     public void handlePost(PostQueueMessage msgQ) throws RuntimeException {
         log.info("Handling post " + msgQ.getPost().getId());
         PostDocument postDocument = new PostDocument(msgQ.getPost());
-        Optional<UserDocument> creator = userRepository.findById(msgQ.getPost().getCreatorId());
         log.info(String.valueOf(postDocument));
-        boolean parentTopicExists = topicRepository.existsById(postDocument.getTopicId());
+        log.info(msgQ.getPost().getTopicId());
+        log.info(msgQ.getPost().getCreatorId());
+        boolean parentTopicExists = topicRepository.existsById(msgQ.getPost().getTopicId());
+        Optional<UserDocument> creator = userRepository.findById(msgQ.getPost().getCreatorId());
 
-        //boolean override = creator.isEmpty() && !parentTopicExists || (msgQ.getPost().getCreatorId().equals("-1") || msgQ.getPost().getTopicId().equals("-1"));
-        boolean overrideCreator = msgQ.getPost().getCreatorId().equals("-1");
-        boolean overrideTopic = msgQ.getPost().getTopicId().equals("-1");
 
-        if (parentTopicExists && creator.isPresent() || overrideCreator || overrideTopic) {
-            Optional<PostDocument> postExists = postRepository.findById(postDocument.getId());
-            postDocument.setCreator(!overrideCreator ? new UserSummaryDTO(creator.orElseThrow(() -> new PostException("creator  not found for post!"))) : new UserSummaryDTO(findRandomUser()));
-            if (postExists.isPresent())
-                postDocument.setTopicId(postExists.get().getTopicId());
-            else if (overrideTopic)
-                postDocument.setTopicId(findRandomTopicId());
+        if (parentTopicExists && creator.isPresent()) {
+            postDocument.setCreator(new UserSummaryDTO(creator.get()));
+            Optional<PostDocument> post = postRepository.findById(postDocument.getId());
 
             switch (msgQ.getType()) {
                 case CREATE -> {
-                    if (postExists.isEmpty()) {
+                    if (post.isEmpty()) {
                         log.info("Adding post " + msgQ.getPost().getId());
                         postRepository.save(postDocument);
                     }
@@ -260,7 +249,7 @@ public class QueryService implements QueryServiceMethods {
                         throw new PostException("CREATE: Post " + postDocument.getId() + " already exists!");
                 }
                 case UPDATE -> {
-                    if (postExists.isPresent()) {
+                    if (post.isPresent()) {
                         log.info("Updating post " + msgQ.getPost().getId());
                         postRepository.save(postDocument);
                     }
@@ -270,7 +259,7 @@ public class QueryService implements QueryServiceMethods {
                     }
                 }
                 case DELETE -> {
-                    if (postExists.isPresent()) {
+                    if (post.isPresent()) {
                         log.info("Deleting post " + msgQ.getPost().getId());
                         postRepository.delete(postDocument);
                     }
@@ -278,9 +267,9 @@ public class QueryService implements QueryServiceMethods {
                         throw new PostException("DELETE: Post " + postDocument.getId() + " to be deleted not found!");
                 }
                 case UPVOTE -> {
-                    if (postExists.isPresent()) {
+                    if (post.isPresent()) {
                         log.info("Post " + msgQ.getPost().getId() + " upvoted by " + postDocument.getCreator().getId());
-                        PostDocument postInDB = postExists.get();
+                        PostDocument postInDB = post.get();
                         postInDB.addUpvote(postDocument.getCreator().getId());
                         postRepository.save(postInDB);
                     }
@@ -288,9 +277,9 @@ public class QueryService implements QueryServiceMethods {
                         throw new PostException("UPVOTE: Post " + postDocument.getId() + " to be upvoted not found");
                 }
                 case DOWNVOTE -> {
-                    if (postExists.isPresent()) {
+                    if (post.isPresent()) {
                         log.info("Post " + msgQ.getPost().getId() + " downvoted by " + postDocument.getCreator().getId());
-                        PostDocument postInDB = postExists.get();
+                        PostDocument postInDB = post.get();
                         postInDB.addDownvote(postDocument.getCreator().getId());
                         postRepository.save(postInDB);
                     }
@@ -300,7 +289,7 @@ public class QueryService implements QueryServiceMethods {
             }
         }
         else
-            throw new ParentException("Topic " + msgQ.getPost().getTopicId() + " or creator " + msgQ.getPost().getCreatorId() + " not found for post!");
+            throw new ParentException("Topic " + msgQ.getPost().getTopicId() + " or creator " + msgQ.getPost().getCreatorId() + " not found for post! Topic exists: " + parentTopicExists + "Creator exists: " + creator.isPresent());
     }
 
     @Override
@@ -308,10 +297,9 @@ public class QueryService implements QueryServiceMethods {
         log.info("Handling topic " + msgQ.getTopic().getId());
         TopicDocument topicDocument = new TopicDocument(msgQ.getTopic());
         Optional<UserDocument> creator = userRepository.findById(msgQ.getTopic().getCreatorId());
-        boolean override = creator.isEmpty() && msgQ.getTopic().getCreatorId().equals("-1");
 
-        if (creator.isPresent() || override) {
-            topicDocument.setCreator(!override ? new UserSummaryDTO(creator.get()) : new UserSummaryDTO(findRandomUser()));
+        if (creator.isPresent()) {
+            topicDocument.setCreator(new UserSummaryDTO(creator.get()));
             boolean topicExists = topicRepository.existsById(topicDocument.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {
@@ -382,18 +370,18 @@ public class QueryService implements QueryServiceMethods {
         }
     }
 
-    private UserDocument findRandomUser() {
-        List<UserDocument> firstPage = userRepository.findAll(PageRequest.of(0, 10)).getContent();
-        return firstPage.get(new Random().nextInt(firstPage.size()));
-    }
-
-    private String findRandomTopicId() {
-        List<TopicDocument> firstPage = topicRepository.findAll(PageRequest.of(0, 10)).getContent();
-        return firstPage.get(new Random().nextInt(firstPage.size())).getId();
-    }
-
-    private String findRandomPostId() {
-        List<PostDocument> firstPage = postRepository.findAll(PageRequest.of(0, 10)).getContent();
-        return firstPage.get(new Random().nextInt(firstPage.size())).getId();
-    }
+//    private UserDocument findRandomUser() {
+//        List<UserDocument> firstPage = userRepository.findAll(PageRequest.of(0, 10)).getContent();
+//        return firstPage.get(new Random().nextInt(firstPage.size()));
+//    }
+//
+//    private String findRandomTopicId() {
+//        List<TopicDocument> firstPage = topicRepository.findAll(PageRequest.of(0, 10)).getContent();
+//        return firstPage.get(new Random().nextInt(firstPage.size())).getId();
+//    }
+//
+//    private String findRandomPostId() {
+//        List<PostDocument> firstPage = postRepository.findAll(PageRequest.of(0, 10)).getContent();
+//        return firstPage.get(new Random().nextInt(firstPage.size())).getId();
+//    }
 }

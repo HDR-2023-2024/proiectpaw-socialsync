@@ -29,4 +29,11 @@ public class Topic {
         this.creatorId = creatorId;
         this.photoId = photoId;
     }
+
+    public Topic(Topic topic) {
+        this.name = topic.getName();
+        this.description = topic.getDescription();
+        this.creatorId = topic.getCreatorId();
+        this.photoId = topic.getPhotoId();
+    }
 }
