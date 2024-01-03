@@ -1,5 +1,4 @@
-package components;
-
+package com.socialsync.postsmicroservice.components;
 
 import lombok.Getter;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -10,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RabbitMqConnectionFactoryComponent {
+public class RabbitMqConnectionFactoryComponentImages {
     @Value("${spring.rabbitmq.host}")
     private String host;
 
@@ -24,15 +23,15 @@ public class RabbitMqConnectionFactoryComponent {
     private String password;
 
     @Getter
-    @Value("${socialsync.rabbitmq.exchange}")
+    @Value("${socialsync.rabbitmq.exchange.n}")
     private String exchange;
 
     @Getter
-    @Value("${socialsync.rabbitmq.routingkey}")
+    @Value("${socialsync.rabbitmq.routingkey.i}")
     private String routingKey;
 
     @Bean
-    private ConnectionFactory connectionFactory() {
+    private ConnectionFactory imagesConnectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
         connectionFactory.setHost(this.host);
         connectionFactory.setUsername(this.username);
@@ -42,7 +41,7 @@ public class RabbitMqConnectionFactoryComponent {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate() {
-        return new RabbitTemplate(connectionFactory());
+    public RabbitTemplate rabbitTemplateImages() {  // Update the method name
+        return new RabbitTemplate(imagesConnectionFactory());
     }
 }

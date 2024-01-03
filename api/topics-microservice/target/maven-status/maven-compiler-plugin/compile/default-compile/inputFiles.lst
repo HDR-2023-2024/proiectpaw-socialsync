@@ -11,3 +11,4 @@
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/repository/TopicRepository.java
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/util/exceptions/CommentNotFound.java
 /home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/interfaces/TopicServiceMethods.java
+/home/madab/Facultate/proiectpaw-socialsync/api/topics-microservice/src/main/java/com/socialsync/topicsmicroservice/components/RabbitMqConnectionFactoryComponentImages.java

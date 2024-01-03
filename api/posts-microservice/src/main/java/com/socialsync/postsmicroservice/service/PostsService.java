@@ -2,6 +2,7 @@ package com.socialsync.postsmicroservice.service;
 
 import com.google.gson.Gson;
 import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponent;
+import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponentImages;
 import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponentNotify;
 import com.socialsync.postsmicroservice.pojo.PostNotification;
 import com.socialsync.postsmicroservice.pojo.PostQueueMessage;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.*;
 
+import static java.rmi.server.LogStream.log;
+
 @AllArgsConstructor
 @Service
 @Slf4j
@@ -37,7 +40,7 @@ public class PostsService implements PostsServiceMethods {
     private RabbitMqConnectionFactoryComponent conectionFactory;
 
     private RabbitMqConnectionFactoryComponentNotify notifyFactory;
-
+    private RabbitMqConnectionFactoryComponentImages imagesFactory;
     @Qualifier("rabbitTemplate")
     private AmqpTemplate amqpTemplate;
 
@@ -50,6 +53,7 @@ public class PostsService implements PostsServiceMethods {
     void initTemplate() {
         this.amqpTemplate = conectionFactory.rabbitTemplate();
         this.amqpTemplateNotify = notifyFactory.rabbitTemplateNotify();
+        this.amqpTemplateImages = imagesFactory.rabbitTemplateImages();
     }
 
     private void sendMessage(PostQueueMessage post) {
@@ -71,6 +75,9 @@ public class PostsService implements PostsServiceMethods {
             }
         });
     }
+
+    @Qualifier("rabbitTemplateImages")
+    private AmqpTemplate amqpTemplateImages;
 
     static List<String> titluPostare = List.of(
             "Orașul Ascuns",
@@ -188,6 +195,13 @@ public class PostsService implements PostsServiceMethods {
         }
     }
 
+    private void sendMessageImage(String mesaj) {
+        System.out.println("Sa trimis mesajul 1!");
+        String json = gson.toJson(mesaj);
+        this.amqpTemplateImages.convertAndSend(imagesFactory.getExchange(), imagesFactory.getRoutingKey(), json);
+        System.out.println("Sa trimis mesajul!");
+    }
+
    /* @Bean
     @Scheduled(fixedDelay = 5000L)
     void newRandomPost() {
@@ -256,6 +270,8 @@ public class PostsService implements PostsServiceMethods {
 
         // notificare care ajunge la admin-ul unui topic
         sendMessageNotification(new PostNotification(post.getCreatorId(), post.getTopicId(), QueueMessageType.CREATE,post.getId(), post.getTitle().substring(0, Math.min(post.getTitle().length(), 50))));
+        sendMessageImage("S-a adaugat o postare cu imagine; idk");
+        log("S-a adaugat o postare cu imagine; idk");
     }
 
     @Override
