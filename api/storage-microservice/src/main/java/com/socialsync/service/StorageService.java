@@ -1,24 +1,19 @@
 package com.socialsync.service;
 
 import com.google.gson.Gson;
+import com.socialsync.pojo.FileInfoDTO;
 import com.socialsync.pojo.PhotoMessageDto;
 import com.socialsync.repository.FileRepository;
-import io.minio.MinioClient;
-import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.socialsync.pojo.FileInfo;
-import org.springframework.expression.spel.ast.OpAnd;
+import com.socialsync.pojo.FileInfoSQL;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -75,18 +70,19 @@ public class StorageService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<FileInfo> findById(String id) {
-        Optional<FileInfo> fileInfo = fileInfoRepository.findById(id);
+    public FileInfoDTO findById(String id) {
+        Optional<FileInfoSQL> fileInfo = fileInfoRepository.findById(id);
         if(fileInfo.isPresent()) {
-            this.minIoService.readFromMinIO(fileInfo.get().getId() + ".bin");
+            byte[] content = this.minIoService.readFromMinIO(fileInfo.get().getId() + ".bin");
+            return new FileInfoDTO(fileInfo.get().getId(),fileInfo.get().getFilename(),fileInfo.get().isConfirmed(),fileInfo.get().getDateCreated(),content);
         }
-        return this.fileInfoRepository.findById(id);
+        return null;
     }
 
-    public FileInfo save(FileInfo file){
+    public FileInfoSQL save(FileInfoDTO file){
         LocalDateTime date = LocalDateTime.now();
-        FileInfo fileInfo =  fileInfoRepository.save(new FileInfo(null,file.getFilename(),false,date,file.getContent()));
-        this.minIoService.writeToMinIO(fileInfo.getId() + ".bin",fileInfo.getContent());
+        FileInfoSQL fileInfo =  fileInfoRepository.save(new FileInfoSQL(null,file.getFilename(),false,date));
+        this.minIoService.writeToMinIO(fileInfo.getId() + ".bin",file.getContent());
         return  fileInfo;
     }
 

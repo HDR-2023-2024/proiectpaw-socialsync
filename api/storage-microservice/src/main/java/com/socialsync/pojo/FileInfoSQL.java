@@ -5,15 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FileInfo {
+public class FileInfoSQL {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -28,13 +26,8 @@ public class FileInfo {
     @Column(name = "dateCreated", nullable = false)
     private LocalDateTime dateCreated;
 
-    @Lob
-    @Column(name = "content", columnDefinition = "LONGBLOB", nullable = false)
-    private byte[] content;
 
-
-    public FileInfo(String filename,byte[] content) {
+    public FileInfoSQL(String filename, byte[] content) {
         this.filename = filename;
-        this.content = content;
     }
 }
