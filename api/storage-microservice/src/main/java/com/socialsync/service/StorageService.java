@@ -9,11 +9,15 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.socialsync.pojo.FileInfo;
 import org.springframework.expression.spel.ast.OpAnd;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -73,7 +77,16 @@ public class StorageService {
     }
 
     public FileInfo save(FileInfo file){
-        LocalDate date = LocalDate.now();
+        LocalDateTime date = LocalDateTime.now();
         return   fileInfoRepository.save(new FileInfo(null,file.getFilename(),false,date,file.getContent()));
+    }
+
+    @Scheduled(fixedRate = 36000000) // 36000000 milisecunde = 10 ore
+    public void myScheduledMethod() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime cutoffDateTime = currentDateTime.minusHours(10);
+
+        fileInfoRepository.deleteUnconfirmedFilesOlderThan5Minutes(cutoffDateTime);
+        log.info("Stergere fisiere neconfirmate mai vechi de 10 ore.");
     }
 }

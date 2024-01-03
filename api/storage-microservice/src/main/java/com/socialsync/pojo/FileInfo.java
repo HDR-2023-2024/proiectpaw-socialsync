@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -25,7 +26,7 @@ public class FileInfo {
     private boolean isConfirmed;
 
     @Column(name = "dateCreated", nullable = false)
-    private LocalDate dateCreated;
+    private LocalDateTime dateCreated;
 
     @Lob
     @Column(name = "content", columnDefinition = "LONGBLOB", nullable = false)
