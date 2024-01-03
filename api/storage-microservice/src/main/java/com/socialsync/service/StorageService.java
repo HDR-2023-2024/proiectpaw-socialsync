@@ -3,6 +3,7 @@ package com.socialsync.service;
 import com.google.gson.Gson;
 import com.socialsync.pojo.PhotoMessageDto;
 import com.socialsync.repository.FileRepository;
+import io.minio.MinioClient;
 import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -26,6 +27,8 @@ public class StorageService {
     private FileRepository fileInfoRepository;
     @Autowired
     private Gson gson;
+    @Autowired
+    private MinIoService minIoService;
 
     @RabbitListener(queues = "${socialsync.rabbitmq.queue.users}")
     void receiveQueueMessageUsers(String msg) {
@@ -73,12 +76,18 @@ public class StorageService {
     }
 
     public Optional<FileInfo> findById(String id) {
+        Optional<FileInfo> fileInfo = fileInfoRepository.findById(id);
+        if(fileInfo.isPresent()) {
+            this.minIoService.readFromMinIO(fileInfo.get().getId() + ".bin");
+        }
         return this.fileInfoRepository.findById(id);
     }
 
     public FileInfo save(FileInfo file){
         LocalDateTime date = LocalDateTime.now();
-        return   fileInfoRepository.save(new FileInfo(null,file.getFilename(),false,date,file.getContent()));
+        FileInfo fileInfo =  fileInfoRepository.save(new FileInfo(null,file.getFilename(),false,date,file.getContent()));
+        this.minIoService.writeToMinIO(fileInfo.getId() + ".bin",fileInfo.getContent());
+        return  fileInfo;
     }
 
     @Scheduled(fixedRate = 36000000) // 36000000 milisecunde = 10 ore

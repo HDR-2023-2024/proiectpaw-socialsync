@@ -172,12 +172,29 @@ services:
     expose:
       - '8090'
 
+# simulare d3 de la aws
+  minio-simulator:
+    image: minio/minio
+    container_name: minio-simulator
+    environment:
+      - MINIO_ACCESS_KEY=minio_access_key
+      - MINIO_SECRET_KEY=minio_secret_key
+    ports:
+      - "8091:9000"
+    volumes:
+      - minio-data:/data
+    command: server /data
+    networks:
+      - default
+
 volumes:
   data: {}
   data1: {}
   data2: {}
   data3: {}
   storage: {}
+  minio-data: {}
+
 networks:
   default:
     name: 'socialsync_network'
