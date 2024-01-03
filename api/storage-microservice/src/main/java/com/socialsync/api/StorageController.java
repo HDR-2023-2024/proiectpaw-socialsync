@@ -40,10 +40,10 @@ public class StorageController {
 
     @RabbitListener(queues = "${socialsync.rabbitmq.queue.posts}")
     void receiveQueueMessagePost(String msg) {
-        String msgQ = gson.fromJson(msg, String.class);
+        PhotoMessageDto msgQ = gson.fromJson(msg, PhotoMessageDto.class);
 
         try {
-            log.info(msgQ);
+            log.info(msgQ.getOperation() + " " + msgQ.getUrl());
         } catch (RuntimeException ex) {
             log.error(ex.getMessage());
         }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponent;
 import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponentImages;
 import com.socialsync.postsmicroservice.components.RabbitMqConnectionFactoryComponentNotify;
+import com.socialsync.postsmicroservice.pojo.PhotoMessageDto;
 import com.socialsync.postsmicroservice.pojo.PostNotification;
 import com.socialsync.postsmicroservice.pojo.PostQueueMessage;
 import com.socialsync.postsmicroservice.pojo.enums.QueueMessageType;
@@ -187,7 +188,7 @@ public class PostsService implements PostsServiceMethods {
     void populateDb() {
         deleteEverything();
 
-        for (int i = 0;i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             String titlu = titluPostare.get(new Random().nextInt(titluPostare.size()));
             String continut = "Acesta este un conținut scurt pentru postarea cu titlul \"" + titlu + "\".";
             Post post = new Post("-1", "-1", titlu, continut);
@@ -195,11 +196,9 @@ public class PostsService implements PostsServiceMethods {
         }
     }
 
-    private void sendMessageImage(String mesaj) {
-        System.out.println("Sa trimis mesajul 1!");
-        String json = gson.toJson(mesaj);
+    private void sendMessageImage(PhotoMessageDto photoMessageDto) {
+        String json = gson.toJson(photoMessageDto);
         this.amqpTemplateImages.convertAndSend(imagesFactory.getExchange(), imagesFactory.getRoutingKey(), json);
-        System.out.println("Sa trimis mesajul!");
     }
 
    /* @Bean
@@ -249,7 +248,7 @@ public class PostsService implements PostsServiceMethods {
     public HashMap<String, Post> fetchAllPosts() {
         HashMap<String, Post> lista = new HashMap<>();
 
-        List<Post> posts =  repository.findAll();
+        List<Post> posts = repository.findAll();
 
         for (Post post : posts)
             lista.put(post.getId(), post);
@@ -263,31 +262,52 @@ public class PostsService implements PostsServiceMethods {
     }
 
     @Override
-    public void addPost(Post post)  {
+    public void addPost(Post post) {
         post.setTimestampCreated(Instant.now().getEpochSecond());
         repository.insert(post);
         sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
 
         // notificare care ajunge la admin-ul unui topic
-        sendMessageNotification(new PostNotification(post.getCreatorId(), post.getTopicId(), QueueMessageType.CREATE,post.getId(), post.getTitle().substring(0, Math.min(post.getTitle().length(), 50))));
-        sendMessageImage("S-a adaugat o postare cu imagine; idk");
-        log("S-a adaugat o postare cu imagine; idk");
+        sendMessageNotification(new PostNotification(post.getCreatorId(), post.getTopicId(), QueueMessageType.CREATE, post.getId(), post.getTitle().substring(0, Math.min(post.getTitle().length(), 50))));
+        if (post.getPhotos() != null) {
+            for (String photo : post.getPhotos()) {
+                sendMessageImage(new PhotoMessageDto("Insert",photo));
+            }
+        }
     }
 
     @Override
     public void updatePost(String id, Post post) throws PostNotFound {
+        Optional<Post> postInDb = repository.findById(id);
+        if(postInDb.isPresent()){
+            if (postInDb.get().getPhotos() != null) {
+                for (String photo : postInDb.get().getPhotos()) {
+                    sendMessageImage(new PhotoMessageDto("Delete",photo));
+                }
+            }
+        }
         repository.findById(id).map(elem -> {
-                elem.setContent(post.getContent());
-                elem.setTitle(post.getTitle());
-                elem.setCreatorId(post.getCreatorId());
-                elem.setTopicId(post.getTopicId());
-                elem.setTimestampUpdated(Instant.now().getEpochSecond());
-                repository.save(elem);
-                sendMessage(new PostQueueMessage(QueueMessageType.UPDATE, post));
-                return elem;
+            elem.setContent(post.getContent());
+            elem.setTitle(post.getTitle());
+            elem.setCreatorId(post.getCreatorId());
+            elem.setTopicId(post.getTopicId());
+            elem.setTimestampUpdated(Instant.now().getEpochSecond());
+            repository.save(elem);
+            if (post.getPhotos() != null) {
+                for (String photo : post.getPhotos()) {
+                    sendMessageImage(new PhotoMessageDto("Insert",photo));
+                }
+            }
+            sendMessage(new PostQueueMessage(QueueMessageType.UPDATE, post));
+            return elem;
         }).orElseThrow(() -> {
             post.setTimestampCreated(Instant.now().getEpochSecond());
             repository.insert(post);
+            if (post.getPhotos() != null) {
+                for (String photo : post.getPhotos()) {
+                    sendMessageImage(new PhotoMessageDto("Insert",photo));
+                }
+            }
             sendMessage(new PostQueueMessage(QueueMessageType.CREATE, post));
             return new PostNotFound("Post not found. Created one instead.");
         });
@@ -296,12 +316,17 @@ public class PostsService implements PostsServiceMethods {
     @Override
     public void deletePost(String id) throws PostNotFound {
         Optional<Post> post = repository.findById(id);
-
+        if(post.isPresent()){
+            if (post.get().getPhotos() != null) {
+                for (String photo : post.get().getPhotos()) {
+                    sendMessageImage(new PhotoMessageDto("Delete",photo));
+                }
+            }
+        }
         if (post.isPresent()) {
             repository.deleteById(id);
             sendMessage(new PostQueueMessage(QueueMessageType.DELETE, post.get()));
-        }
-        else
+        } else
             throw new PostNotFound("Post not found.");
     }
 
@@ -317,10 +342,9 @@ public class PostsService implements PostsServiceMethods {
 
             sendMessage(new PostQueueMessage(QueueMessageType.UPVOTE, new Post(postId, userId, post.get().getTopicId())));
             // notificare care ajunge la creatorul postarii
-            sendMessageNotification(new PostNotification(post.get().getCreatorId(), post.get().getTopicId(), QueueMessageType.UPVOTE,post.get().getId(), post.get().getTitle().substring(0, Math.min(post.get().getTitle().length(), 50))));
+            sendMessageNotification(new PostNotification(post.get().getCreatorId(), post.get().getTopicId(), QueueMessageType.UPVOTE, post.get().getId(), post.get().getTitle().substring(0, Math.min(post.get().getTitle().length(), 50))));
 //            sendMessage(new PostQueueMessage(QueueMessageType.UPVOTE, new Post(postId, userId, "657ca7e2fb8e4725915e20c9")));
-        }
-        else
+        } else
             throw new PostNotFound("Post not found.");
     }
 
@@ -336,9 +360,8 @@ public class PostsService implements PostsServiceMethods {
 
             sendMessage(new PostQueueMessage(QueueMessageType.DOWNVOTE, new Post(postId, userId, post.get().getTopicId())));
 //            sendMessage(new PostQueueMessage(QueueMessageType.DOWNVOTE, new Post(postId, userId, "657ca7e2fb8e4725915e20c9")));
-            sendMessageNotification(new PostNotification(post.get().getCreatorId(), post.get().getTopicId(), QueueMessageType.DOWNVOTE,post.get().getId(), post.get().getTitle().substring(0, Math.min(post.get().getTitle().length(), 50))));
-        }
-        else
+            sendMessageNotification(new PostNotification(post.get().getCreatorId(), post.get().getTopicId(), QueueMessageType.DOWNVOTE, post.get().getId(), post.get().getTitle().substring(0, Math.min(post.get().getTitle().length(), 50))));
+        } else
             throw new PostNotFound("Post not found.");
     }
 }
