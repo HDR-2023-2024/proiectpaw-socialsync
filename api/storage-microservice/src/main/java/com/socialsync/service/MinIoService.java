@@ -21,7 +21,7 @@ public class MinIoService {
 
     static {
         minioClient = MinioClient.builder()
-                .endpoint("http://localhost:8091")
+                .endpoint("http://minio-simulator:9000")
                 .credentials("minio_access_key", "minio_secret_key")
                 .build();
     }
