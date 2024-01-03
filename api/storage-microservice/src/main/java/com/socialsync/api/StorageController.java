@@ -23,46 +23,11 @@ import java.util.*;
 @AllArgsConstructor
 @Slf4j
 public class StorageController {
-    private FileRepository fileRepository;
     private StorageService storageService;
-    private Gson gson;
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue.topics}")
-    void receiveQueueMessageComment(String msg) {
-        String msgQ = gson.fromJson(msg, String.class);
-
-        try {
-            log.info(msgQ);
-        }
-        catch (RuntimeException ex) {
-            log.error(ex.getMessage());
-        }
-    }
-
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue.posts}")
-    void receiveQueueMessagePost(String msg) {
-        PhotoMessageDto msgQ = gson.fromJson(msg, PhotoMessageDto.class);
-
-        try {
-            log.info(msgQ.getOperation() + " " + msgQ.getUrl());
-        } catch (RuntimeException ex) {
-            log.error(ex.getMessage());
-        }
-    }
-
-    @RabbitListener(queues = "${socialsync.rabbitmq.queue.users}")
-    void receiveQueueMessageUsers(String msg) {
-        String msgQ = gson.fromJson(msg, String.class);
-
-        try {
-            log.info(msgQ);
-        } catch (RuntimeException ex) {
-            log.error(ex.getMessage());
-        }
-    }
 
     @GetMapping("/img/{id}")
     public ResponseEntity<byte[]> getMemoryFileByIdImg(@PathVariable("id") String id) {
-        Optional<FileInfo> optionalFile = this.fileRepository.findById(id);
+        Optional<FileInfo> optionalFile = this.storageService.findById(id);
         if (!optionalFile.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -83,7 +48,7 @@ public class StorageController {
         for (MultipartFile file : files) {
             if (isImageFile(file.getOriginalFilename())) {
                 try {
-                    FileInfo fileInfo = fileRepository.save(new FileInfo(file.getOriginalFilename(), null, file.getBytes()));
+                    FileInfo fileInfo = storageService.save(new FileInfo(file.getOriginalFilename(), file.getBytes()));
                     System.out.println(file.getOriginalFilename());
                     url.add(new UrlDto("http://localhost:8088/api/v1/storage/img/" + fileInfo.getId()));
                 } catch (IOException ioException) {
@@ -109,7 +74,7 @@ public class StorageController {
         for (JsonFile file : files) {
             // daca e imagine
             if (isImageFile(file.getFileName())) {
-                FileInfo fileInfo = fileRepository.save(new FileInfo(file.getFileName(), null, file.getContent()));
+                FileInfo fileInfo = storageService.save(new FileInfo(file.getFileName(), file.getContent()));
                 urls.add(new UrlDto("http://localhost:8088/api/v1/storage/img/" + fileInfo.getId()));
             }else{
                 return new ResponseEntity<>(new ErrorClass("Formatul fisierului nu este valid."),HttpStatus.NOT_ACCEPTABLE);
@@ -135,17 +100,7 @@ public class StorageController {
         }
     }*/
 
-    @DeleteMapping("/delete-file/{fileId}")
-    public ResponseEntity<?> deleteFile(@PathVariable String fileId) {
-        Optional<FileInfo> optionalFileInfo = fileRepository.findById(fileId);
 
-        if (optionalFileInfo.isPresent()) {
-            fileRepository.deleteById(fileId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
     @PostMapping("/get-file-names")
     public List<Map.Entry<String, String>> getFileNamesByIds(@RequestBody ListUrl listUrl) {
