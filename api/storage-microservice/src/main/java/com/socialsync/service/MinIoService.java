@@ -80,4 +80,30 @@ public class MinIoService {
             return null;
         }
     }
+
+    public void deleteFromMinIO(String fileName) throws IllegalArgumentException {
+        try {
+             Object objectExists = minioClient.statObject(
+                    StatObjectArgs.builder()
+                            .bucket("images")
+                            .object(fileName)
+                            .build()
+            ) ;
+
+            if (objectExists != null) {
+                minioClient.removeObject(
+                        RemoveObjectArgs.builder()
+                                .bucket("images")
+                                .object(fileName)
+                                .build()
+                );
+
+                System.out.println(fileName + " successfully deleted from MinIO");
+            } else {
+                System.out.println(fileName + " does not exist in MinIO");
+            }
+        } catch (Exception e) {
+            System.out.println("Error occurred: " + e);
+        }
+    }
 }

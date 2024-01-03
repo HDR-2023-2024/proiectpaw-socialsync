@@ -42,6 +42,7 @@ public class StorageService {
         try {
             //log.info(msgQ.getOperation() + " " + msgQ.getUrl());
             if(Objects.equals(msgQ.getOperation(), "Delete")){
+                this.minIoService.deleteFromMinIO(msgQ.getUrl().replace("http://localhost:8088/api/v1/storage/img/","") + ".bin");
                 this.fileInfoRepository.deleteById(msgQ.getUrl().replace("http://localhost:8088/api/v1/storage/img/",""));
             }
             if(Objects.equals(msgQ.getOperation(), "Insert")){
@@ -90,7 +91,10 @@ public class StorageService {
     public void myScheduledMethod() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDateTime cutoffDateTime = currentDateTime.minusHours(10);
-
+        List<FileInfoSQL> list = fileInfoRepository.findUnconfirmedFilesOlderThan5Minutes(cutoffDateTime);
+        for (FileInfoSQL fileInfoSQL : list) {
+            this.minIoService.deleteFromMinIO(fileInfoSQL.getId() + ".bin");
+        }
         fileInfoRepository.deleteUnconfirmedFilesOlderThan5Minutes(cutoffDateTime);
         log.info("Stergere fisiere neconfirmate mai vechi de 10 ore.");
     }
