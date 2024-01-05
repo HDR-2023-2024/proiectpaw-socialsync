@@ -25,11 +25,13 @@ public class PostsService {
     // Notificarile nevazute ale unui user pentru postarile create de el
     public List<Post> getAllNewPostNotifUser (String user_id) {
         List<Post> userPosts = postRepository.findPostsByCreatorId(user_id);
-        // delete the seen post notifications
-        postRepository.deleteAll(userPosts);
         return userPosts;
     }
 
+    // Delete la notificarile vazute
+    public void deletePostNotif (String notif_id) {
+        postRepository.deleteById(notif_id);
+    }
 
     // slavare
     public void savePost(PostQueueMessage postQueueMessage){

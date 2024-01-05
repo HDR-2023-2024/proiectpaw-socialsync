@@ -3,14 +3,13 @@ package com.socialsync.notifymicroservice.api;
 import com.google.gson.Gson;
 import com.socialsync.notifymicroservice.components.RabbitMqConnectionFactoryComponent;
 import com.socialsync.notifymicroservice.dto.ContactForm;
+import com.socialsync.notifymicroservice.dto.ReportDTO;
 import com.socialsync.notifymicroservice.dto.ResetPasswordDto;
-import com.socialsync.notifymicroservice.pojo.Comment;
-import com.socialsync.notifymicroservice.pojo.CommentQueueMessage;
-import com.socialsync.notifymicroservice.pojo.Post;
-import com.socialsync.notifymicroservice.pojo.PostQueueMessage;
+import com.socialsync.notifymicroservice.pojo.*;
 import com.socialsync.notifymicroservice.service.CommentsService;
 import com.socialsync.notifymicroservice.service.EmailService;
 import com.socialsync.notifymicroservice.service.PostsService;
+import com.socialsync.notifymicroservice.service.ReportService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,10 @@ import java.util.Map;
 public class EmailController {
 
     private CommentsService commentsService;
+
     private PostsService postsService;
+
+    private ReportService reportService;
 
     private RabbitMqConnectionFactoryComponent conectionFactory;
 
@@ -46,7 +48,8 @@ public class EmailController {
 
     private final EmailService emailService;
 
-    /*@RabbitListener(queues = "${socialsync.rabbitmq.queue.comments}")
+    /*
+    @RabbitListener(queues = "${socialsync.rabbitmq.queue.comments}")
     void receiveQueueMessageComment(String msg) {
         CommentQueueMessage msgQ = gson.fromJson(msg, CommentQueueMessage.class);
 
@@ -70,15 +73,17 @@ public class EmailController {
         catch (RuntimeException ex) {
             log.error(ex.getMessage());
         }
-    }*/
+    }
+    */
 
     @Autowired
-    public EmailController(EmailService emailService, RabbitMqConnectionFactoryComponent conectionFactory, Gson gson, PostsService postsService, CommentsService commentsService) {
+    public EmailController(EmailService emailService, RabbitMqConnectionFactoryComponent conectionFactory, Gson gson, PostsService postsService, CommentsService commentsService, ReportService reportService) {
         this.emailService = emailService;
         this.amqpTemplate = conectionFactory.rabbitTemplate();
         this.gson = gson;
         this.postsService = postsService;
         this.commentsService = commentsService;
+        this.reportService = reportService;
     }
 
     @PostMapping("/send/{admin_mail}")
@@ -112,6 +117,16 @@ public class EmailController {
         }
     }
 
+    @DeleteMapping("post/{notification_id}")
+    public ResponseEntity<?> deletePostNotification(@PathVariable String notification_id){
+        try {
+            postsService.deletePostNotif(notification_id);
+            return new ResponseEntity<>("Post notification deleted successfully!", HttpStatus.OK);
+        } catch (Exception e){
+
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @GetMapping("comment/{user_id}")
     public ResponseEntity<?> getNotificationsComments(@PathVariable String user_id){
@@ -124,6 +139,47 @@ public class EmailController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping("comment/{notification_id}")
+    public ResponseEntity<?> deleteCommentNotification(@PathVariable String notification_id){
+        try {
+            commentsService.deleteCommNotif(notification_id);
+        } catch (Exception e){
+            return new ResponseEntity<>("Comment notification deleted successfully!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    @GetMapping("reports")
+    public ResponseEntity<?> getReports() {
+        try {
+            List<Report> reports = reportService.getAllReports();
+            return new ResponseEntity<>(reports, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("reports/{report_id}")
+    public ResponseEntity<?> deleteReport(@PathVariable String report_id) {
+        try {
+            reportService.deleteById(report_id);
+            return new ResponseEntity<>("Report deleted successfully!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("reports")
+    public ResponseEntity<?> saveReport(@RequestBody ReportDTO reportDTO) {
+        try {
+            reportService.saveReport(reportDTO);
+            return new ResponseEntity<>("Report saved successfully!", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/send-reset-password")
     public ResponseEntity<?> sendResetEmail(@RequestBody ResetPasswordDto resetPasswordDto) {
         try {
@@ -134,4 +190,5 @@ public class EmailController {
             return new ResponseEntity<>("Failed to send email. Check the console for errors.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
