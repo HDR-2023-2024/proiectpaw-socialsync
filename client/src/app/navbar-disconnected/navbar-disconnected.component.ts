@@ -79,4 +79,8 @@ export class NavbarDisconnectedComponent implements OnInit {
       this.router.navigate(['/home', { query: inputValue }]);
     }
   }
+
+  onNotifications(){
+    this.router.navigate(['/notifications']);
+  }
 }
