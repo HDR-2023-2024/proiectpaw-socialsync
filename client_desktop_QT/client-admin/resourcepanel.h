@@ -1,0 +1,41 @@
+#ifndef RESOURCEPANEL_H
+#define RESOURCEPANEL_H
+
+#include <QDialog>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QStandardItemModel>
+#include <QListView>
+#include <resourcedetails.h>
+
+namespace Ui {
+class ResourcePanel;
+}
+
+class ResourcePanel : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit ResourcePanel(QWidget *parent = nullptr);
+    ~ResourcePanel();
+    void setTitle(QString title);
+    void setContent(QString content);
+
+private:
+    Ui::ResourcePanel *ui;
+    QJsonObject content;
+    QStandardItemModel *model;
+    ResourceDetails *resourceDetails;
+    QString resourceName;
+
+protected:
+    void closeEvent(QCloseEvent *event) override {
+        model->clear();
+        QDialog::closeEvent(event);
+    }
+private slots:
+    void on_listView_doubleClicked(const QModelIndex &index);
+};
+
+#endif // RESOURCEPANEL_H
