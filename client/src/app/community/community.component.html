@@ -3,14 +3,14 @@
     <div class="full-div d-flex col-lg-2 col-0  m-0 p-0 d-none d-lg-block">
         <app-navbar-horizontally></app-navbar-horizontally>
     </div>
-    <div class="col-lg-10 col-12 m-0 p-0 content d-flex justify-content-center">
+    <div class="col-lg-10 col-12 m-0 p-0 content d-flex justify-content-center ">
         <div class="container-fluid mt-5">
             <nav class="container-1 row m-0 p-0">
                 <div class="d-flex justify-content-center align-items-center">
                     <img class="avatar-short-post"
                         src="{{(data?.photoId != undefined && data?.photoId != null ) ? data.photoId : 'assets/images/Group-of-People.jpg'}}">
                     <h2 class="ms-3">{{data?.name}}</h2>
-                    <button type="button" class="btn ms-3" id="join-btn" *ngIf="authService.isUserLoggedIn()"
+                    <button type="button" class="btn ms-3 text-center" id="join-btn" *ngIf="authService.isUserLoggedIn()"
                         (click)="toggleJoinState()">{{ joined ? 'Părăsește'
                         :
                         'Alătură-te' }}</button>
@@ -30,22 +30,25 @@
                 <div class="row">
                     <div class="col-lg-8 col-12">
                         <div class="listPosts mx-auto">
-                            <div class="d-flex justify-content-start mt-4 ms-5">
-                                <select id="sort-category">
-                                    <option value="nume-asc">Voturi (Ascendent)</option>
-                                    <option value="nume-desc">Voturi (Descendent)</option>
-                                    <option value="data-asc">Data (Ascendent)</option>
-                                    <option value="data-desc">Data (Descendent)</option>
-                                    <option value="com-asc">Comentarii (Ascendent)</option>
-                                    <option value="com-desc">Comentarii (Descendent)</option>
-                                </select>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="d-flex justify-content-center sort-category  pb-2  my-auto">
+                                    <label class="sort-category ms-">Sortează după: </label> 
+                                    <select class="sort-category ms-2">
+                                        <option value="nume-asc">Voturi (Ascendent)</option>
+                                        <option value="nume-desc">Voturi (Descendent)</option>
+                                        <option value="data-asc">Data (Ascendent)</option>
+                                        <option value="data-desc">Data (Descendent)</option>
+                                        <option value="com-asc">Comentarii (Ascendent)</option>
+                                        <option value="com-desc">Comentarii (Descendent)</option>
+                                    </select>
+                                </div>
                             </div>
                             <div *ngFor="let post of posts">
                                 <app-short-post class="mx-auto" [data]="post"></app-short-post>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-1 col-12 mt-4">
+                    <div class="col-lg-1 col-12 mt-4 ms-1">
                         <app-community-details data={{data}}></app-community-details>
                     </div>
                 </div>
