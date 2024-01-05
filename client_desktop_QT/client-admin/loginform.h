@@ -22,7 +22,7 @@ private slots:
 
 private:
     Ui::LogInForm *ui;
-    QString loginURL = "http://localhost:8082/api/v1/users/login";
+    QString loginURL = "http://localhost:8086/api/v1/users/login";
     QNetworkAccessManager *manager;
     QNetworkRequest request;
 };
