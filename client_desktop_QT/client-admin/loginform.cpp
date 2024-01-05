@@ -1,0 +1,61 @@
+#include "loginform.h"
+#include "ui_loginform.h"
+
+#include <mainwindow.h>
+
+LogInForm::LogInForm(QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::LogInForm)
+{
+    ui->setupUi(this);
+    ui->lineEditPassword->setEchoMode(QLineEdit::Password);
+    ui->credentialMsg->setWordWrap(true);
+
+    manager = new QNetworkAccessManager(this);
+    connect(manager, &QNetworkAccessManager::finished, this, &LogInForm::response_received);
+}
+
+LogInForm::~LogInForm()
+{
+    delete ui;
+}
+
+void LogInForm::on_btnLogIn_clicked()
+{
+    QString username = ui->lineEditUsername->text();
+    QString password = ui->lineEditPassword->text();
+
+    request.setUrl(QUrl(loginURL));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject json;
+    json.insert("username", username);
+    json.insert("password", password);
+
+    QJsonDocument doc(json);
+    QByteArray postData = doc.toJson();
+
+    manager->post(request, postData);
+}
+
+void LogInForm::response_received(QNetworkReply *reply)
+{
+    QString msg = QString::fromUtf8(reply->readAll());
+    qDebug() << msg;
+
+    QString statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString();
+
+    qDebug() << statusCode;
+
+    if (statusCode == "200")
+    {
+        MainWindow *w = new MainWindow(this);
+        w->show();
+        this->hide();
+    }
+    else
+    {
+        ui->credentialMsg->setText(msg);
+    }
+}
+
