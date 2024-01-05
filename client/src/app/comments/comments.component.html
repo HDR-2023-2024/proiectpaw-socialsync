@@ -3,7 +3,7 @@
     <div class="form-group">
       <textarea class="form-control" placeholder="What are your thoughts?" #commentContent></textarea>
     </div>
-    <button class="btn btn-outline-dark align-self-end mt-3" type="submit">Add comment</button>
+    <button class="btn btn-outline-dark align-self-end mt-3 addComment" type="submit">Add comment</button>
   </form>
 </div>
 <div class="comment-container">
@@ -20,7 +20,7 @@
         {{ comment.content }}
       </p>
     </div>
-    <div class="butoane d-flex  flex-end">
+    <div class="butoane d-flex  flex-end mt-2">
         <div>
           <button type="button" class="btn px-3 mx-3 pt-2 edit-comment-btn align-items-center"  (click)="deleteComment(comment.id)"
               *ngIf="authService.isUserLoggedIn() && authService.getId() === comment.creator?.id">
