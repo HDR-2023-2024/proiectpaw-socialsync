@@ -1,0 +1,25 @@
+<app-navbar-disconnected></app-navbar-disconnected>
+<div class="row m-0 p-0 ">
+    <div class="full-div d-flex col-lg-2 col-0  m-0 p-0 d-none d-lg-block">
+        <app-navbar-horizontally></app-navbar-horizontally>
+    </div>
+    <div class="col-lg-10 col-12 m-0 p-0 content d-flex justify-content-center">
+        <div class="row m-0 p-0 d-flex justify-content-center">
+            <div class=" col-lg-10 col-12 m-0 mx-auto p-0 content  ">
+                <div class=" m-0 p-0 d-none d-lg-block col-0 col-lg-12" id="carousel">
+                    <app-carousel></app-carousel>
+                </div>
+                <div class="container-flex d-flex col-lg-10 col-12 row mx-auto p-0 notifications">
+                    <div class="notification d-flex align-items-center">
+                      <h2 class="mt-3 ms-2">Notifications</h2>
+                      <p class="count mt-4 ms-2 text-center">{{ notificationCount }}</p>
+                    </div>
+                  
+                    <div *ngFor="let notification of notifications" class="mx-auto notification">
+                      <app-notification class="m-0" [data]="notification"></app-notification>
+                    </div>
+                </div>                                
+            </div>
+        </div>
+    </div>
+</div>

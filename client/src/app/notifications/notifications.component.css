@@ -1,0 +1,19 @@
+.notification{
+    width: 100%;
+}
+
+.notifications {
+    background-color: #ffff;
+    width: 90%;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 1%; 
+}
+
+.count {
+    background-color: #FF4433;
+    width: 40px;
+    color: #ffff;
+    border-radius: 15%; 
+}
+
