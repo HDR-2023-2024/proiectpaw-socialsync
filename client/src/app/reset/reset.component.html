@@ -1,3 +1,4 @@
+
 <app-navbar-disconnected></app-navbar-disconnected>
 <div class="container-fluid m-0 p-0 mt-lg-0 overflow-hidden">
     <div class="row m-0 p-0">
@@ -5,7 +6,7 @@
             <app-navbar-horizontally></app-navbar-horizontally>
         </div>
         <div class="row col-lg-10 col-12 m-0 p-0 justify-content-center align-items-center">
-            <div class="col-12 col-lg-6 vh-80 div-contact m-0 p-0">
+            <div class="col-12 col-lg-6 div-contact m-0 p-0">
                 <form  #myForm="ngForm" class="resetPass p-5 mx-auto col-12">
                     <h2 class="mb-0 text-center">Introdu codul primit prin email</h2>
                     <br>
@@ -16,6 +17,9 @@
                         <button type="submit" class="btn reset-btn" [disabled]="!myForm.valid" (click)="sendCode()">Resetează</button>
                     </div>
                 </form>
+            </div>
+            <div class="col-0 col-lg-6 div-contact m-0 p-0">
+                <img src="assets/images/code.jpg" id="imgReset" class=" d-none d-lg-block">
             </div>
         </div>
     </div>
