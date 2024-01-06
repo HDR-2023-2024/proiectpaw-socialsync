@@ -50,6 +50,8 @@ import { PopupServiceService } from './popup-service.service';
 import { FormPasswordsComponent } from './form-passwords/form-passwords.component';
 import { ResetComponent } from './reset/reset.component';
 import { ResetPassComponent } from './reset-pass/reset-pass.component';
+import { NotificationComponent } from './notification/notification.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
@@ -81,7 +83,8 @@ const routes: Routes = [
   { path: "edit-post/:postId", component: EditPostComponent },
   { path: "reset", component: ResetComponent },
   { path: "reset-pass", component: ResetPassComponent },
-  { path: "form-password", component: FormPasswordsComponent }
+  { path: "form-password", component: FormPasswordsComponent },
+  { path: "notifications", component: NotificationsComponent },
 ];
 
 
@@ -130,7 +133,9 @@ const routes: Routes = [
     PopupComponentComponent,
     FormPasswordsComponent,
     ResetComponent,
-    ResetPassComponent
+    ResetPassComponent,
+    NotificationComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,
