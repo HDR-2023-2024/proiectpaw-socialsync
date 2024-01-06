@@ -17,7 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr, QString token = "Bearer ");
     ~MainWindow();
 
 private slots:
@@ -35,13 +35,13 @@ private:
     ResourcePanel *resourcePanel;
     QNetworkAccessManager *manager;
     QNetworkRequest request;
-    QString topicsURL = "http://localhost:8084/api/v1/topics";
-    QString usersURL = "http://localhost:8082/api/v1/users";
-    QString postsURL = "http://localhost:8080/api/v1/posts";
-    QString commentsURL = "http://localhost:8081/api/v1/comments";
-    // QString topicsURL = "http://localhost:8086/api/v1/topics";
-    // QString usersURL = "http://localhost:8086/api/v1/users";
-    // QString postsURL = "http://localhost:8086/api/v1/posts";
-    // QString commentsURL = "http://localhost:8086/api/v1/comments";
+    // QString topicsURL = "http://localhost:8084/api/v1/topics";
+    // QString usersURL = "http://localhost:8082/api/v1/users";
+    // QString postsURL = "http://localhost:8080/api/v1/posts";
+    // QString commentsURL = "http://localhost:8081/api/v1/comments";
+    QString topicsURL = "http://localhost:8086/api/v1/topics";
+    QString usersURL = "http://localhost:8086/api/v1/users";
+    QString postsURL = "http://localhost:8086/api/v1/posts";
+    QString commentsURL = "http://localhost:8086/api/v1/comments";
 };
 #endif // MAINWINDOW_H

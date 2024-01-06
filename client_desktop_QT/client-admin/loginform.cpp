@@ -34,6 +34,7 @@ void LogInForm::on_btnLogIn_clicked()
 
     QJsonDocument doc(json);
     QByteArray postData = doc.toJson();
+    request.setRawHeader("Authorization", "");
 
     manager->post(request, postData);
 }
@@ -49,7 +50,7 @@ void LogInForm::response_received(QNetworkReply *reply)
 
     if (statusCode == "200")
     {
-        MainWindow *w = new MainWindow(this);
+        MainWindow *w = new MainWindow();
         w->show();
         this->hide();
     }

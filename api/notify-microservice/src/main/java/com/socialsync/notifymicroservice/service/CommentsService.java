@@ -34,10 +34,12 @@ public class CommentsService {
             List<Comment> postComments = commentRepository.getCommentsByPostId(post.getPostId());
             allUnseenComments.addAll(postComments);
         }
-        // 3. Delete the fetched comments
-        commentRepository.deleteAll(allUnseenComments);
 
         return allUnseenComments;
+    }
+
+    public void deleteCommNotif (String notif_id) {
+        commentRepository.deleteById(notif_id);
     }
 
     public void saveComment(CommentQueueMessage commentQueueMessage) {

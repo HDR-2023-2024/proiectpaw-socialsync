@@ -2,7 +2,8 @@
 
 cd gateway
 
-mvn package
+./mvnw clean
+./mvnw install
 
 cd target
 java -jar  gateway-0.0.1-SNAPSHOT.jar
