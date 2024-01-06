@@ -17,7 +17,7 @@
                         <textarea class="form-control" id="description" [(ngModel)]="post.content" name="description" rows="3" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="photo">Fotografile postări:</label>
+                        <label for="photo">Fotografiile postări:</label>
                         <div *ngFor="let file of files; let i = index">
                             {{ file.name }}
                             <button (click)="deleteFile(i)">X</button>
