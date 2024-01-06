@@ -40,7 +40,8 @@ select {
 }
 
 .btn-primary {
-  background-color: #de1738;
+  background-color: #FF4433;
+  color: #fff;
   color: #fff;
   border: none;
   padding: 10px 15px;
