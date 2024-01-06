@@ -1,4 +1,4 @@
-<app-navbar-disconnected></app-navbar-disconnected>>
+<app-navbar-disconnected></app-navbar-disconnected>
 <div class="container-fluid m-0 p-0">
     <div class="row m-0 p-0">
         <div class="full-div d-flex col-lg-2 col-0  m-0 p-0 d-none d-lg-block">
@@ -32,9 +32,11 @@
                             </button>
                         </div>
                     </div>
-                    <button id="sub" type="button" class="btn btn-primary"
-                        [disabled]="community.name.length == 0 || community.description.length == 0  "
-                        (click)="saveChanges()">Creare</button>
+                    <div class="form-group d-flex justify-content-center">
+                        <button id="sub" type="button" class="btn btn-primary"
+                            [disabled]="community.name.length == 0 || community.description.length == 0"
+                            (click)="saveChanges()">Creare</button>
+                    </div>
                 </form>
             </div>
         </div>
