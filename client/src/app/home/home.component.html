@@ -11,17 +11,6 @@
                 </div>
                 <div class="container-flex d-flex col-lg-10 col-12  row  mx-auto p-0">
                     <div class="listPosts mx-auto">
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="d-flex justify-content-center sort-category  pb-2 mt-3 my-auto">
-                                <label class="sort-category">Sortează după:</label>
-                                <select class="sort-category">
-                                    <option value="nume-asc">Nume (Ascendent)</option>
-                                    <option value="nume-desc">Nume (Descendent)</option>
-                                    <option value="data-asc">Data (Ascendent)</option>
-                                    <option value="data-desc">Data (Descendent)</option>
-                                </select>
-                            </div>
-                        </div>
                         <div *ngFor="let item of myArr " class="postShort mx-auto">
                             <app-short-post class="m-0 " [data]="item"></app-short-post>
                         </div>
