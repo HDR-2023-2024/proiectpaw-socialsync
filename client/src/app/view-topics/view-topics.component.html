@@ -16,16 +16,6 @@
                                 <button type="button" class="btn px-3 py-auto" id="create-post-btn"
                                     (click)="redirectToCreateTopicPage()" *ngIf="authService.isUserLoggedIn()">+</button>
                             </div>
-
-                            <div class="d-flex justify-content-center sort-category  pb-2 mt-3 my-auto">
-                                <label class="sort-category">Sortează după:</label>
-                                <select class="sort-category">
-                                    <option value="nume-asc">Nume (Ascendent)</option>
-                                    <option value="nume-desc">Nume (Descendent)</option>
-                                    <option value="data-asc">Data (Ascendent)</option>
-                                    <option value="data-desc">Data (Descendent)</option>
-                                </select>
-                            </div>
                         </div>
                         <div *ngFor="let item of myArr " class="postShort mx-auto">
                             <app-topic-short class="mx-0 " [data]="item"></app-topic-short>

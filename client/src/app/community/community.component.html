@@ -28,27 +28,14 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-12">
+                    <div class="col-lg-8 col-12 mt-4">
                         <div class="listPosts mx-auto">
-                            <div class="d-flex align-items-center mt-3">
-                                <div class="d-flex justify-content-center sort-category  pb-2  my-auto">
-                                    <label class="sort-category ms-">Sortează după: </label> 
-                                    <select class="sort-category ms-2">
-                                        <option value="nume-asc">Voturi (Ascendent)</option>
-                                        <option value="nume-desc">Voturi (Descendent)</option>
-                                        <option value="data-asc">Data (Ascendent)</option>
-                                        <option value="data-desc">Data (Descendent)</option>
-                                        <option value="com-asc">Comentarii (Ascendent)</option>
-                                        <option value="com-desc">Comentarii (Descendent)</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div *ngFor="let post of posts">
                                 <app-short-post class="mx-auto" [data]="post"></app-short-post>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-1 col-12 mt-4 ms-1">
+                    <div class="col-lg-1 col-12 ms-1">
                         <app-community-details data={{data}}></app-community-details>
                     </div>
                 </div>
