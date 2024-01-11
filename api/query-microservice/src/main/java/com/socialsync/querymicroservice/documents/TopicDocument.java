@@ -5,10 +5,14 @@ import com.redis.om.spring.annotations.Indexed;
 import com.redis.om.spring.annotations.Searchable;
 import com.socialsync.querymicroservice.dto.UserSummaryDTO;
 import com.socialsync.querymicroservice.pojo.Topic;
+import com.socialsync.querymicroservice.pojo.enums.Categorie;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +27,12 @@ public class TopicDocument {
     private String name;
     private String description;
     private String photoId;
+
+    @Searchable
+    private Categorie categorie;
+    private Set<UserSummaryDTO> members = new HashSet<>();
+
+
     private Long timestampCreated;
     private Long timestampUpdated;
 
@@ -31,6 +41,7 @@ public class TopicDocument {
         this.name = topic.getName();
         this.description = topic.getDescription();
         this.photoId = topic.getPhotoId();
+        this.categorie = topic.getCategorie();
         this.timestampCreated = topic.getTimestampCreated();
         this.timestampUpdated = topic.getTimestampUpdated();
     }

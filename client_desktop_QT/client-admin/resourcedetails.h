@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QStandardItemModel>
 #include <QAbstractItemView>
+#include <QCloseEvent>
 
 namespace Ui {
 class ResourceDetails;

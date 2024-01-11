@@ -6,5 +6,7 @@ public enum QueueMessageType {
     DELETE,
     RETRIEVE,
     UPVOTE,
-    DOWNVOTE
+    DOWNVOTE,
+     JOIN,
+    LEAVE
 }
