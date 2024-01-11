@@ -13,6 +13,7 @@ import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.querymicroservice.pojo.PostQueueMessage;
 import com.socialsync.querymicroservice.pojo.TopicQueueMessage;
 import com.socialsync.querymicroservice.pojo.UserQueueMessage;
+import com.socialsync.querymicroservice.pojo.enums.Categorie;
 import com.socialsync.querymicroservice.service.QueryService;
 import com.socialsync.querymicroservice.util.exceptions.TopicException;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -144,7 +146,15 @@ public class QueryController {
     }
 
     @GetMapping("/topics")
-    public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page, Optional<String> query) {
+    public ResponseEntity<?> fetchTopics(@NotNull @RequestParam Integer page, Optional<String> query, Optional<Categorie> categorie) {
+        if (categorie.isPresent()) {
+            log.info("Cautare dupa categorie: " + categorie.get());
+            return categorie.map(s -> ResponseEntity
+                            .ok(queryService.fetchTopicsByCategorie(s, parsePage(page))))
+                    .orElseGet(() -> ResponseEntity
+                            .ok(List.of()));
+        }
+
         return query.map(s -> ResponseEntity
                     .ok(queryService.searchTopicsByName(s, parsePage(page))))
                 .orElseGet(() -> ResponseEntity
@@ -156,7 +166,7 @@ public class QueryController {
         Optional<TopicDocument> topic = queryService.fetchTopic(id);
 
         return ResponseEntity
-                .ok(topic.isPresent() ? new TopicDTO(topic.get(), queryService.fetchTopicPosts(id, 0, userId)) : "shit");
+                .ok(topic.isPresent() ? new TopicDTO(topic.get(), queryService.fetchTopicPosts(id, 0, userId), topic.get().getMembers()) : "shit");
     }
 
     @GetMapping("/topics/{id}/posts")

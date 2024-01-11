@@ -10,6 +10,7 @@ import com.socialsync.querymicroservice.pojo.CommentQueueMessage;
 import com.socialsync.querymicroservice.pojo.PostQueueMessage;
 import com.socialsync.querymicroservice.pojo.TopicQueueMessage;
 import com.socialsync.querymicroservice.pojo.UserQueueMessage;
+import com.socialsync.querymicroservice.pojo.enums.Categorie;
 import com.socialsync.querymicroservice.repository.CommentRepository;
 import com.socialsync.querymicroservice.repository.PostRepository;
 import com.socialsync.querymicroservice.repository.TopicRepository;
@@ -100,6 +101,11 @@ public class QueryService implements QueryServiceMethods {
         return topicRepository.findById(id);
     }
 
+    public List<TopicSummaryDTO> fetchTopicsByCategorie(Categorie categorie, Integer page) {
+        log.info("Pagina " + page);
+        return topicRepository.findAll().stream().map(TopicSummaryDTO::new).filter( topicSummaryDTO -> topicSummaryDTO.getCategorie().equals(categorie)).toList();
+    }
+
     public List<PostSummaryDTO> fetchTopicPosts(String id, Integer page, Optional<String> userId) {
         return postRepository.findAllByTopicId(id, PageRequest.of(page, 10)).map(postDocument -> toSummary(postDocument, userId)).toList();
     }
@@ -183,11 +189,13 @@ public class QueryService implements QueryServiceMethods {
         CommentDocument commentDocument = new CommentDocument(msgQ.getComment());
 
         boolean parentPostExists = postRepository.existsById(commentDocument.getPostId());
-        boolean creatorExists = userRepository.existsById(msgQ.getComment().getCreatorId());
+        Optional<UserDocument> creator = userRepository.findById(msgQ.getComment().getCreatorId());
 
 
-        if (parentPostExists && creatorExists) {
+        if (parentPostExists && creator.isPresent()) {
             log.info("Post and creator found for comment " + commentDocument.getId());
+            commentDocument.setCreator(new UserSummaryDTO(creator.get()));
+
             boolean commentExists = commentRepository.existsById(commentDocument.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {
@@ -300,10 +308,10 @@ public class QueryService implements QueryServiceMethods {
 
         if (creator.isPresent()) {
             topicDocument.setCreator(new UserSummaryDTO(creator.get()));
-            boolean topicExists = topicRepository.existsById(topicDocument.getId());
+            Optional<TopicDocument> topic = topicRepository.findById(topicDocument.getId());
             switch (msgQ.getType()) {
                 case CREATE -> {
-                    if (!topicExists) {
+                    if (topic.isEmpty()) {
                         log.info("Adding topic " + msgQ.getTopic().getId());
                         topicRepository.save(topicDocument);
                     }
@@ -311,7 +319,7 @@ public class QueryService implements QueryServiceMethods {
                         throw new TopicException("CREATE: Topic " + topicDocument.getId()  + " already exists!");
                 }
                 case UPDATE -> {
-                    if (topicExists) {
+                    if (topic.isPresent()) {
                         log.info("Updating topic " + msgQ.getTopic().getId());
                         topicRepository.save(topicDocument);
                     }
@@ -321,12 +329,30 @@ public class QueryService implements QueryServiceMethods {
                     }
                 }
                 case DELETE -> {
-                    if (topicExists) {
+                    if (topic.isPresent()) {
                         log.info("Deleting topic " + msgQ.getTopic().getId());
                         topicRepository.delete(topicDocument);
                     }
                     else
                         throw new TopicException("DELETE: Topic " + topicDocument.getId() + " to be deleted not found!");
+                }
+                case JOIN -> {
+                    if (topic.isPresent()) {
+                        log.info("User " + msgQ.getTopic().getCreatorId() + " joined " + topicDocument.getId());
+                        topic.get().getMembers().add(topicDocument.getCreator());
+                        topicRepository.save(topic.get());
+                    }
+                    else
+                        throw new TopicException("JOIN: Topic " + topicDocument.getId() + "doest not exist");
+                }
+                case LEAVE -> {
+                    if (topic.isPresent()) {
+                        log.info("User " + msgQ.getTopic().getCreatorId() + " joined " + topicDocument.getId());
+                        topic.get().getMembers().remove(topicDocument.getCreator());
+                        topicRepository.save(topic.get());
+                    }
+                    else
+                        throw new TopicException("LEAVE: Topic " + topicDocument.getId() + "doest not exist");
                 }
             }
         }

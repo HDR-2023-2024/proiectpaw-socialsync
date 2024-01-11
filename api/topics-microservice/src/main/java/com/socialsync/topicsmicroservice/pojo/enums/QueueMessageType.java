@@ -4,5 +4,7 @@ public enum QueueMessageType {
     CREATE,
     UPDATE,
     DELETE,
-    RETRIEVE
+    RETRIEVE,
+    JOIN,
+    LEAVE
 }

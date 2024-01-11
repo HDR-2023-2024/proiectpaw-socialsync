@@ -60,6 +60,19 @@ public class TopicController {
         }
     }
 
+    @PutMapping("/{id}/join")
+    public ResponseEntity<?> joinTopic(@RequestHeader("X-User-Id") String userId, @PathVariable String id) {
+        try {
+
+            topicService.joinTopic(id, userId);
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } catch (TopicNotFound ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @PathVariable String id) {
