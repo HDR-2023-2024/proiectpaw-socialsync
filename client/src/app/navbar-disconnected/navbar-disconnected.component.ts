@@ -74,7 +74,7 @@ export class NavbarDisconnectedComponent implements OnInit {
     if (this.inputData != null && this.inputData.stringName.includes("com")) {
       this.router.navigate(['/view-topics', { query: inputValue }]);
     } else if (this.inputData != null && this.inputData.stringName.includes("uti")) {
-      this.router.navigate(['/home', { query: inputValue }]);
+      this.router.navigate(['/users', { query: inputValue }]);
     } else {
       this.router.navigate(['/home', { query: inputValue }]);
     }
