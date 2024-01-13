@@ -28,11 +28,12 @@ export class ProfileCardComponent {
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
   ngOnInit() {
-    this.user.getData(this.authService.getId()).subscribe(
+    let userId : any =  this.storage.get("userToShow");
+    this.user.getData(userId).subscribe(
       (data) => {
         console.log('Datele de la server:', data);
         this.data = data;
-        this.profilePhoto = this.authService.getAvatar();
+        this.profilePhoto =  data.photoId;
       },
       (error) => {
         this.router.navigate(['/internal-server-error']);

@@ -1,3 +1,5 @@
-<div *ngFor="let profilePost of myArr">
-  <app-short-post class="mx-0 " [data]="profilePost"></app-short-post>
+<div class="full">
+  <div *ngFor="let profilePost of myArr">
+    <app-short-post [data]="profilePost"></app-short-post>
+  </div>
 </div>

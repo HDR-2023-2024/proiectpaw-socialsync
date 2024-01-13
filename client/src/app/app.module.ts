@@ -52,6 +52,9 @@ import { ResetComponent } from './reset/reset.component';
 import { ResetPassComponent } from './reset-pass/reset-pass.component';
 import { NotificationComponent } from './notification/notification.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { ProfileLinkCommunityComponent } from './profile-link-community/profile-link-community.component';
+import { ViewUsersComponent } from './view-users/view-users.component';
+import { UserShortComponent } from './user-short/user-short.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
@@ -81,10 +84,12 @@ const routes: Routes = [
   { path: "help", component: HelpPageComponent },
   { path: "help-s", component: HelpSiteComponent },
   { path: "edit-post/:postId", component: EditPostComponent },
+  { path: "user/:userId", component: ProfileComponent },
   { path: "reset", component: ResetComponent },
   { path: "reset-pass", component: ResetPassComponent },
   { path: "form-password", component: FormPasswordsComponent },
   { path: "notifications", component: NotificationsComponent },
+  { path: "users", component: ViewUsersComponent },
 ];
 
 
@@ -135,7 +140,10 @@ const routes: Routes = [
     ResetComponent,
     ResetPassComponent,
     NotificationComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    ProfileLinkCommunityComponent,
+    ViewUsersComponent,
+    UserShortComponent
   ],
   imports: [
     BrowserModule,

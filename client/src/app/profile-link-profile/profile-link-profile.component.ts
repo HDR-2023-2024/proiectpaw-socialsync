@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject,Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FullPostService } from '../full-post.service';
 import { AuthService } from '../auth.service';
@@ -16,7 +16,7 @@ import { PopupServiceService } from '../popup-service.service';
 export class ProfileLinkProfileComponent {
 
   constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private userServ: UserServiceService, public authService: AuthService, private http: HttpClient ,private popupService: PopupServiceService) { }
-
+  @Input() userId: any = null;
 
   data = {
     id: '',
@@ -29,9 +29,11 @@ export class ProfileLinkProfileComponent {
 
   }
   ngOnInit() {
-    this.userServ.getData(this.authService.getId()).subscribe(
+    let userId : any =  this.storage.get("userToShow");
+
+    this.userServ.getData(userId).subscribe(
       (data) => {
-        //console.log('Datele de la server:', data);
+        console.log('Datele de la server:', data);
         this.data = data;
       },
       (error) => {

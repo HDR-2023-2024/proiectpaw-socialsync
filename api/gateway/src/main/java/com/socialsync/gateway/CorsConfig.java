@@ -15,7 +15,6 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowCredentials(true);
-        //corsConfig.addAllowedOrigin("http://localhost:4200");
         corsConfig.setAllowedOriginPatterns(List.of("*"));  // testare nu angular
         corsConfig.addAllowedHeader("*");
 
