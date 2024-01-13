@@ -1,38 +1,14 @@
 package com.socialsync.topicsmicroservice.pojo.enums;
 
 public enum Categorie {
-    //BAUTURI
-    APA,
-    VIN,
-    BERE,
-
-    //MANCARE
-    SHAORMA,
-    CARTOFI,
-
-    //DESERT
-    CIOCOLATA,
-    PRAJITURI,
-
-    //NOUTATI
-    EVENIMENTE,
-    OFERTE,
-    PROMOTII,
-
-    //ISTORIE
-    PERIOADE_ISTORICE,
-    EVENIMENTE_ISTORICE,
-
-    //SPORT
-    FOLBAL,
-    BASCHET,
-
-    //GEOGRAFIE
-    TARA,
-    MUNTI,
-
-    //STIINTA
-    CHIMIE,
-    FIZICA,
-    TEHNOLOGIE
+    Băuturi, Mâncare, Deserturi,
+    Apa, Sucuri, Cafea,
+    Pizza, Paste, Burgeri,
+    Tort, Înghețată, Prăjituri,
+    Evenimente, Oferte, Promoții,
+    Perioade_istorice, Personalități_istorice, Evenimente_istorice,
+    Țări, Capitale, Munți,
+    Fotbal, Tenis, Baschet,
+    Astronomie, Biologie, Chimie,
+    Gadget_uri, Software, Inovații
 }

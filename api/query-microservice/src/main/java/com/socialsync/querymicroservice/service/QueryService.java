@@ -103,6 +103,7 @@ public class QueryService implements QueryServiceMethods {
 
     public List<TopicSummaryDTO> fetchTopicsByCategorie(Categorie categorie, Integer page) {
         log.info("Pagina " + page);
+        log.info("Categorie " + categorie);
         return topicRepository.findAll().stream().map(TopicSummaryDTO::new).filter( topicSummaryDTO -> topicSummaryDTO.getCategorie().equals(categorie)).toList();
     }
 

@@ -10,6 +10,7 @@ public class User {
     private String photoId;
     private String  username;
     private String  email;
+    private String  description;
     private RoleType role;
     private GenderType gender;
 }
