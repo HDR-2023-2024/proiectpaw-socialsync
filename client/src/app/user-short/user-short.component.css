@@ -1,0 +1,62 @@
+.chart {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 1px 2px #8888885d;
+  }
+  
+  .avatar-short-post {
+    width: 32px;
+    height: 32px;
+  }
+  
+  
+  .reaction {
+    font-size: 1.0em;
+    color: #000;
+  }
+  
+  .reaction-neg {
+    font-size: 1.0em;
+    color: #000;
+  }
+  
+  .reaction:hover {
+    cursor: pointer;
+  }
+  
+  .reaction-value {
+    cursor: default;
+  }
+  
+  
+  .reaction-box-like {
+    background-color: #8888883f;
+    border-radius: 20px;
+  }
+  
+  .shortPostClass {
+    width: 100%;
+  }
+  
+  .shortOver:hover {
+    cursor: pointer;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+  
+  a:hover {
+    cursor: pointer;
+  }
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  p {
+    text-align: justify;
+    text-justify: inter-word;
+  }
