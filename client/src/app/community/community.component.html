@@ -9,11 +9,11 @@
                 <div class="d-flex justify-content-center align-items-center">
                     <img class="avatar-short-post"
                         src="{{(data?.photoId != undefined && data?.photoId != null ) ? data.photoId : 'assets/images/Group-of-People.jpg'}}">
-                    <h2 class="ms-3">{{data?.name}}</h2>
-                    <button type="button" class="btn ms-3 text-center" id="join-btn" *ngIf="authService.isUserLoggedIn()"
-                        (click)="toggleJoinState()">{{ joined ? 'Părăsește'
-                        :
-                        'Alătură-te' }}</button>
+                    <h2 class="ms-3">{{data?.name}}</h2><br>
+                   
+                    <button type="button"  class="btn ms-3 text-center" id="join-btn" *ngIf="authService.isUserLoggedIn() && !isMember && authService.getId() != data.creator?.id"
+                        (click)="toggleJoinState()">
+                        Alătură-te</button>
                 </div>
             </nav>
             <div class="butoane d-flex ">

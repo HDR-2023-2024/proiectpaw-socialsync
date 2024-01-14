@@ -24,5 +24,12 @@
 
 p {
   text-align: justify;
-  text-justify: inter-word;
+}
+
+.ms-3 {
+  display: inline;
+}
+
+a{
+  color: #000;
 }

@@ -1,8 +1,8 @@
 <div class="community-details d-flex flex-column mt-5 align-items-center justify-content-center">
   <h3>Despre comunitate</h3>
   <hr>
+  <p class="ms-0 d-inline" (click)="navigateToUser()">Creată de : <a (click)="navigateToUser()" class="d-inline">{{data?.creator.username}}</a> </p>
   <p class="justify-content-center">{{data?.description}}</p>
-  <hr>
   <div class="d-inline">
     <hr>
     <p>
@@ -21,5 +21,5 @@
     <hr>
   
   </div>
-  <button type="button" class="btn" id="create-btn" *ngIf="authService.isUserLoggedIn()" (click)="navigateToPost(data.id,data.name)">Creează o postare</button>
+  <button type="button" class="btn" id="create-btn" *ngIf="(isMember || data.creator?.id == authService.getId())" (click)="navigateToPost(data.id,data.name)">Creează o postare</button>
 </div>

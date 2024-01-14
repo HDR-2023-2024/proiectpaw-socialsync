@@ -219,6 +219,10 @@ public class GatewayApplication {
                 .route("users-ms", r -> r
                         .path("/api/v1/users/**")
                         .uri("http://localhost:8082"))
+
+                .route("topics", r -> r
+                        .path("/api/v1/topics/**")
+                        .uri("http://localhost:8084"))
                 .build();
 
     }

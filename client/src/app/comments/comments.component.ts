@@ -87,6 +87,7 @@ export class CommentsComponent {
       (response) => {
         //console.log('Comentariu creat cu succes.', response);
         this.ngOnInit();
+        this.popupService.showPopup("Comentariu creat cu succes.");
       },
       (error) => {
         this.router.navigate(['/internal-server-error']);

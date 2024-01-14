@@ -30,7 +30,6 @@ export class CreateTopicService {
     return this.http.post<any>("http://localhost:8086/api/v1/topics", postData, { headers: headers }).subscribe(
       data => {
         //console.log(data);
-        this.router.navigate(['/unauthorized']);
         this.router.navigate(['community/', data.id]);
       },
       error => {

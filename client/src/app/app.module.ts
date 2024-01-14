@@ -56,6 +56,7 @@ import { ProfileLinkCommunityComponent } from './profile-link-community/profile-
 import { ViewUsersComponent } from './view-users/view-users.component';
 import { UserShortComponent } from './user-short/user-short.component';
 
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
   { path: 'home-menu', component: HomeMenuComponent }, // ok
@@ -143,7 +144,7 @@ const routes: Routes = [
     NotificationsComponent,
     ProfileLinkCommunityComponent,
     ViewUsersComponent,
-    UserShortComponent
+    UserShortComponent,
   ],
   imports: [
     BrowserModule,
