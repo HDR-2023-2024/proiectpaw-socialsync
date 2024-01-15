@@ -69,9 +69,9 @@ export class CommunityDetailsComponent {
     this.router.navigate(['/create-post', topicId, topicName]);
   }
 
-  navigateToUser(){
+  navigateToUser(id : string){
     console.log("Ceva2")
-    this.router.navigate(['/user', this.data.creator?.id]);
+    this.router.navigate(['/user', id]);
   }
 
   navigateToCategory(){
