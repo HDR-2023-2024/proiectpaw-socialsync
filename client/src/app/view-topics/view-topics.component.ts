@@ -15,11 +15,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class ViewTopicsComponent {
   private page = 0;
   private query: string | null = null;
+  private category: string | null = null;
 
 
   constructor(public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
       this.query = params['query'];
+      this.category = params['category'];
       this.page = 0;
       //console.log('Valoarea primita:', this.query);
       this.loadDataOnPageLoad();
@@ -50,11 +52,12 @@ export class ViewTopicsComponent {
     let url = "";
 
     if (this.query == null || this.query.length == 0) {
-      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString();
+      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + (this.category != null ? "&categorie=" + this.category : "");
     }
     else {
-      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + "&query=" + this.query;
+      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + "&query=" + this.query + (this.category != null ? "&categorie=" + this.category : "");
     }
+    console.log(url)
     let oldSize = this.myArr.length;
     this.dataService.getDataSyncTopics(url)
       .then((data: any[]) => {
@@ -88,11 +91,12 @@ export class ViewTopicsComponent {
     let url;
 
     if (this.query == null || this.query.length == 0) {
-      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString();
+      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + (this.category != null ? "&categorie=" + this.category : "");
     }
     else {
-      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + "&query=" + this.query;
+      url = 'http://localhost:8086/api/v1/query/topics?page=' + this.page.toString() + "&query=" + this.query + (this.category != null ? "&categorie=" + this.category : "");
     }
+    console.log(url);
     this.dataService.getDataTopics(url).subscribe(
       (data) => {
         console.log('Datele de la server:', data);

@@ -15,7 +15,7 @@
         </ng-template>
     </p>
     <div id="subgroup" [style.display]="isVisible ? 'block' : 'none'">
-        <div *ngFor=" let item of data.subgroup">
+        <div *ngFor=" let item of data.subgroup" (click)="handleItemClick(item)">
             <p class="subitem">{{ item }}</p>
         </div>
     </div>
