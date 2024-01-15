@@ -52,7 +52,7 @@ public class CommentsController {
                 commentsService.updateComment(id, comment);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
-                return new ResponseEntity<>("Este topicul altui utilizator!", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("Acest comentariu apartine altui utilizator!", HttpStatus.UNAUTHORIZED);
             }
         } catch (CommentNotFound topicNotFound) {
             System.out.println("Topicul nu exista il creez");
@@ -71,7 +71,7 @@ public class CommentsController {
                 commentsService.deleteComment(id);
                 return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
             } else {
-                return new ResponseEntity<>("Comentatiul nu poate fi sters decat de admin sau utilizatorul care la creat!", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("Comentariul nu poate fi sters decat de admin sau utilizatorul care l-a creat!", HttpStatus.UNAUTHORIZED);
             }
         } catch (CommentNotFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

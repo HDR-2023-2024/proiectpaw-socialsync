@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -31,12 +32,18 @@ public class ReportService {
     }
 
     // slavare
-    public void saveReport(ReportDTO reportDTO){
+    public boolean saveReport(ReportDTO reportDTO){
+        // verficare sa nu fi dat deja report
+        Optional<Report> rep = reportRepository.findAllByPostIdAndUserId(reportDTO.getPostId(), reportDTO.getUserId());
+        if(rep.isPresent())
+            return false;
+
         Report report = new Report();
         report.setPostTitle(reportDTO.getPostTitle());
         report.setUsername(reportDTO.getUsername());
         report.setPostId(reportDTO.getPostId());
         report.setUserId(reportDTO.getUserId());
         reportRepository.save(report);
+        return  true;
     }
 }

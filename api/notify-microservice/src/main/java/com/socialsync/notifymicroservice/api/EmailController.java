@@ -48,7 +48,7 @@ public class EmailController {
 
     private final EmailService emailService;
 
-    /*
+
     @RabbitListener(queues = "${socialsync.rabbitmq.queue.comments}")
     void receiveQueueMessageComment(String msg) {
         CommentQueueMessage msgQ = gson.fromJson(msg, CommentQueueMessage.class);
@@ -74,7 +74,7 @@ public class EmailController {
             log.error(ex.getMessage());
         }
     }
-    */
+
 
     @Autowired
     public EmailController(EmailService emailService, RabbitMqConnectionFactoryComponent conectionFactory, Gson gson, PostsService postsService, CommentsService commentsService, ReportService reportService) {
@@ -92,11 +92,12 @@ public class EmailController {
             @RequestBody ContactForm contactFormModel) {
         String to = admin_mail;
         String subject = contactFormModel.getSubject();
-        String text = "Name: " + contactFormModel.getNume() + "\n" +
-                "Surname: " + contactFormModel.getPrenume() + "\n" +
-                "Message: " + contactFormModel.getMessage() + "\n" +
-                "Mail: " + contactFormModel.getEmail();
-        log.info("Email text: {}", text);
+        String greetings = "Hi, Admin! \nAveti o notificare noua de la echipa Socialsync! \n";
+        String text = greetings + "Dorim sa va informam ca utilizatorul cu numele" + contactFormModel.getNume() +
+                " " + contactFormModel.getPrenume() +
+                " va transmite urmatorul mesaj de contact: \n\n" + contactFormModel.getMessage() + "\n\n" +
+                "Ii puteti raspunde la adresa de mail: " + contactFormModel.getEmail();
+        log.info("Email text: {}", greetings + text);
         try {
             emailService.sendEmail(to, subject, text);
             return new ResponseEntity<>("Email send successfuly!", HttpStatus.OK);
@@ -173,8 +174,12 @@ public class EmailController {
     @PostMapping("reports")
     public ResponseEntity<?> saveReport(@RequestBody ReportDTO reportDTO) {
         try {
-            reportService.saveReport(reportDTO);
-            return new ResponseEntity<>("Report saved successfully!", HttpStatus.OK);
+            if(reportService.saveReport(reportDTO)) {
+                return new ResponseEntity<>("Report saved successfully!", HttpStatus.OK);
+            }
+            else
+                // 422
+                return  new ResponseEntity<>("Can not report a post for more than one time!", HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
