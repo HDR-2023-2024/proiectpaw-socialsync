@@ -8,6 +8,7 @@ import { CommunityService } from '../community.service';
 import { HttpClient } from '@angular/common/http';
 import { ViewChild, ElementRef } from '@angular/core';
 import { StorageService } from '../storage.service';
+import { JoinToTopicService } from '../join-to-topic.service';
 
 interface FileObject {
   [key: string]: string;
@@ -21,20 +22,31 @@ interface FileObject {
 
 
 export class CommunityEditComponent {
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private createTopic: CreateTopicService, private communityService: CommunityService, private storageService: StorageService) { }
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private createTopic: CreateTopicService, private communityService: CommunityService, private storageService: StorageService,private joinToTopic: JoinToTopicService) { }
   photoName: string = '';
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
   @Input() community: any = {
     id: '1',
     name: 'Sample Community',
     description: 'This is a sample community.',
-    ageRestriction: true,
     photoId: 123,
-    postIds: ['post1', 'post2'],
     creatorId: 'user123',
-    memberIds: ['member1', 'member2', 'member3']
+    memberIds: ['member1', 'member2', 'member3'],
+    categorie: ''
   };
 
+  categories = [
+    'Bauturi', 'Mancare', 'Deserturi',
+    'Apa', 'Sucuri', 'Cafea',
+    'Pizza', 'Paste', 'Burgeri',
+    'Tort', 'Inghetata', 'Prajituri',
+    'Evenimente', 'Oferte', 'Promotii',
+    'Perioade_istorice, Personalitati_istorice, Evenimente_istorice',
+    'Tari', 'Capitale', 'Munti',
+    'Fotbal', 'Tenis', 'Baschet',
+    'Astronomie', 'Biologie', 'Chimie',
+    'Gadget_uri', 'Software', 'Inovatii'
+  ];
   selectedPhoto: File | null = null;
   files: any[] = [];
 
@@ -62,6 +74,7 @@ export class CommunityEditComponent {
       (data) => {
         this.community = data;
         this.community.creatorId = data.creator.id;
+
         console.log(data)
 
         if (this.community.photoId && this.community.photoId.startsWith("http://localhost:8088/api/v1/storage/img/")) {
@@ -127,5 +140,17 @@ export class CommunityEditComponent {
     console.log(this.community);
     this.createTopic.updatePost(this.community);
     this.router.navigate(['community/', this.community.id]);
+  }
+
+  async toggleJoinState(id : string) {
+
+    try {
+      await this.joinToTopic.join(id);
+      console.log("ceva");
+    } catch (error) {
+
+      console.error('Eroare la apelul de join:', error);
+    }
+
   }
 }
