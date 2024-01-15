@@ -136,7 +136,7 @@ public class QueryService implements QueryServiceMethods {
         }
     }
 
-    public List<PostSummaryDTO> fetchPostsByCreatorId(String id, Integer page) {
+    public List<PostSummaryDTO> fetchPostsByCreatorId(String id, Integer page,String idUser) {
         try {
             return postRepository
                     .findAll()
