@@ -55,7 +55,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { ProfileLinkCommunityComponent } from './profile-link-community/profile-link-community.component';
 import { ViewUsersComponent } from './view-users/view-users.component';
 import { UserShortComponent } from './user-short/user-short.component';
-
+import {AuthGuard} from './guard-auth.guard'
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
@@ -78,18 +78,18 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "create-account", component: CreateAccountComponent },
   { path: "see-posts", component: ProfileLinkPostsComponent},
-  { path: "edit-topic/:topicId", component: CommunityEditComponent},
+  { path: "edit-topic/:topicId", component: CommunityEditComponent,canActivate: [AuthGuard]},
   { path: "view-topics", component: ViewTopicsComponent},
-  { path: "create-topics", component: CommunityCreateComponent},
-  { path: "create-post/:topicId/:topicName", component: CreatePostComponent },
+  { path: "create-topics", component: CommunityCreateComponent,canActivate: [AuthGuard]},
+  { path: "create-post/:topicId/:topicName", component: CreatePostComponent,canActivate: [AuthGuard] },
   { path: "help", component: HelpPageComponent },
   { path: "help-s", component: HelpSiteComponent },
-  { path: "edit-post/:postId", component: EditPostComponent },
+  { path: "edit-post/:postId", component: EditPostComponent,canActivate: [AuthGuard] },
   { path: "user/:userId", component: ProfileComponent },
   { path: "reset", component: ResetComponent },
   { path: "reset-pass", component: ResetPassComponent },
   { path: "form-password", component: FormPasswordsComponent },
-  { path: "notifications", component: NotificationsComponent },
+  { path: "notifications", component: NotificationsComponent,canActivate: [AuthGuard] },
   { path: "users", component: ViewUsersComponent },
 ];
 
