@@ -15,6 +15,7 @@ public class UserDTO {
     private String photoId;
     private String  username;
     private String  email;
+    private String  description;
     private RoleType role;
     private GenderType gender;
 
@@ -25,5 +26,6 @@ public class UserDTO {
         this.email = user.getEmail();
         this.role = user.getRole();
         this.gender = user.getGender();
+        this.description = user.getDescription();
     }
 }

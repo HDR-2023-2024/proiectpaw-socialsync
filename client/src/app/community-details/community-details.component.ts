@@ -5,6 +5,15 @@ import { Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
+
+interface Member {
+  id: null;
+  photoId: null;
+  username: null;
+  description: null;
+  role: null;
+}
+
 @Component({
   selector: 'app-community-details',
   templateUrl: './community-details.component.html',
@@ -17,6 +26,8 @@ export class CommunityDetailsComponent {
   page= 0;
   communityId:string='';
   formattedDate?: string;
+  isMember = false;
+
 
   constructor(private route:ActivatedRoute, private communityService:CommunityService,private router: Router, public authService: AuthService){}
 
@@ -33,6 +44,13 @@ export class CommunityDetailsComponent {
       (response) => {
        // console.log('Datele de la server:', response);
         this.data = response; 
+        this.data.members.forEach((element: Member) => {
+          if (element.id == this.authService.getId()) {
+            this.isMember = true;
+            
+          }
+        });
+        console.log(this.isMember);
       },
       (error) => {
         this.router.navigate(['/internal-server-error']);
@@ -49,5 +67,16 @@ export class CommunityDetailsComponent {
 
   navigateToPost(topicId: string,topicName : string) {
     this.router.navigate(['/create-post', topicId, topicName]);
+  }
+
+  navigateToUser(id : string){
+    console.log("Ceva2")
+    this.router.navigate(['/user', id]);
+  }
+
+  navigateToCategory(){
+    console.log(`Item clicked: ${this.data.categorie}`);
+    let modificat = this.data.categorie.replace("ă","a").replace("ț","t").replace("â","a").replace("ș","s").replace("Î","I").replace(" ","_").replace("Ț","T").replace("-","_");
+    this.router.navigate(['/view-topics', { category: modificat }]);
   }
 }

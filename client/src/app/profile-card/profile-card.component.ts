@@ -28,11 +28,12 @@ export class ProfileCardComponent {
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
   ngOnInit() {
-    this.user.getData(this.authService.getId()).subscribe(
+    let userId : any =  this.storage.get("userToShow");
+    this.user.getData(userId).subscribe(
       (data) => {
         console.log('Datele de la server:', data);
         this.data = data;
-        this.profilePhoto = this.authService.getAvatar();
+        this.profilePhoto =  data.photoId;
       },
       (error) => {
         this.router.navigate(['/internal-server-error']);
@@ -40,6 +41,7 @@ export class ProfileCardComponent {
       }
     );
   }
+
   uploadFiles() {
     const fileInput = this.fileInputRef.nativeElement;
     const files = fileInput.files;
@@ -59,6 +61,7 @@ export class ProfileCardComponent {
               console.log(data)
               this.storage.set("ProfilePhoto", data[0].url);
               this.profilePhoto = data[0].url;
+              this.data.photoId = data[0].url;
             }
           },
           error => {
@@ -70,6 +73,7 @@ export class ProfileCardComponent {
       this.router.navigate(['/internal-server-error']);
       console.error('Niciun fisier. selectat.');
     }
+    
   }
 
 }

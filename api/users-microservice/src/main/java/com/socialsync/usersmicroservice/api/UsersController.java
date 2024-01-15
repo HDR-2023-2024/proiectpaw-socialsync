@@ -63,7 +63,7 @@ public class UsersController {
             }
             usersService.addUser(user);
             String token = authorizationService.getJwt(new AuthorizedInfo(user.getId(), user.getRole().name()));
-            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token,user.getUsername(),user.getPhotoId(),user.getId()),HttpStatus.OK);
+            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token,user.getUsername(),user.getPhotoId(),user.getId(),user.getRole().toString()),HttpStatus.OK);
         } catch (NotAcceptableException unauthorizedException) {
             return new ResponseEntity<>(unauthorizedException.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         } catch (UnauthorizedException e) {
@@ -115,7 +115,7 @@ public class UsersController {
             AuthorizedInfo authorizedInfo = usersService.login(credentials);
             String token = authorizationService.getJwt(authorizedInfo);
            UserSelect user = this.usersService.fetchUserById(authorizedInfo.getId());
-            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token,user.getUsername(),user.getPhotoId(),user.getId()) ,HttpStatus.OK);
+            return new ResponseEntity<>(new AuthorizedResponseDto("Bearer " + token,user.getUsername(),user.getPhotoId(),user.getId(),user.getRole().toString()) ,HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>("Datele de autentificare nu sunt valide!", HttpStatus.UNAUTHORIZED);
         }

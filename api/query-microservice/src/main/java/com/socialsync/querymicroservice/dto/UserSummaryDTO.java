@@ -13,6 +13,7 @@ public class UserSummaryDTO {
     private String id;
     private String photoId;
     private String  username;
+    private String  description;
     private RoleType role;
 
     public UserSummaryDTO(UserDocument user) {
@@ -20,5 +21,6 @@ public class UserSummaryDTO {
         this.photoId = user.getPhotoId();
         this.username = user.getUsername();
         this.role = user.getRole();
+        this.description = user.getDescription();
     }
 }

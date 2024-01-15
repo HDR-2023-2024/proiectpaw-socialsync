@@ -150,7 +150,7 @@ public class QueryController {
         if (categorie.isPresent()) {
             log.info("Cautare dupa categorie: " + categorie.get());
             return categorie.map(s -> ResponseEntity
-                            .ok(queryService.fetchTopicsByCategorie(s, parsePage(page))))
+                            .ok(queryService.fetchTopicsByCategorie(categorie.get(), parsePage(page))))
                     .orElseGet(() -> ResponseEntity
                             .ok(List.of()));
         }
@@ -198,8 +198,8 @@ public class QueryController {
     }
 
     @GetMapping("/users/{id}/posts")
-    public ResponseEntity<?> fetchUserPosts(@PathVariable String id, @NotNull @RequestParam Integer page) {
-        return ResponseEntity.ok(queryService.fetchPostsByCreatorId(id, parsePage(page)));
+    public ResponseEntity<?> fetchUserPosts(@PathVariable String id, @NotNull @RequestParam Integer page, @RequestHeader("X-User-Id") String userId) {
+        return ResponseEntity.ok(queryService.fetchPostsByCreatorId(id, parsePage(page),userId));
     }
 
     @GetMapping("/users/{id}/comments")

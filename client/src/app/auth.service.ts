@@ -23,10 +23,12 @@ export class AuthService {
       tap((response: HttpResponse<any>) => {
         console.log(response.body)
         this.loginInfo = response.body;
-        this.storage.set("Token", response.body.token);
-        this.storage.set("PhotoId", response.body.photoId);
-        this.storage.set("Username", response.body.username);
-        this.storage.set("Id", response.body.id);
+        if (response.body.role == "user") {
+          this.storage.set("Token", response.body.token);
+          this.storage.set("PhotoId", response.body.photoId);
+          this.storage.set("Username", response.body.username);
+          this.storage.set("Id", response.body.id);
+        }
         return response;
       }),
       catchError(error => {
@@ -56,7 +58,7 @@ export class AuthService {
   }
 
   getAvatar() {
-      return this.storage.get("PhotoId").length > 1  ?  this.storage.get("PhotoId")  : 'assets/images/avatar/' + this.storage.get("PhotoId")[this.storage.get("PhotoId").length - 1] + '.png' ;
+    return this.storage.get("PhotoId").length > 1 ? this.storage.get("PhotoId") : 'assets/images/avatar/' + this.storage.get("PhotoId")[this.storage.get("PhotoId").length - 1] + '.png';
   }
 
   getUsername() {

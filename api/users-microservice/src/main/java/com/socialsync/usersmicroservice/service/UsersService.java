@@ -252,7 +252,7 @@ public class UsersService implements UsersServiceMethods {
             Optional<User> user = this.repository.findByEmail(validateCode.getEmail());
             try {
                 if (user.isPresent()) {
-                   return  new AuthorizedResponseDto("Bearer " + authorizationService.getJwt(new AuthorizedInfo(user.get().getId(), user.get().getRole().name())),user.get().getUsername(),user.get().getPhotoId(),user.get().getId());
+                   return  new AuthorizedResponseDto("Bearer " + authorizationService.getJwt(new AuthorizedInfo(user.get().getId(), user.get().getRole().name())),user.get().getUsername(),user.get().getPhotoId(),user.get().getId(),user.get().getRole().toString());
                 } else {
                     throw new UnauthorizedException();
                 }

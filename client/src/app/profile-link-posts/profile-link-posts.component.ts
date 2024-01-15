@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Input,Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { DataHomeService } from '../data-home.service';
@@ -6,7 +6,10 @@ import { ScroolServiceService } from '../scrool-service.service';
 import { debounceTime, filter } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { FullPostService } from '../full-post.service';
+import { UserServiceService } from '../user-service.service';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { PopupServiceService } from '../popup-service.service';
 
 @Component({
   selector: 'app-profile-link-posts',
@@ -14,7 +17,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   styleUrls: ['./profile-link-posts.component.css']
 })
 export class ProfileLinkPostsComponent {
-  constructor(public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService, private route: ActivatedRoute) {
+  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService,public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
       this.query = params['query'];
       this.page = 0;
@@ -24,6 +27,7 @@ export class ProfileLinkPostsComponent {
   }
 
   myArr: any[] = [];
+  @Input() userId: any = null;
 
   navigateToPost(postId: number) {
     this.router.navigate(['/full-post', postId]);
@@ -50,11 +54,12 @@ export class ProfileLinkPostsComponent {
   }
 
   private handleScrollEnd(): void {
+    let userId : any =  this.storage.get("userToShow");
     if (this.myArr.length > 10) {
       this.page++;
     }
     let url = "";
-    url = 'http://localhost:8086/api/v1/query/users/' + this.authService.getId() + '/posts?page=' + this.page.toString();
+    url = 'http://localhost:8086/api/v1/query/users/' + userId + '/posts?page=' + this.page.toString();
     let oldSize = this.myArr.length;
     let headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
@@ -92,7 +97,8 @@ export class ProfileLinkPostsComponent {
 
   loadDataOnPageLoad(): void {
     let url;
-    url = 'http://localhost:8086/api/v1/query/users/' + this.authService.getId() + '/posts?page=' + this.page.toString();
+    let userId : any =  this.storage.get("userToShow");
+    url = 'http://localhost:8086/api/v1/query/users/' + userId + '/posts?page=' + this.page.toString();
     this.dataService.getData(url).subscribe(
       (data) => {
         console.log('Datele de la server:', data);

@@ -209,4 +209,40 @@ export class FullPostComponent {
     this.router.navigate(['edit-post/', this.data.id]);
   }
 
+  raportPost() {
+    console.log("Ceva2")
+    if (!this.authService.getToken()) {
+      this.popupService.showPopup('Este necesară autentificarea pentru a raporta. Vă rugăm să vă autentificați.');
+      return;
+    }
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getToken()
+    });
+   
+    this.http.post<any>("http://localhost:8086/notification/reports", {
+      "userId": this.authService.getId(),
+      "username": this.authService.getUsername(),
+      "postId": this.data.id,
+      "postTitle": this.data.title
+    }, { headers: headers })
+      .subscribe(
+        data => {
+          this.popupService.showPopup('Postarea a fost raportată cu succes!');
+        },
+        error => {
+          console.error('Eroare:', error);
+          if (error.status == 401) {
+            this.router.navigate(['/unauthorized']);
+          }
+          if (error.status == 403) {
+            this.popupService.showPopup('Sesiunea a expirat este necesară reautentificarea.');
+            this.router.navigate(['/login']);
+          }
+          if (error.status == 200) {
+            this.popupService.showPopup('Sesiunea a expirat este necesară reautentificarea.');
+            this.popupService.showPopup('Postarea a fost raportată cu succes!');
+          }
+        }
+      );
+  }
 }

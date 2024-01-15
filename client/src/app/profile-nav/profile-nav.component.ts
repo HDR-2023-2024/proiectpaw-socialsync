@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-
+import { Component,ComponentFactoryResolver, Input } from '@angular/core';
 
 @Component({
   selector: 'app-profile-nav',
@@ -15,5 +14,7 @@ export class ProfileNavComponent {
   }
 
   @Input() navComponents: any[] = []
+  @Input() userId: any = null
 
+ 
 }
