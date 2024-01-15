@@ -16,3 +16,7 @@ p {
   text-align: justify;
   text-justify: inter-word;
 }
+
+.pointer-cursor{
+  cursor: pointer;
+}

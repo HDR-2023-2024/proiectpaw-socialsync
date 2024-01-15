@@ -16,7 +16,8 @@ export class CommunityCreateComponent {
   community = {
     name: '',
     description: '',
-    photoId: ''
+    photoId: '',
+    categorie: ''
   }
   photoName : string = '';
 
@@ -30,7 +31,8 @@ export class CommunityCreateComponent {
   saveChanges() {
     this.community.photoId = this.imageUrl != null ? this.imageUrl : '';
     console.log('Changes saved:', this.community, 'Selected photo:', this.selectedPhoto);
-    this.createTopic.saveTopic(this.community.name, this.community.description, this.community.photoId);
+    console.log(this.community)
+    this.createTopic.saveTopic(this.community.name, this.community.description, this.community.photoId,this.community.categorie);
   }
 
   onPhotoChange(event: any) {
@@ -69,4 +71,17 @@ export class CommunityCreateComponent {
       console.error('Niciun fisier. selectat.');
     }
   }
+
+  categories = [
+    'Bauturi', 'Mancare', 'Deserturi',
+    'Apa', 'Sucuri', 'Cafea',
+    'Pizza', 'Paste', 'Burgeri',
+    'Tort', 'Inghetata', 'Prajituri',
+    'Evenimente', 'Oferte', 'Promotii',
+    'Perioade_istorice, Personalitati_istorice, Evenimente_istorice',
+    'Tari', 'Capitale', 'Munti',
+    'Fotbal', 'Tenis', 'Baschet',
+    'Astronomie', 'Biologie', 'Chimie',
+    'Gadget_uri', 'Software', 'Inovatii'
+  ];
 }

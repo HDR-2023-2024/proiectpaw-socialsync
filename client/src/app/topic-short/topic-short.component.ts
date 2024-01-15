@@ -17,4 +17,15 @@ export class TopicShortComponent {
     this.router.navigate(['community/', id]);
   }
 
+  navigateToCategory(){
+    console.log(`Item clicked: ${this.data.categorie}`);
+    let modificat = this.data.categorie.replace("ă","a").replace("ț","t").replace("â","a").replace("ș","s").replace("Î","I").replace(" ","_").replace("Ț","T").replace("-","_");
+    this.router.navigate(['/view-topics', { category: modificat }]);
+  }
+
+  convertTimestampToDateTime(timestamp: number) {
+    var date = new Date(timestamp * 1000);
+    return date.toLocaleString();
+  }
+
 }

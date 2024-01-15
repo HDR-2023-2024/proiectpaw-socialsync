@@ -10,7 +10,7 @@ export class CreateTopicService {
   constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private http: HttpClient, private router: Router) { }
   private loginUrl = 'http://localhost:8086/api/v1/topics';
 
-  saveTopic(name: string, description: string, photoId: string) {
+  saveTopic(name: string, description: string, photoId: string,categorie: string) {
     const postData = {
       id: -1,
       name: name,
@@ -18,7 +18,8 @@ export class CreateTopicService {
       photoId: photoId,
       creatorId: -1,
       timestampCreated: 0,
-      timestampUpdated: 0
+      timestampUpdated: 0,
+      categorie: categorie
     };
 
     const token = this.storage.get('Token');
