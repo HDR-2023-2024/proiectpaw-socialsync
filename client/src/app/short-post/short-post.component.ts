@@ -193,7 +193,7 @@ export class ShortPostComponent {
   }
 
   navigateToUser(){
-    console.log("Ceva2")
+
     this.router.navigate(['/user', this.data.creator?.id]);
   }
 }

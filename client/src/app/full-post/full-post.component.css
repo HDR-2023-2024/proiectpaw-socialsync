@@ -54,3 +54,7 @@ svg {
   border-color:#fff;
   color: #fff;
 }
+
+.pointer-cursor{
+  cursor: pointer;
+}
