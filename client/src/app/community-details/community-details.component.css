@@ -39,3 +39,16 @@ a{
 .pointer-cursor{
   cursor: pointer;
 }
+
+.scroll-container {
+  max-height: 100px; 
+  width: 150px; 
+  overflow: auto; 
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+hr {
+  margin: 0;
+  padding: 0;
+}
