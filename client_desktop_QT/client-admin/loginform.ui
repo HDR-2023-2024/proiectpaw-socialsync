@@ -23,7 +23,10 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Log In</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -703,7 +706,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btnLogIn">
+        <widget class="CustomPushButton" name="btnLogIn">
          <property name="minimumSize">
           <size>
            <width>150</width>
@@ -753,6 +756,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CustomPushButton</class>
+   <extends>QPushButton</extends>
+   <header>custompushbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

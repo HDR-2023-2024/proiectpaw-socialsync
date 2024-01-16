@@ -1,0 +1,40 @@
+* {
+    background-color: white;
+}
+
+QLabel {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+QPushButton {
+    border-width: 1px;
+    border-style: solid;
+    border-color: orange;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+QPushButton:hover {
+    background-color: orange;
+    color: white
+}
+
+QPushButton#deleteBtn {
+    border-color: red;
+}
+
+QPushButton#deleteBtn:hover {
+    background-color: red;
+    color: white
+}
+
+QLineEdit {
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+QLineEdit:focus {
+    border: 1px solid orange;
+}

@@ -42,15 +42,19 @@ void LogInForm::on_btnLogIn_clicked()
 void LogInForm::response_received(QNetworkReply *reply)
 {
     QString msg = QString::fromUtf8(reply->readAll());
-    qDebug() << msg;
+    //qDebug() << msg;
 
     QString statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString();
 
-    qDebug() << statusCode;
+    //qDebug() << statusCode;
+
+    QString token = QJsonDocument::fromJson(msg.toUtf8()).object().value("token").toString();
+
+    qDebug() << token;
 
     if (statusCode == "200")
     {
-        MainWindow *w = new MainWindow();
+        MainWindow *w = new MainWindow(nullptr, token);
         w->show();
         this->hide();
     }
