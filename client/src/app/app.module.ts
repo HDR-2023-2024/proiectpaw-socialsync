@@ -57,7 +57,8 @@ import { ViewUsersComponent } from './view-users/view-users.component';
 import { UserShortComponent } from './user-short/user-short.component';
 import {AuthGuard} from './guard-auth.guard';
 import { CarouselUsersComponent } from './carousel-users/carousel-users.component';
-import { CarouselTopicsComponent } from './carousel-topics/carousel-topics.component'
+import { CarouselTopicsComponent } from './carousel-topics/carousel-topics.component';
+
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
@@ -149,6 +150,7 @@ const routes: Routes = [
     UserShortComponent,
     CarouselUsersComponent,
     CarouselTopicsComponent,
+ 
   ],
   imports: [
     BrowserModule,

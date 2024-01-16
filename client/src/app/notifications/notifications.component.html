@@ -15,9 +15,12 @@
                       <p class="count mt-4 ms-2 text-center">{{ notificationCount }}</p>
                     </div>
                   
-                    <div *ngFor="let notification of notifications" class="mx-auto notification">
+                    <div *ngFor="let notification of myArr1" class="mx-auto notification">
                       <app-notification class="m-0" [data]="notification"></app-notification>
                     </div>
+                    <div *ngFor="let notification of myArr2" class="mx-auto notification">
+                        <app-notification class="m-0" [data]="notification"></app-notification>
+                      </div>
                 </div>                                
             </div>
         </div>

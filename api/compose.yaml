@@ -26,6 +26,20 @@ services:
       - '27017'
     volumes:
       - 'data:/data'
+  
+  mongodb-notif:
+    container_name: 'mongodb_notif'
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=notif_ms_db'
+      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+    ports:
+      - '27020:27017'
+    expose:
+      - '27017'
+    volumes:
+      - 'data:/data'
       
   mongodb-comments:
     container_name: 'mongodb_comments'
