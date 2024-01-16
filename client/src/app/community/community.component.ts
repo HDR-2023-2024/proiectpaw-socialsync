@@ -113,6 +113,21 @@ export class CommunityComponent {
   editTopic() {
     this.router.navigate(['edit-topic/', this.data.id]);
   }
+
+  transformCharToNumber(char: string): number {
+
+    if (char >= 'a' && char <= 'z') {
+
+      return char.charCodeAt(0) - 'a'.charCodeAt(0);
+    }
+  
+
+    if (char >= '0' && char <= '9') {
+      return parseInt(char, 10);
+    }
+  
+    return -1;
+  }
 }
 
 
