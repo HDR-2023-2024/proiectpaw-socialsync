@@ -2,9 +2,9 @@
     <div class="row h-100">
         <div class="col post-container">
             <div class="d-flex mt-5">
-                <img class="avatar-short-post mx-0"
+                <img (click)="navigateToUser()" class="avatar-short-post mx-0 pointer-cursor"
                     src="{{data.creator?.photoId != null && data.creator?.photoId.length > 1 ? data.creator?.photoId : 'assets/images/avatar/' + data.creator?.photoId[data.creator?.photoId.length - 1] + '.png'}}">
-                <p class="my-auto ms-2"> {{data.creator?.username || 'Nume utilizator necunoscut'}} •
+                <p class="my-auto ms-2 pointer-cursor" (click)="navigateToUser()"> {{data.creator?.username || 'Nume utilizator necunoscut'}} •
                     {{convertTimestampToDateTime(data.timestampCreated)}}</p>
                 <div class="butoane d-flex">
                     <div>
@@ -29,7 +29,9 @@
             </div>
             <br>
             <div>
-                <h2>{{ data.title }}</h2>
+                <h2 class="mb-0 pb-0">{{ data.title }}</h2>
+                <br>
+                <p class="mt-0 pt-0 pointer-cursor" (click)="navigateToCommunity(data.topic.id)">În topicul: {{ data.topic.title }}</p>
                 <br>
                 <p>{{ data.content }}</p>
                 <app-carousel-full-post [myArr]="data.photos" *ngIf="data.photos.length != 0"></app-carousel-full-post>

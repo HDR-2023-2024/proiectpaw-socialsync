@@ -245,4 +245,12 @@ export class FullPostComponent {
         }
       );
   }
+
+  navigateToCommunity(id: string) {
+    this.router.navigate(['community/', id]);
+  }
+
+  navigateToUser(){
+    this.router.navigate(['/user', this.data.creator?.id]);
+  }
 }

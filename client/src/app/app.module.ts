@@ -55,7 +55,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { ProfileLinkCommunityComponent } from './profile-link-community/profile-link-community.component';
 import { ViewUsersComponent } from './view-users/view-users.component';
 import { UserShortComponent } from './user-short/user-short.component';
-import {AuthGuard} from './guard-auth.guard'
+import {AuthGuard} from './guard-auth.guard';
+import { CarouselUsersComponent } from './carousel-users/carousel-users.component'
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }, // ok
@@ -145,6 +146,7 @@ const routes: Routes = [
     ProfileLinkCommunityComponent,
     ViewUsersComponent,
     UserShortComponent,
+    CarouselUsersComponent,
   ],
   imports: [
     BrowserModule,
