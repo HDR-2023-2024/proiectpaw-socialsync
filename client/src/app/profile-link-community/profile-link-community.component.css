@@ -9,3 +9,15 @@
     width: 100%;
   }
   
+  #create-post-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FF4433;
+    border-radius: 24px;
+    margin-right: 16px;
+    color: #fff;
+    height: 40px;
+    font-size: 1.5em;
+    text-align: center;
+}

@@ -26,7 +26,7 @@
                     <select id="gender" name="gender" [(ngModel)]="myFormData.gender">
                         <option value="woman">Feminin</option>
                         <option value="man">Masculin</option>
-                        <option value="null">Nu specific</option>
+                   
                     </select>
                     <br><br>
                     <label for="username">Descriere</label><br>
@@ -47,7 +47,7 @@
                     <br>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn contact-btn" [disabled]="(!myForm.valid || isValid)"
-                            (click)="onSubmit()">Conectare</button>
+                            (click)="onSubmit()">Creare</button>
                     </div>
                     <br>
                 </form>

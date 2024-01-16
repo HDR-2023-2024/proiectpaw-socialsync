@@ -137,6 +137,7 @@ export class CommunityEditComponent {
   }
 
   saveChangesTopic() {
+   // this.community.photoId = "http://localhost:8088/api/v1/storage/img/" + this.community.photoId;
     console.log(this.community);
     this.createTopic.updatePost(this.community);
     this.router.navigate(['community/', this.community.id]);
@@ -148,7 +149,6 @@ export class CommunityEditComponent {
       await this.joinToTopic.join(id);
       console.log("ceva");
     } catch (error) {
-
       console.error('Eroare la apelul de join:', error);
     }
 

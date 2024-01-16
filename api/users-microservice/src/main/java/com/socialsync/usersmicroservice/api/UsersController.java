@@ -137,10 +137,13 @@ public class UsersController {
 
     @PostMapping("/sendCodeResetPassword")
     public ResponseEntity<?> sendCodeResetPassword(@RequestBody EmailDto emailDto) throws JsonProcessingException {
-        if(this.usersService.sendCodeResetPassword(emailDto.getEmail())){
+        int code = this.usersService.sendCodeResetPassword(emailDto.getEmail());
+        if(code== 0){
             return new ResponseEntity<>(HttpStatus.OK);
-        }else{
+        }else if(code == 1){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

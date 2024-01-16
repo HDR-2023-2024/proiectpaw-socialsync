@@ -31,10 +31,10 @@ export class ResetPassComponent {
       },
       error => {
         console.error('Eroare:', error);
-        if (error.status == 500) {
-          this.message = "Adresă de email invalidă!";
+        if (error.status == 404) {
+          this.message = "Adresă de email nu există!";
         }
-        if (error.status == 0) {
+        if (error.status == 500) {
           this.router.navigate(['/internal-server-error']);
         }
       }
