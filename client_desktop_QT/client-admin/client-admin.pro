@@ -16,6 +16,7 @@ SOURCES += \
     resourcepanel.cpp
 
 HEADERS += \
+    custompushbutton.h \
     loginform.h \
     mainwindow.h \
     resourcedetails.h \
@@ -31,3 +32,11 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    styles.css
+
+OTHER_FILES +=
+
+RESOURCES += \
+    resources.qrc

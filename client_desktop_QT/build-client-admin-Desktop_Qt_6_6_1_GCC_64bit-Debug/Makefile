@@ -56,7 +56,8 @@ SOURCES       = ../client-admin/loginform.cpp \
 		../client-admin/main.cpp \
 		../client-admin/mainwindow.cpp \
 		../client-admin/resourcedetails.cpp \
-		../client-admin/resourcepanel.cpp moc_loginform.cpp \
+		../client-admin/resourcepanel.cpp qrc_resources.cpp \
+		moc_loginform.cpp \
 		moc_mainwindow.cpp \
 		moc_resourcedetails.cpp \
 		moc_resourcepanel.cpp
@@ -65,11 +66,13 @@ OBJECTS       = loginform.o \
 		mainwindow.o \
 		resourcedetails.o \
 		resourcepanel.o \
+		qrc_resources.o \
 		moc_loginform.o \
 		moc_mainwindow.o \
 		moc_resourcedetails.o \
 		moc_resourcepanel.o
-DIST          = /home/costi/Qt/6.6.1/gcc_64/mkspecs/features/spec_pre.prf \
+DIST          = ../client-admin/styles.css \
+		/home/costi/Qt/6.6.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/common/unix.conf \
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/common/linux.conf \
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/common/sanitize.conf \
@@ -237,7 +240,8 @@ DIST          = /home/costi/Qt/6.6.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/features/exceptions.prf \
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/features/yacc.prf \
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/features/lex.prf \
-		../client-admin/client-admin.pro ../client-admin/loginform.h \
+		../client-admin/client-admin.pro ../client-admin/custompushbutton.h \
+		../client-admin/loginform.h \
 		../client-admin/mainwindow.h \
 		../client-admin/resourcedetails.h \
 		../client-admin/resourcepanel.h ../client-admin/loginform.cpp \
@@ -425,6 +429,7 @@ Makefile: ../client-admin/client-admin.pro /home/costi/Qt/6.6.1/gcc_64/mkspecs/l
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/features/yacc.prf \
 		/home/costi/Qt/6.6.1/gcc_64/mkspecs/features/lex.prf \
 		../client-admin/client-admin.pro \
+		../client-admin/resources.qrc \
 		/home/costi/Qt/6.6.1/gcc_64/lib/libQt6Widgets.prl \
 		/home/costi/Qt/6.6.1/gcc_64/lib/libQt6Gui.prl \
 		/home/costi/Qt/6.6.1/gcc_64/lib/libQt6Network.prl \
@@ -599,6 +604,7 @@ Makefile: ../client-admin/client-admin.pro /home/costi/Qt/6.6.1/gcc_64/mkspecs/l
 /home/costi/Qt/6.6.1/gcc_64/mkspecs/features/yacc.prf:
 /home/costi/Qt/6.6.1/gcc_64/mkspecs/features/lex.prf:
 ../client-admin/client-admin.pro:
+../client-admin/resources.qrc:
 /home/costi/Qt/6.6.1/gcc_64/lib/libQt6Widgets.prl:
 /home/costi/Qt/6.6.1/gcc_64/lib/libQt6Gui.prl:
 /home/costi/Qt/6.6.1/gcc_64/lib/libQt6Network.prl:
@@ -617,8 +623,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../client-admin/resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /home/costi/Qt/6.6.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../client-admin/loginform.h ../client-admin/mainwindow.h ../client-admin/resourcedetails.h ../client-admin/resourcepanel.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../client-admin/custompushbutton.h ../client-admin/loginform.h ../client-admin/mainwindow.h ../client-admin/resourcedetails.h ../client-admin/resourcepanel.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../client-admin/loginform.cpp ../client-admin/main.cpp ../client-admin/mainwindow.cpp ../client-admin/resourcedetails.cpp ../client-admin/resourcepanel.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../client-admin/loginform.ui ../client-admin/mainwindow.ui ../client-admin/resourcedetails.ui ../client-admin/resourcepanel.ui $(DISTDIR)/
 
@@ -644,8 +651,14 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_resources.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_resources.cpp
+qrc_resources.cpp: ../client-admin/resources.qrc \
+		/home/costi/Qt/6.6.1/gcc_64/libexec/rcc \
+		../client-admin/styles.css
+	/home/costi/Qt/6.6.1/gcc_64/libexec/rcc -name resources --no-zstd ../client-admin/resources.qrc -o qrc_resources.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -818,6 +831,32 @@ moc_loginform.cpp: ../client-admin/loginform.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QSizeF \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QTransform \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qnativeinterface.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetworkexports.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QSharedDataPointer \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QString \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QUrl \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QVariant \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QSslConfiguration \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslsocket.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtcpsocket.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qhostaddress.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslerror.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslcertificate.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcryptographichash.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcalendar.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qlocale.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qssl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QFlags \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QMetaType \
 		moc_predefs.h \
 		/home/costi/Qt/6.6.1/gcc_64/libexec/moc
 	/home/costi/Qt/6.6.1/gcc_64/libexec/moc $(DEFINES) --include /home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/build-client-admin-Desktop_Qt_6_6_1_GCC_64bit-Debug/moc_predefs.h -I/home/costi/Qt/6.6.1/gcc_64/mkspecs/linux-g++ -I/home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/client-admin -I/home/costi/Qt/6.6.1/gcc_64/include -I/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets -I/home/costi/Qt/6.6.1/gcc_64/include/QtGui -I/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork -I/home/costi/Qt/6.6.1/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../client-admin/loginform.h -o moc_loginform.cpp
@@ -1050,6 +1089,7 @@ moc_mainwindow.cpp: ../client-admin/mainwindow.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
 		../client-admin/resourcedetails.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QAbstractItemView \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QCloseEvent \
 		moc_predefs.h \
 		/home/costi/Qt/6.6.1/gcc_64/libexec/moc
 	/home/costi/Qt/6.6.1/gcc_64/libexec/moc $(DEFINES) --include /home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/build-client-admin-Desktop_Qt_6_6_1_GCC_64bit-Debug/moc_predefs.h -I/home/costi/Qt/6.6.1/gcc_64/mkspecs/linux-g++ -I/home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/client-admin -I/home/costi/Qt/6.6.1/gcc_64/include -I/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets -I/home/costi/Qt/6.6.1/gcc_64/include/QtGui -I/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork -I/home/costi/Qt/6.6.1/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../client-admin/mainwindow.h -o moc_mainwindow.cpp
@@ -1246,6 +1286,7 @@ moc_resourcedetails.cpp: ../client-admin/resourcedetails.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabbar.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QCloseEvent \
 		moc_predefs.h \
 		/home/costi/Qt/6.6.1/gcc_64/libexec/moc
 	/home/costi/Qt/6.6.1/gcc_64/libexec/moc $(DEFINES) --include /home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/build-client-admin-Desktop_Qt_6_6_1_GCC_64bit-Debug/moc_predefs.h -I/home/costi/Qt/6.6.1/gcc_64/mkspecs/linux-g++ -I/home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/client-admin -I/home/costi/Qt/6.6.1/gcc_64/include -I/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets -I/home/costi/Qt/6.6.1/gcc_64/include/QtGui -I/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork -I/home/costi/Qt/6.6.1/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../client-admin/resourcedetails.h -o moc_resourcedetails.cpp
@@ -1447,6 +1488,7 @@ moc_resourcepanel.cpp: ../client-admin/resourcepanel.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
 		../client-admin/resourcedetails.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QAbstractItemView \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QCloseEvent \
 		moc_predefs.h \
 		/home/costi/Qt/6.6.1/gcc_64/libexec/moc
 	/home/costi/Qt/6.6.1/gcc_64/libexec/moc $(DEFINES) --include /home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/build-client-admin-Desktop_Qt_6_6_1_GCC_64bit-Debug/moc_predefs.h -I/home/costi/Qt/6.6.1/gcc_64/mkspecs/linux-g++ -I/home/costi/Documents/PAWP/proiectpaw-socialsync/client_desktop_QT/client-admin -I/home/costi/Qt/6.6.1/gcc_64/include -I/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets -I/home/costi/Qt/6.6.1/gcc_64/include/QtGui -I/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork -I/home/costi/Qt/6.6.1/gcc_64/include/QtCore -I. -I/usr/include/c++/12 -I/usr/include/x86_64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/gcc/x86_64-linux-gnu/12/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../client-admin/resourcepanel.h -o moc_resourcepanel.cpp
@@ -1459,7 +1501,173 @@ compiler_uic_make_all: ui_loginform.h ui_mainwindow.h ui_resourcedetails.h ui_re
 compiler_uic_clean:
 	-$(DEL_FILE) ui_loginform.h ui_mainwindow.h ui_resourcedetails.h ui_resourcepanel.h
 ui_loginform.h: ../client-admin/loginform.ui \
-		/home/costi/Qt/6.6.1/gcc_64/libexec/uic
+		/home/costi/Qt/6.6.1/gcc_64/libexec/uic \
+		../client-admin/custompushbutton.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtguiglobal.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qglobal.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtversionchecks.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtconfiginclude.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qconfig.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtcore-config.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtconfigmacros.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtcoreexports.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtdeprecationmarkers.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qassert.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtnoop.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtypes.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtversion.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtclasshelpermacros.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qsysinfo.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qlogging.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qflags.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcompare_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qatomic.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qconstructormacros.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qdarwinhelpers.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qexceptionhandling.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qforeach.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qttypetraits.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfunctionpointer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qmalloc.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qminmax.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qnumeric.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qoverload.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qswap.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtenvironmentvariables.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtresource.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qttranslation.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qversiontagging.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtgui-config.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtguiexports.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qicon.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qsize.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qnamespace.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtmetamacros.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qhashfunctions.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstring.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qchar.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringview.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qbytearray.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qrefcount.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qarraydata.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qpair.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qarraydatapointer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qarraydataops.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcontainertools_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qxptype_traits.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/q20functional.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/q20memory.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qbytearrayalgorithms.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qbytearrayview.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringfwd.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/q20type_traits.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringliteral.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qlatin1stringview.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qanystringview.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qutf8stringview.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringtokenizer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qmargins.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/q23utility.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qlist.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qiterator.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringlist.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qalgorithms.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpixmap.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfunctionaltools_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qrect.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qpoint.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qcolor.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qrgb.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qrgba64.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qshareddata.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qimage.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpixelformat.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtransform.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpolygon.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qregion.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qdatastream.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qiodevicebase.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qline.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qkeysequence.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qwidget.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qobject.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcoreevent.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qmetatype.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcompare.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfloat16.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qmath.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qiterable.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qmetacontainer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcontainerinfo.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtaggedpointer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qscopeguard.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qobject_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qbindingstorage.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qaction.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qvariant.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qdebug.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtextstream.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qstringconverter_base.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qmap.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qshareddata_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qset.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qhash.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpalette.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qbrush.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qfont.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qfontinfo.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qcursor.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qbitmap.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qevent.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qiodevice.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qpointer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qurl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qeventpoint.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qvector2d.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qvectornd.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpointingdevice.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qinputdevice.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qscreen.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QList \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QObject \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QRect \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QSize \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QSizeF \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QTransform \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qnativeinterface.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QEvent \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QDebug
 	/home/costi/Qt/6.6.1/gcc_64/libexec/uic ../client-admin/loginform.ui -o ui_loginform.h
 
 ui_mainwindow.h: ../client-admin/mainwindow.ui \
@@ -1480,7 +1688,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -1647,7 +1855,118 @@ loginform.o: ../client-admin/loginform.cpp ../client-admin/loginform.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QSizeF \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QTransform \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qnativeinterface.h \
-		ui_loginform.h
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetworkexports.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QSharedDataPointer \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QString \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QUrl \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QVariant \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QSslConfiguration \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslsocket.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtcpsocket.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qhostaddress.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslerror.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslcertificate.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcryptographichash.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qdatetime.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcalendar.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qlocale.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qssl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QFlags \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QMetaType \
+		ui_loginform.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QApplication \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qapplication.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qeventloop.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcoreapplication_platform.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfuture.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfutureinterface.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qmutex.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qdeadlinetimer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qelapsedtimer.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtsan_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qresultstore.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfuture_impl.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qthreadpool.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qthread.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qrunnable.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qexception.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qpromise.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qguiapplication.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qinputmethod.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qlayout.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QLabel \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qlabel.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qframe.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpicture.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtextdocument.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QLineEdit \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtextcursor.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtextformat.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qpen.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qtextoption.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QSpacerItem \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QVBoxLayout \
+		../client-admin/custompushbutton.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QPushButton \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QEvent \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QDebug \
+		../client-admin/mainwindow.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QMainWindow \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qmainwindow.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QNetworkReply \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qnetworkreply.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QIODevice \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QNetworkRequest \
+		../client-admin/resourcepanel.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QJsonDocument \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qjsondocument.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qjsonvalue.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcborvalue.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcborcommon.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qregularexpression.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/quuid.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qendian.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QJsonObject \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qjsonobject.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QStandardItemModel \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qstandarditemmodel.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QListView \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qlistview.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qstyleoption.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qvalidator.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qslider.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractslider.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qstyle.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabbar.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
+		../client-admin/resourcedetails.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QAbstractItemView \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QCloseEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loginform.o ../client-admin/loginform.cpp
 
 main.o: ../client-admin/main.cpp ../client-admin/loginform.h \
@@ -1813,11 +2132,6 @@ main.o: ../client-admin/main.cpp ../client-admin/loginform.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QSizeF \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QTransform \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qnativeinterface.h \
-		../client-admin/mainwindow.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QMainWindow \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qmainwindow.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabwidget.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QNetworkAccessManager \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetworkglobal.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qtnetwork-config.h \
@@ -1844,41 +2158,6 @@ main.o: ../client-admin/main.cpp ../client-admin/loginform.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qsslpresharedkeyauthenticator.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QMetaType \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QNetworkReply \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/qnetworkreply.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QIODevice \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtNetwork/QNetworkRequest \
-		../client-admin/resourcepanel.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QJsonDocument \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qjsondocument.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qjsonvalue.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcborvalue.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcborcommon.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qregularexpression.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/quuid.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qendian.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QJsonObject \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qjsonobject.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QStandardItemModel \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qstandarditemmodel.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qabstractitemmodel.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QListView \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qlistview.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractitemview.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qframe.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qitemselectionmodel.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qstyleoption.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractspinbox.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qvalidator.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qslider.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qabstractslider.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qstyle.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabbar.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
-		../client-admin/resourcedetails.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QAbstractItemView \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QApplication \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qapplication.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1899,7 +2178,13 @@ main.o: ../client-admin/main.cpp ../client-admin/loginform.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qpromise.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qguiapplication.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qinputmethod.h \
-		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qguiapplication_platform.h
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/qguiapplication_platform.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QFile \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfile.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfiledevice.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QFileInfo \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qfileinfo.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/qtimezone.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../client-admin/main.cpp
 
 mainwindow.o: ../client-admin/mainwindow.cpp ../client-admin/mainwindow.h \
@@ -2130,6 +2415,7 @@ mainwindow.o: ../client-admin/mainwindow.cpp ../client-admin/mainwindow.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
 		../client-admin/resourcedetails.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QAbstractItemView \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QCloseEvent \
 		ui_mainwindow.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QApplication \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qapplication.h \
@@ -2363,6 +2649,7 @@ resourcedetails.o: ../client-admin/resourcedetails.cpp ../client-admin/resourced
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabbar.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QCloseEvent \
 		ui_resourcedetails.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QVariant \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QApplication \
@@ -2596,6 +2883,7 @@ resourcepanel.o: ../client-admin/resourcepanel.cpp ../client-admin/resourcepanel
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qrubberband.h \
 		../client-admin/resourcedetails.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QAbstractItemView \
+		/home/costi/Qt/6.6.1/gcc_64/include/QtGui/QCloseEvent \
 		ui_resourcepanel.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtCore/QVariant \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/QApplication \
@@ -2629,6 +2917,9 @@ resourcepanel.o: ../client-admin/resourcepanel.cpp ../client-admin/resourcepanel
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qlayoutitem.h \
 		/home/costi/Qt/6.6.1/gcc_64/include/QtWidgets/qgridlayout.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o resourcepanel.o ../client-admin/resourcepanel.cpp
+
+qrc_resources.o: qrc_resources.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
 
 moc_loginform.o: moc_loginform.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_loginform.o moc_loginform.cpp

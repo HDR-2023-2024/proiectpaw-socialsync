@@ -60,7 +60,7 @@ public:
 
     void retranslateUi(QDialog *ResourcePanel)
     {
-        ResourcePanel->setWindowTitle(QCoreApplication::translate("ResourcePanel", "Dialog", nullptr));
+        ResourcePanel->setWindowTitle(QCoreApplication::translate("ResourcePanel", "Resource Panel", nullptr));
         panelTitle->setText(QCoreApplication::translate("ResourcePanel", "TextLabel", nullptr));
     } // retranslateUi
 

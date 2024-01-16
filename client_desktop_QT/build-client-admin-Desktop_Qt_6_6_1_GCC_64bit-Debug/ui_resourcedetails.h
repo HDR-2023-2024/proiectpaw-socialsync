@@ -12,9 +12,12 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListView>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
+#include "custompushbutton.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -25,6 +28,11 @@ public:
     QVBoxLayout *verticalLayout;
     QLabel *label;
     QListView *listView;
+    QSpacerItem *horizontalSpacer;
+    QHBoxLayout *horizontalLayout;
+    QSpacerItem *horizontalSpacer_3;
+    CustomPushButton *deleteBtn;
+    QSpacerItem *horizontalSpacer_2;
 
     void setupUi(QDialog *ResourceDetails)
     {
@@ -50,6 +58,28 @@ public:
 
         verticalLayout->addWidget(listView);
 
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        verticalLayout->addItem(horizontalSpacer);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName("horizontalLayout");
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_3);
+
+        deleteBtn = new CustomPushButton(ResourceDetails);
+        deleteBtn->setObjectName("deleteBtn");
+
+        horizontalLayout->addWidget(deleteBtn);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_2);
+
+
+        verticalLayout->addLayout(horizontalLayout);
+
 
         verticalLayout_2->addLayout(verticalLayout);
 
@@ -61,8 +91,9 @@ public:
 
     void retranslateUi(QDialog *ResourceDetails)
     {
-        ResourceDetails->setWindowTitle(QCoreApplication::translate("ResourceDetails", "Dialog", nullptr));
+        ResourceDetails->setWindowTitle(QCoreApplication::translate("ResourceDetails", "Resource Details", nullptr));
         label->setText(QCoreApplication::translate("ResourceDetails", "Details", nullptr));
+        deleteBtn->setText(QCoreApplication::translate("ResourceDetails", "Delete", nullptr));
     } // retranslateUi
 
 };

@@ -15,9 +15,9 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
+#include "custompushbutton.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -44,7 +44,7 @@ public:
     QSpacerItem *verticalSpacer_2;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer_4;
-    QPushButton *btnLogIn;
+    CustomPushButton *btnLogIn;
     QSpacerItem *horizontalSpacer_3;
     QSpacerItem *verticalSpacer_5;
 
@@ -55,6 +55,7 @@ public:
         LogInForm->resize(400, 300);
         LogInForm->setMinimumSize(QSize(400, 300));
         LogInForm->setMaximumSize(QSize(400, 300));
+        LogInForm->setWindowOpacity(1.000000000000000);
         verticalLayout_2 = new QVBoxLayout(LogInForm);
         verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout = new QVBoxLayout();
@@ -235,7 +236,7 @@ public:
 
         horizontalLayout_3->addItem(horizontalSpacer_4);
 
-        btnLogIn = new QPushButton(LogInForm);
+        btnLogIn = new CustomPushButton(LogInForm);
         btnLogIn->setObjectName("btnLogIn");
         btnLogIn->setMinimumSize(QSize(150, 0));
         btnLogIn->setMaximumSize(QSize(150, 16777215));
@@ -264,7 +265,7 @@ public:
 
     void retranslateUi(QDialog *LogInForm)
     {
-        LogInForm->setWindowTitle(QCoreApplication::translate("LogInForm", "Dialog", nullptr));
+        LogInForm->setWindowTitle(QCoreApplication::translate("LogInForm", "Log In", nullptr));
         label->setText(QCoreApplication::translate("LogInForm", "Log In", nullptr));
         labelUsername->setText(QCoreApplication::translate("LogInForm", "Username", nullptr));
         labelPassword->setText(QCoreApplication::translate("LogInForm", "Password", nullptr));

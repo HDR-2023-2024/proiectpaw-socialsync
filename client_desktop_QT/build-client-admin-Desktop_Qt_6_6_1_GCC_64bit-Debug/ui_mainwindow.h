@@ -14,11 +14,11 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "custompushbutton.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -31,19 +31,19 @@ public:
     QLabel *title;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer_2;
-    QPushButton *usersButton;
+    CustomPushButton *usersButton;
     QSpacerItem *horizontalSpacer;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_4;
-    QPushButton *topicsButton;
+    CustomPushButton *topicsButton;
     QSpacerItem *horizontalSpacer_3;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer_6;
-    QPushButton *postsButton;
+    CustomPushButton *postsButton;
     QSpacerItem *horizontalSpacer_5;
     QHBoxLayout *horizontalLayout_4;
     QSpacerItem *horizontalSpacer_8;
-    QPushButton *commButton;
+    CustomPushButton *commButton;
     QSpacerItem *horizontalSpacer_7;
     QStatusBar *statusbar;
 
@@ -76,7 +76,7 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer_2);
 
-        usersButton = new QPushButton(centralwidget);
+        usersButton = new CustomPushButton(centralwidget);
         usersButton->setObjectName("usersButton");
         usersButton->setMinimumSize(QSize(150, 0));
 
@@ -95,7 +95,7 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer_4);
 
-        topicsButton = new QPushButton(centralwidget);
+        topicsButton = new CustomPushButton(centralwidget);
         topicsButton->setObjectName("topicsButton");
         topicsButton->setMinimumSize(QSize(150, 0));
 
@@ -114,7 +114,7 @@ public:
 
         horizontalLayout_3->addItem(horizontalSpacer_6);
 
-        postsButton = new QPushButton(centralwidget);
+        postsButton = new CustomPushButton(centralwidget);
         postsButton->setObjectName("postsButton");
         postsButton->setMinimumSize(QSize(150, 0));
 
@@ -133,7 +133,7 @@ public:
 
         horizontalLayout_4->addItem(horizontalSpacer_8);
 
-        commButton = new QPushButton(centralwidget);
+        commButton = new CustomPushButton(centralwidget);
         commButton->setObjectName("commButton");
         commButton->setMinimumSize(QSize(150, 0));
 

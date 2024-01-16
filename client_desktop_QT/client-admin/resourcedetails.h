@@ -6,6 +6,7 @@
 #include <QStandardItemModel>
 #include <QAbstractItemView>
 #include <QCloseEvent>
+#include <qnetworkaccessmanager.h>
 
 namespace Ui {
 class ResourceDetails;
@@ -20,6 +21,8 @@ public:
     ~ResourceDetails();
 
     void setDetails(QJsonValue value);
+    void setUrl(QString url);
+    void setToken(QString token);
 
 protected:
     void closeEvent(QCloseEvent *event) override {
@@ -27,10 +30,18 @@ protected:
         QDialog::closeEvent(event);
     }
 
+private slots:
+    void on_deleteBtn_clicked();
+    void response_received(QNetworkReply *reply);
+
 private:
     Ui::ResourceDetails *ui;
     QJsonValue details;
     QStandardItemModel *model;
+    QNetworkAccessManager *manager;
+    QNetworkRequest request;
+    QString url;
+    QString token;
 };
 
 #endif // RESOURCEDETAILS_H

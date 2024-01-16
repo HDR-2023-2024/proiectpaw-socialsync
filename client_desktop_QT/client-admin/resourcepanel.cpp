@@ -50,6 +50,17 @@ void ResourcePanel::on_listView_doubleClicked(const QModelIndex &index)
 
     QJsonValue data = this->content.value(id);
     resourceDetails->setDetails(data);
+    resourceDetails->setUrl(url);
+    resourceDetails->setToken(token);
     resourceDetails->show();
 }
 
+void ResourcePanel::setUrl(QString url)
+{
+    this->url = url;
+}
+
+void ResourcePanel::setToken(QString token)
+{
+    this->token = token;
+}

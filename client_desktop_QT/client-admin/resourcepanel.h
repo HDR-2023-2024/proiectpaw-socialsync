@@ -21,6 +21,8 @@ public:
     ~ResourcePanel();
     void setTitle(QString title);
     void setContent(QString content);
+    void setUrl(QString url);
+    void setToken(QString token);
 
 private:
     Ui::ResourcePanel *ui;
@@ -28,6 +30,8 @@ private:
     QStandardItemModel *model;
     ResourceDetails *resourceDetails;
     QString resourceName;
+    QString url;
+    QString token;
 
 protected:
     void closeEvent(QCloseEvent *event) override {
