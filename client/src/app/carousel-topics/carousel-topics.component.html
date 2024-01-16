@@ -1,0 +1,20 @@
+<div class="container-flex row-1 h-5 m-0 mt-5 mb-5 p-0 d-flex">
+    <div class="d-flex b-none mx-0 col-1 justify-content-end align-items-center">
+        <p class="prev my-0 p-0" (click)="prev()" [style.display]="start > 1 ? 'block' : 'none'">⮜</p>
+    </div>
+
+    <div class="d-flex b-none mx-0 col-10 justify-content-center align-items-center ">
+        <div *ngFor="let item of myArr.slice(start-1, start+2)" class="d-flex m-0" (click)="navigateToCommunity(item.id)">
+            <div class="image-container d-flex border mx-5 justify-content-center align-items-center" (click)="navigateToCommunity(item.id)" >
+                <a href={{item.url}} (click)="navigateToCommunity(item.id)" >
+                    <img src="{{item.photoId != null && item.photoId.length > 1 ? item.photoId : 'assets/images/community/' + transformCharToNumber(item.id[item.id.length - 1]) + '.png'}}" alt="{{item.name}}" class="mx-5 img-user ">
+                </a>
+                <p class="image-text-author mx-auto pb-0 mb-0" (click)="navigateToCommunity(item.id)" >{{item.name}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex b-none mx-0 col-1 justify-content-start align-items-center">
+        <p class="next my-0 p-0" (click)="next()" [style.display]="start < myArr.length - 2 ? 'block' : 'none'">⮞</p>
+    </div>
+</div>
