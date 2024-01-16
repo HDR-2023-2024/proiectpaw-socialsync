@@ -53,6 +53,8 @@ public class EmailController {
     void receiveQueueMessageComment(String msg) {
         CommentQueueMessage msgQ = gson.fromJson(msg, CommentQueueMessage.class);
 
+        log.info("Processing comment {}", msgQ.toString());
+
         try {
             log.info(msgQ.getPost_id().toString());
             commentsService.saveComment(msgQ);
@@ -65,6 +67,7 @@ public class EmailController {
     @RabbitListener(queues = "${socialsync.rabbitmq.queue.posts}")
     void receiveQueueMessagePost(String msg) {
         PostQueueMessage msgQ = gson.fromJson(msg, PostQueueMessage.class);
+        log.info("Processing post {}", msgQ.toString());
 
         try {
             log.info(msgQ.toString());

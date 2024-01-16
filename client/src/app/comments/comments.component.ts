@@ -6,6 +6,7 @@ import { AuthService } from '../auth.service';
 import { ScroolServiceService } from '../scrool-service.service';
 import { debounceTime, filter } from 'rxjs/operators';
 import { PopupServiceService } from '../popup-service.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-comments',
@@ -18,6 +19,8 @@ export class CommentsComponent {
   private page: number = 0;
   postId: string = '';
   showReplyTextarea: boolean[] = [];
+  commentValue: string = '';
+  isButtonDisabled: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -105,7 +108,7 @@ export class CommentsComponent {
     return date.toLocaleString();
   }
 
-  deleteComment(id : string){
+  deleteComment(id: string) {
     this.commentService.deleteComm(id);
     const index = this.comments.findIndex(comment => comment.id === id);
     if (index !== -1) {
@@ -114,8 +117,8 @@ export class CommentsComponent {
     }
   }
 
-  editComment(commentId: number,editedComment : string){
-  
+  editComment(commentId: number, editedComment: string) {
+
     console.log(editedComment);
     this.commentService.updateComment(String(commentId), editedComment).subscribe(
       (response) => {
@@ -127,5 +130,12 @@ export class CommentsComponent {
         console.error('Eroare la creare.', error);
       }
     );
+  }
+
+
+  onInputChange() {
+    console.log("&")
+    
+    console.log(this.commentValue)
   }
 }

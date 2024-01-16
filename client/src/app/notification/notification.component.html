@@ -1,13 +1,37 @@
-<div class="container-flex col-10 mx-auto px-0 pt-2 my-3 pb-2 w-100 notification">
+<div class="container-flex col-10 mx-auto px-0 pt-2 my-3 pb-2 w-100 ">
     <div class="container-flex chart mx-1 justify-content-between align-items-center">
-        <div class="d-flex px-2 pt-2">
+        <div class="d-flex px-2 pt-2 w-100">
             <div class="notification d-flex justify-content-between align-items-start w-100">
-                <div class="mx-0">
-                    <strong class>{{ data.title }}</strong><br>
-                    <p class>{{ data.content }}</p>
+                <div class="mx-0 w-100 ">
+                    <strong class> {{ data.tip == 1 ? "Postare nouă în topicul dumneavoastră" : "Comentariu nou la
+                        postarea dumneavoastră!"}}</strong><br>
+                    <span class="" *ngIf="data.tip == 1">În topicul cu numele </span>
+                    <span class="pointer-cursor" *ngIf="data.tip == 1" (click)="navigateToCommunity(data.topicId)">"{{
+                        data.topicTitle }}" </span>
+                    <span class="" *ngIf="data.tip == 1"> a apărut o nouă postare cu titlul:</span>
+                    <span class="pointer-cursor" *ngIf="data.tip == 1"
+                        (click)="navigateToPost(data.postId)">{{data.title}}</span>
+                    <span class="" *ngIf="data.tip == 2">În postarea cu numele </span>
+                    <span class="pointer-cursor" *ngIf="data.tip == 2" (click)="navigateToPost(data.postId)">"{{
+                        data.postTitle }}"</span>
+                    <span class="" *ngIf="data.tip == 2"> a apărut comentariul:</span>
+                    <span class="" *ngIf="data.tip == 2"> "{{data.comm}}"</span>
+                    <div class="d-flex justify-content-end mt-2 w-100">
+                        <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="deleteNotification()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-trash" viewBox="0 0 16 16">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                <path
+                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                            </svg>
+                        </button>
+                    </div>
+
                 </div>
-                <div class="text-right">{{ data.date }}</div>
+                <!--<div class="text-right">{{ data }}</div>-->
             </div>
         </div>
     </div>
+    <app-popup-component></app-popup-component>
 </div>

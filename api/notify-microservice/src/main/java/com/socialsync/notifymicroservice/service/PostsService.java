@@ -42,6 +42,8 @@ public class PostsService {
         post.setMessageType(postQueueMessage.getMessageType());
         post.setTopicId(postQueueMessage.getTopic_id());
 
+        log.info("Post-id:" + postQueueMessage.getPost_id());
+
         // save in permanent repo too
         persistentPostRepository.save(new PersistentPost(post.getPostId(), post.getTitle(), post.getCreatorId()));
         postRepository.save(post);

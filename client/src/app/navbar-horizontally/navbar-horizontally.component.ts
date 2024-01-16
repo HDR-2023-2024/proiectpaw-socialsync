@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-navbar-horizontally',
   templateUrl: './navbar-horizontally.component.html',
   styleUrls: ['./navbar-horizontally.component.css']
 })
 export class NavbarHorizontallyComponent implements OnInit {
-
+  constructor(public authService: AuthService){}
   ngOnInit(): void {
     var myArr: any[] = [
       { id: 1, name: 'Meniul', subgroup: ["Băuturi", "Mâncare", "Deserturi"] },

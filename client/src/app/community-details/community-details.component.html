@@ -24,11 +24,12 @@
   <div class="d-flex flex-column">
     <p class="ms-0 d-inline pointer-cursor text-center" (click)="navigateToUser(data?.creator.id)">Creată de  <a (click)="navigateToUser(data?.creator.id)" class="d-inline">{{data?.creator.username}}</a> </p>
     <p class="ms-0 d-inline pointer-cursor  text-center" (click)="navigateToCategory()" >Categoria  {{data?.categorie}} </p>
-    <p class="ms-0 d-inline text-center" *ngIf="uriMembers.length > 0" >Membri </p>
-    <div class="scroll-container">
-      <div *ngFor="let item of uriMembers">
-        <p class="subitem pointer-cursor" (click)="navigateToUser(item)">{{ item }}</p>
-      </div>
+    <hr>
+    <p class="ms-0 d-inline text-center" *ngIf="data.members.length > 0" >Membri: </p>
+    <!--<div class="scroll-container">-->
+      <div *ngFor="let item of data.members" class="align-items-center">
+        <p class=" pointer-cursor text-center" (click)="navigateToUser(item.id)">{{ item.username}}</p>
+     <!-- </div>-->
     </div>  
     <button type="button" class="btn" id="create-btn" *ngIf="(isMember || data.creator?.id == authService.getId())" (click)="navigateToPost(data.id,data.name)">Creează o postare</button>
   </div>

@@ -1,10 +1,11 @@
 <div class="post-comment">
   <form class="d-flex flex-column" *ngIf="authService.isUserLoggedIn()" (ngSubmit)="addComment(commentContent.value)">
     <div class="form-group">
-      <textarea class="form-control" placeholder="What are your thoughts?" #commentContent></textarea>
+      <textarea class="form-control" placeholder="What are your thoughts?" #commentContent (input)="onInputChange()"></textarea>
     </div>
-    <button class="btn btn-outline-dark align-self-end mt-3 addComment" type="submit">Add comment</button>
+    <button class="btn btn-outline-dark align-self-end mt-3 addComment" type="submit" [disabled]="commentContent.value.length === 0">Add comment</button>
   </form>
+  
 </div>
 <div class="comment-container">
   <div class="comment my-5 py-4 px-2" *ngFor="let comment of comments; let i = index">
