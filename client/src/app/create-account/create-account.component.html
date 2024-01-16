@@ -6,7 +6,7 @@
         </div>
         <div class="row col-lg-10 col-12 m-0 p-0">
             <div class="col-12 col-lg-6  vh-80 div-contact m-0 p-0 ">
-                <form #myForm="ngForm" class="formContact p-5 mx-auto col-12 justify-content-center">
+                <form #myForm="ngForm" class="formContact p-5 pt-2 mx-auto col-12 justify-content-center">
                     <h1 class="mb-0 text-center">Creare cont</h1>
                     <br>
                     <div class="file-input-wrapper d-flex align-items-center justify-content-center">
@@ -29,6 +29,9 @@
                         <option value="null">Nu specific</option>
                     </select>
                     <br><br>
+                    <label for="username">Descriere</label><br>
+                    <input type="text" id="Descriere" name="Descriere" [(ngModel)]="myFormData.description" required><br><br>
+                   
                     <label for="pass">Parola*</label><br>
                     <input type="password" id="pass" name="pass" [(ngModel)]="myFormData.password"
                         (ngModelChange)="onPasswordChange()" required><br><br>

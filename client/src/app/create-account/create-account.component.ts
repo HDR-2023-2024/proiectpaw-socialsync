@@ -27,13 +27,14 @@ export class CreateAccountComponent {
     email: '',
     photoId: null,
     gender: '',
-    error: ''
+    error: '',
+    description:''
   };
 
   isValid = false;
 
   onSubmit() {
-    this.createAccount.saveUser(this.myFormData.username, this.myFormData.email, this.myFormData.password, this.myFormData.photoId, this.myFormData.gender)
+    this.createAccount.saveUser(this.myFormData.username, this.myFormData.email, this.myFormData.password, this.myFormData.photoId, this.myFormData.gender,this.myFormData.description)
       .subscribe(
         response => {
           console.log('Create account:', response);
