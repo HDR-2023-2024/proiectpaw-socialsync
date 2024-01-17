@@ -17,6 +17,10 @@ export class TopicShortComponent {
     this.router.navigate(['community/', id]);
   }
 
+  navigateToUser(id: string) {
+    this.router.navigate(['user/', id]);
+  }
+
   navigateToCategory(){
     console.log(`Item clicked: ${this.data.categorie}`);
     let modificat = this.data.categorie.replace("ă","a").replace("ț","t").replace("â","a").replace("ș","s").replace("Î","I").replace(" ","_").replace("Ț","T").replace("-","_");

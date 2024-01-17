@@ -16,11 +16,13 @@ import { FormsModule } from '@angular/forms';
 export class CommentsComponent {
   @Input() comments: any[] = [];
   @Input() replies: any[] = [];
+  @Input() idPost: number = 0;
   private page: number = 0;
   postId: string = '';
   showReplyTextarea: boolean[] = [];
   commentValue: string = '';
   isButtonDisabled: boolean = true;
+  newVal: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -59,6 +61,7 @@ export class CommentsComponent {
         //console.log('Datele de la server:', data);
         for (const item of data) {
           this.comments.push(item);
+        
         }
         var seenIds: Record<string, boolean> = {};
         // filtrare duplicate
@@ -117,12 +120,14 @@ export class CommentsComponent {
     }
   }
 
-  editComment(commentId: number, editedComment: string) {
-
-    console.log(editedComment);
-    this.commentService.updateComment(String(commentId), editedComment).subscribe(
+  editComment(comment: any) {
+    comment.postId = this.postId;
+   
+    console.log("Comentariul:" + comment)
+    console.log(comment)
+    this.commentService.updateComment(comment).subscribe(
       (response) => {
-        console.log("Comentariu modificat cu succs")
+        this.popupService.showPopup("Comentariu modificat cu succes.")
         this.ngOnInit();
       },
       (error) => {
@@ -135,7 +140,11 @@ export class CommentsComponent {
 
   onInputChange() {
     console.log("&")
-    
+
     console.log(this.commentValue)
+  }
+
+  onContentChange(comm: any) {
+    comm.isModified = true;
   }
 }
