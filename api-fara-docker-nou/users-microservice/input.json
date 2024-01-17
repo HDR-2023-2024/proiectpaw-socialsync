@@ -1,0 +1,176 @@
+[
+  {
+    "id": null,
+    "username": "timofteIorgu",
+    "password": "myPassword",
+    "email": "timofteIorgu@gmail.com",
+    "gender": "man",
+    "role": "admin"
+  },
+  {
+    "id": null,
+    "username": "ciocoiuMatei",
+    "password": "imiPlacParoleleComplicate",
+    "email": "ciocoiuMatei@gmail.com",
+    "gender": "man",
+    "role": "admin"
+  },
+  {
+    "id": null,
+    "username": "tomaIon",
+    "password": "tomaIonPassword1234",
+    "email": "tomaIon@gmail.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "tomaMaria",
+    "password": "tomaMaria.12CatelusCuParulCret",
+    "email": "tomaMaria@gmail.com",
+    "gender": "woman",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "johnDoe",
+    "password": "johnDoe123!Pass",
+    "email": "johnDoe@example.com",
+    "gender": "man",
+    "role": "user"
+  },{
+  "id": null,
+  "username": "janeSmith",
+  "password": "janeSmith@456",
+  "email": "janeSmith@gmail.com",
+  "gender": "woman",
+  "role": "user"
+},
+  {
+    "id": null,
+    "username": "alexJohnson",
+    "password": "alexJohnsonPass",
+    "email": "alexJohnson@yahoo.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "emilyBrown",
+    "password": "emilyBrownPwd",
+    "email": "emilyBrown@hotmail.com",
+    "gender": "woman",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "michaelClark",
+    "password": "michaelClarkPass",
+    "email": "michaelClark@gmail.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "sarahWhite",
+    "password": "sarahWhitePwd",
+    "email": "sarahWhite@yahoo.com",
+    "gender": "woman",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "davidTaylor",
+    "password": "davidTaylor123",
+    "email": "davidTaylor@hotmail.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "oliviaMartin",
+    "password": "oliviaMartinPwd",
+    "email": "oliviaMartin@gmail.com",
+    "gender": "woman",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "chrisMiller",
+    "password": "chrisMillerPwd",
+    "email": "chrisMiller@yahoo.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "amandaYoung",
+    "password": "amandaYoungPass",
+    "email": "amandaYoung@hotmail.com",
+    "gender": "woman",
+    "role": "user"
+  },{
+  "id": null,
+  "username": "AnaPopescu",
+  "password": "ParolaAna123!",
+  "email": "ana.popescu@example.com",
+  "gender": "woman",
+  "role": "user"
+},
+  {
+    "id": null,
+    "username": "AndreiIonescu",
+    "password": "IonescuPass456",
+    "email": "andrei.ionescu@example.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "ElenaVasilescu",
+    "password": "ElenaPass789",
+    "email": "elena.vasilescu@example.com",
+    "gender": "woman",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "MariusDumitrescu",
+    "password": "MariusPass123",
+    "email": "marius.dumitrescu@example.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "SimonaGheorghiu",
+    "password": "SimonaPwd456",
+    "email": "simona.gheorghiu@example.com",
+    "gender": "woman",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "CristianRadu",
+    "password": "Cristian123!",
+    "email": "cristian.radu@example.com",
+    "gender": "man",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "AlexandraStanescu",
+    "password": "AlexandraPwd789",
+    "email": "alexandra.stanescu@example.com",
+    "gender": "woman",
+    "role": "user"
+  },
+  {
+    "id": null,
+    "username": "AdrianMoldovan",
+    "password": "Adrian456!",
+    "email": "adrian.moldovan@example.com",
+    "gender": "man",
+    "role": "user"
+  }
+]
