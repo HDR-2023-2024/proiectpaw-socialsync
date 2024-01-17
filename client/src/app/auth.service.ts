@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { HttpResponse } from '@angular/common/http';
 
 export class AuthService {
 
-  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private http: HttpClient) { }
+  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService, private http: HttpClient, private router: Router) { }
   private loginUrl = 'http://localhost:8086/api/v1/users/login';
   private loginInfo: any | null = null;
 
@@ -21,13 +22,15 @@ export class AuthService {
 
     return this.http.post(this.loginUrl, postData, { observe: 'response' }).pipe(
       tap((response: HttpResponse<any>) => {
-        console.log(response.body)
+        console.log(response.body.role)
         this.loginInfo = response.body;
-        if (response.body.role == "user") {
+        if (response.body.role === "user") {
           this.storage.set("Token", response.body.token);
           this.storage.set("PhotoId", response.body.photoId);
           this.storage.set("Username", response.body.username);
           this.storage.set("Id", response.body.id);
+        } else {
+          
         }
         return response;
       }),

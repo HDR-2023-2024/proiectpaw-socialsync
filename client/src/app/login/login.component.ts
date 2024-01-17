@@ -20,7 +20,9 @@ export class LoginComponent {
     this.authService.login(this.formData.username, this.formData.password)
       .subscribe(
         response => {
-          console.log('Login response:', response);
+          if(response.body.role !== 'user'){
+            this.loginMsg = "Nu este un cod de utilizator!"
+          }else{
           if (response.status === 200) {
             this.router.navigate(['/home']);
           }
@@ -30,6 +32,7 @@ export class LoginComponent {
           else if (response.status === 406) {
             this.loginMsg = "Datele de autentificare sunt invalide!"
           }
+        }
         },
         error => {
           if (error.status === 401) {
