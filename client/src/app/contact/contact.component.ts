@@ -51,7 +51,7 @@ export class ContactComponent {
     console.log(this.formData);
     const postData = {
       nume: this.formData.nume, prenume: this.formData.prenume, email: this.formData.email,
-      subject: this.formData.subject, message: this.formData.subject
+      subject: this.formData.subject, message: this.formData.message
     };
     return this.http.post(this.loginUrl, postData, { observe: 'response' }).pipe(
       tap((response: HttpResponse<any>) => {

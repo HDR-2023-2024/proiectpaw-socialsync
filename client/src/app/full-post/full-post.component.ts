@@ -239,8 +239,12 @@ export class FullPostComponent {
             this.router.navigate(['/login']);
           }
           if (error.status == 200) {
-            this.popupService.showPopup('Sesiunea a expirat este necesară reautentificarea.');
+     
             this.popupService.showPopup('Postarea a fost raportată cu succes!');
+          }
+          if (error.status == 422) {
+     
+            this.popupService.showPopup('Postarea a fost deja raportată cu succes!');
           }
         }
       );

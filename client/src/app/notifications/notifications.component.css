@@ -4,7 +4,7 @@
 
 .notifications {
     background-color: #ffff;
-    width: 90%;
+    width: 100%;
     border: 1px solid #e5e5e5;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 1%; 
@@ -16,4 +16,5 @@
     color: #ffff;
     border-radius: 15%; 
 }
+
 
