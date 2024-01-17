@@ -128,7 +128,8 @@ export class CommentsComponent {
     this.commentService.updateComment(comment).subscribe(
       (response) => {
         this.popupService.showPopup("Comentariu modificat cu succes.")
-        this.ngOnInit();
+        comment.isModified = null;
+
       },
       (error) => {
         this.router.navigate(['/internal-server-error'])
