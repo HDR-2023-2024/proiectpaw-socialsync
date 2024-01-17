@@ -7,11 +7,11 @@ import { AuthService } from '../auth.service';
 
 
 interface Member {
-  id: null;
-  photoId: null;
-  username: null;
-  description: null;
-  role: null;
+  id: '';
+  photoId: '';
+  username: '';
+  description: '';
+  role: '';
 }
 
 @Component({
@@ -22,7 +22,7 @@ interface Member {
 export class CommunityDetailsComponent {
   joined: boolean = false;
   isNotified : boolean = false;
-  @Input() data:any | null = null;
+  @Input() data:any  = {};
   page= 0;
   communityId:string='';
   formattedDate?: string;

@@ -220,11 +220,12 @@ public class UsersService implements UsersServiceMethods {
         throw new RuntimeException("Unauthorized");
     }
 
-    public boolean sendCodeResetPassword(String email) throws JsonProcessingException {
+    public int sendCodeResetPassword(String email) throws JsonProcessingException {
         Random random = new Random();
         // cod de 6 cifre
         int code = random.nextInt(900000) + 100000;
-
+        Optional<User> user = this.repository.findByEmail(email);
+        if(user.isPresent()){
         String url = "http://notify-microservice:8090/notification/send-reset-password";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -241,9 +242,11 @@ public class UsersService implements UsersServiceMethods {
         HttpStatusCode statusCode = responseEntity.getStatusCode();
         if (statusCode == HttpStatus.OK) {
             hashMap.put(email, code + "");
-            return true;
+            return 0;
         } else {
-            return false;
+            return 1;
+        }}else{
+            return  2;
         }
     }
 

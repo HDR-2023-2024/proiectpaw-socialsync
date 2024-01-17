@@ -14,7 +14,7 @@ import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
   styleUrls: ['./profile-link-community.component.css']
 })
 export class ProfileLinkCommunityComponent {
-  constructor(@Inject(LOCAL_STORAGE) private storage: StorageService,public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService, private route: ActivatedRoute) {
+  constructor(@Inject(LOCAL_STORAGE) public storage: StorageService,public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
       this.page = 0;
       this.loadDataOnPageLoad();
@@ -49,8 +49,8 @@ export class ProfileLinkCommunityComponent {
       this.page++;
     }
     let url = "";
-    let userId : any =  this.storage.get("userToShow");
-    url = 'http://localhost:8086/api/v1/query/users/' + userId + '/topics?page=' + this.page.toString();
+     this.userId  =  this.storage.get("userToShow");
+    url = 'http://localhost:8086/api/v1/query/users/' + this.userId + '/topics?page=' + this.page.toString();
     let oldSize = this.myArr.length;
     let headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
@@ -88,8 +88,8 @@ export class ProfileLinkCommunityComponent {
 
   loadDataOnPageLoad(): void {
     let url;
-    let userId : any =  this.storage.get("userToShow");
-    url = 'http://localhost:8086/api/v1/query/users/' + userId + '/topics?page=' + this.page.toString();
+    this.userId =  this.storage.get("userToShow");
+    url = 'http://localhost:8086/api/v1/query/users/' + this.userId + '/topics?page=' + this.page.toString();
     this.dataService.getData(url).subscribe(
       (data) => {
         console.log('Datele de la server:', data);
@@ -109,5 +109,9 @@ export class ProfileLinkCommunityComponent {
         console.error('Eroare la incarcarea datelor:', error);
       }
     );
+  }
+
+  redirectToCreateTopicPage(): void {
+    this.router.navigate(['/create-topics']);
   }
 }
