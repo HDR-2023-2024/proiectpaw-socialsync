@@ -142,7 +142,7 @@ public class QueryService implements QueryServiceMethods {
                     .findAll()
                     .stream()
                     .filter(p -> p.getCreator().getId().equals(id))
-                    .map(postDocument -> toSummary(postDocument, Optional.of(id)))
+                    .map(postDocument -> toSummary(postDocument, Optional.of(idUser)))
                     .toList()
                     .subList(page * 10, (page + 1) * 10);
         } catch (IndexOutOfBoundsException ex) {
@@ -150,7 +150,7 @@ public class QueryService implements QueryServiceMethods {
                     .findAll()
                     .stream()
                     .filter(p -> p.getCreator().getId().equals(id))
-                    .map(postDocument -> toSummary(postDocument, Optional.of(id)))
+                    .map(postDocument -> toSummary(postDocument, Optional.of(idUser)))
                     .toList();
             return list.subList(page == 0 ? page : Math.max(page - 10, 0), list.size());
         }
