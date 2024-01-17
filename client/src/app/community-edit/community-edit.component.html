@@ -22,19 +22,12 @@
                     </div>
                     <div class="form-group">
                         <label for="category">Categorie:</label>
-                        <select class="form-control" id="category" [(ngModel)]="community.categorie" name="category" required>
-                          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                        <select class="form-control" id="category" [(ngModel)]="community.categorie" name="category"
+                            required>
+                            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
                         </select>
-                      </div>
-                    <div class="form-group">
-                        <label for="members">Membri:</label>
-                        <ul>
-                            <li *ngFor="let memberId of community.members">
-                                <span >{{ memberId.username }}</span>
-                                <button (click)="toggleJoinState(memberId.id)">X</button>
-                            </li>
-                        </ul>
                     </div>
+
                     <div class="form-group">
                         <label for="photo">Fotografia comunități: </label>
                         <p>{{photoName}}</p>
@@ -49,7 +42,10 @@
                             </button>
                         </div>
                     </div>
-                    <button id="sub" type="submit"  (click)="saveChangesTopic()" class="btn btn-primary">Save Changes</button>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button id="sub" type="submit" (click)="saveChangesTopic()" class="btn btn-primary">Save Changes</button>
+                    </div>
+                    
                 </form>
             </div>
         </div>

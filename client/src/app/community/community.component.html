@@ -8,7 +8,12 @@
             <nav class="container-1 row m-0 p-0">
                 <div class="d-flex justify-content-center align-items-center">
                     <img class="avatar-short-post"
-                        src="{{data.photoId != null && data.photoId.length > 1 ? data.photoId : 'assets/images/community/' + transformCharToNumber(data.id[data.id.length - 1]) + '.png'}}" alt="{{data.name}}">
+                    src="{{
+                        (data.photoId != null && data.photoId.length > 1)  
+                            ? (data.photoId[0] === 'h' ? data.photoId : 'http://localhost:8088/api/v1/storage/img/' + data.photoId)
+                            : 'assets/images/community/' + transformCharToNumber(data.id[data.id.length - 1]) + '.png'
+                    }}">
+                
                     <h2 class="ms-3">{{data?.name}}</h2><br>
 
                     <button type="button" class="btn ms-3 text-center" id="join-btn"
