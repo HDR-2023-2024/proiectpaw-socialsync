@@ -31,7 +31,7 @@ void ResourceDetails::setDetails(QJsonValue value)
     foreach(const QString& key, json.keys()) {
         QJsonValue value = json.value(key);
         QString valueString = value.isString() ? value.toString() : QString::number(value.toInt());
-        QStandardItem *item = new QStandardItem(key + " : " + valueString);
+        QStandardItem *item = new QStandardItem(key.toUpper() + " : " + valueString);
         model->appendRow(item);
     }
     ui->listView->setModel(model);

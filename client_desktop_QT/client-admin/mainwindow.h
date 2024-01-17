@@ -30,10 +30,13 @@ private slots:
 
     void on_commButton_clicked();
 
+    void on_listView_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
-    ResourcePanel *resourcePanel;
+    ResourceDetails *resourceDetails;
     QNetworkAccessManager *manager;
+    QStandardItemModel *model;
     QNetworkRequest request;
     // QString topicsURL = "http://localhost:8084/api/v1/topics";
     // QString usersURL = "http://localhost:8082/api/v1/users";
@@ -43,5 +46,8 @@ private:
     QString usersURL = "http://localhost:8086/api/v1/users";
     QString postsURL = "http://localhost:8086/api/v1/posts";
     QString commentsURL = "http://localhost:8086/api/v1/comments";
+    QString selectedURL;
+    QString token;
+    QJsonObject json;
 };
 #endif // MAINWINDOW_H

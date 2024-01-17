@@ -32,6 +32,7 @@ private:
     QString resourceName;
     QString url;
     QString token;
+    QNetworkAccessManager *manager;
 
 protected:
     void closeEvent(QCloseEvent *event) override {

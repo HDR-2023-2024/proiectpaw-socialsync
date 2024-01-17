@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
@@ -26,9 +27,11 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QVBoxLayout *verticalLayout_2;
+    QHBoxLayout *horizontalLayout_5;
     QVBoxLayout *verticalLayout;
+    QSpacerItem *verticalSpacer_4;
     QLabel *title;
+    QSpacerItem *verticalSpacer_2;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer_2;
     CustomPushButton *usersButton;
@@ -45,21 +48,30 @@ public:
     QSpacerItem *horizontalSpacer_8;
     CustomPushButton *commButton;
     QSpacerItem *horizontalSpacer_7;
+    QVBoxLayout *verticalLayout_2;
+    QSpacerItem *verticalSpacer;
+    QLabel *resLabel;
+    QSpacerItem *verticalSpacer_3;
+    QListView *listView;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(400, 300);
-        MainWindow->setMinimumSize(QSize(400, 300));
-        MainWindow->setMaximumSize(QSize(400, 300));
+        MainWindow->resize(1000, 300);
+        MainWindow->setMinimumSize(QSize(1000, 300));
+        MainWindow->setMaximumSize(QSize(1000, 300));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        verticalLayout_2 = new QVBoxLayout(centralwidget);
-        verticalLayout_2->setObjectName("verticalLayout_2");
+        horizontalLayout_5 = new QHBoxLayout(centralwidget);
+        horizontalLayout_5->setObjectName("horizontalLayout_5");
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName("verticalLayout");
+        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_4);
+
         title = new QLabel(centralwidget);
         title->setObjectName("title");
         QFont font;
@@ -69,6 +81,10 @@ public:
         title->setAlignment(Qt::AlignCenter);
 
         verticalLayout->addWidget(title);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_2);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName("horizontalLayout");
@@ -147,7 +163,34 @@ public:
         verticalLayout->addLayout(horizontalLayout_4);
 
 
-        verticalLayout_2->addLayout(verticalLayout);
+        horizontalLayout_5->addLayout(verticalLayout);
+
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer);
+
+        resLabel = new QLabel(centralwidget);
+        resLabel->setObjectName("resLabel");
+        QFont font1;
+        font1.setPointSize(16);
+        resLabel->setFont(font1);
+        resLabel->setAlignment(Qt::AlignCenter);
+
+        verticalLayout_2->addWidget(resLabel);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer_3);
+
+        listView = new QListView(centralwidget);
+        listView->setObjectName("listView");
+
+        verticalLayout_2->addWidget(listView);
+
+
+        horizontalLayout_5->addLayout(verticalLayout_2);
 
         MainWindow->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(MainWindow);
@@ -167,6 +210,7 @@ public:
         topicsButton->setText(QCoreApplication::translate("MainWindow", "View Topics", nullptr));
         postsButton->setText(QCoreApplication::translate("MainWindow", "View Posts", nullptr));
         commButton->setText(QCoreApplication::translate("MainWindow", "View Comments", nullptr));
+        resLabel->setText(QString());
     } // retranslateUi
 
 };
