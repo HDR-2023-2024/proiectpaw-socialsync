@@ -31,6 +31,10 @@ img {
     position: relative;
     display: inline-block;
     z-index: -1;
+    width: 32vh;
+    height: 20vh;
+    border-radius: 20px;
+
 }
 
 
@@ -46,16 +50,28 @@ img {
     position: absolute;
     bottom: 20px;
     left: 0;
-    color: #fff;
+    color: #000000;
     padding: 5px;
 
 }
 
 .image-text-author {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    color: #fff;
-    padding: 5px;
+    bottom: 0px;
+ 
+    color: #000000;
+  
     font-style: italic;
+}
+
+.img-user{
+    width: 24vh;
+    height: 16vh;
+    border-radius: 20px;
+}
+
+.border{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 2px 4px #8888885d;
 }

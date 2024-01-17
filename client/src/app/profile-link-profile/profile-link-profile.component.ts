@@ -43,7 +43,9 @@ export class ProfileLinkProfileComponent {
   }
 
   updateUser() {
-    this.data.photoId = this.storage.get("ProfilePhoto");
+    if(this.storage.get("ProfilePhoto") != null)
+      this.data.photoId = this.storage.get("ProfilePhoto");
+    this.storage.remove("ProfilePhoto");
     let headers = new HttpHeaders({
       'Authorization': this.authService.getToken()
     });

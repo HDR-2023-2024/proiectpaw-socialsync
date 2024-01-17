@@ -69,6 +69,20 @@ services:
     volumes:
       - 'data3:/data3'
 
+  mariadb-storage:
+    image: 'mariadb:latest'
+    environment:
+      - 'MARIADB_DATABASE=mydatabase'
+      - 'MARIADB_PASSWORD=secret'
+      - 'MARIADB_ROOT_PASSWORD=verysecret'
+      - 'MARIADB_USER=myuser'
+    ports:
+      - '3307:3306'
+    expose:
+      - '3306'
+    volumes:
+      - 'data4:/data4'
+
   redis-query:
     image: 'redis/redis-stack:latest'
     environment:
@@ -206,6 +220,7 @@ volumes:
   data1: {}
   data2: {}
   data3: {}
+  data4: {}
   storage: {}
   minio-data: {}
 

@@ -18,6 +18,7 @@ public class PostSummaryDTO {
     private boolean dislikedByUser = false;
     private Integer score;
     private Long timestampCreated;
+    private String photoId;
 
 
     public PostSummaryDTO(PostDocument post, PostTopicSummaryDTO topic) {
@@ -28,5 +29,6 @@ public class PostSummaryDTO {
         this.content = post.getContent().substring(0, Math.min(post.getContent().length(), 500));
         this.score = post.getUpvotes().size() - post.getDownvotes().size();
         this.timestampCreated = post.getTimestampCreated();
+        this.photoId = !post.getPhotos().isEmpty() ? post.getPhotos().iterator().next() : null;
     }
 }

@@ -1,4 +1,11 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { DataHomeService } from '../data-home.service';
+import { ScroolServiceService } from '../scrool-service.service';
+import { debounceTime, filter } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-carousel',
@@ -8,15 +15,10 @@ import { Component, Input } from '@angular/core';
 export class CarouselComponent {
   start = 1;
   numElementsToShow = 3;
-
+  constructor(public authService: AuthService, private router: Router, private dataService: DataHomeService, private scrollService: ScroolServiceService, private route: ActivatedRoute) {}
+  
   myArr: any[] = [
-    { id: 1, name: 'Nume1', author: "author1", img: "assets/images/1.jpg", url: "/home" },
-    { id: 2, name: 'Nume2', author: "author2", img: "assets/images/2.jpg", url: "/home" },
-    { id: 3, name: 'Nume3', author: "author3", img: "assets/images/3.jpg", url: "/home" },
-    { id: 4, name: 'Nume4', author: "author4", img: "assets/images/4.jpg", url: "/home" },
-    { id: 5, name: 'Nume5', author: "author5", img: "assets/images/5.jpg", url: "/home" },
-    { id: 6, name: 'Nume6', author: "author6", img: "assets/images/6.jpg", url: "/home" },
-    { id: 7, name: 'Nume7', author: "author7", img: "assets/images/7.jpg", url: "/home" },
+
   ];
 
   next() {
@@ -32,4 +34,54 @@ export class CarouselComponent {
       this.start--;
     }
   }
+
+  loadDataOnPageLoad(): void {
+    let url;
+      url = 'http://localhost:8086/api/v1/query/posts?page=0';
+
+    this.dataService.getData(url).subscribe(
+      (data) => {
+        //console.log('Datele de la server:', data);
+        this.myArr = data;
+        var seenIds: Record<string, boolean> = {};
+        var filteredArr = this.myArr.filter(function (item: any) {
+          if (seenIds.hasOwnProperty(item.id)) {
+            return false;
+          }
+          seenIds[item.id] = true;
+          return true;
+        });
+        this.myArr = filteredArr;
+      },
+      (error) => {
+        console.error('Eroare la incarcarea datelor:', error);
+        this.router.navigate(['/internal-server-error']);
+      }
+    );
+  }
+
+  transformCharToNumber(char: string): number {
+
+    if (char >= 'a' && char <= 'z') {
+
+      return char.charCodeAt(0) - 'a'.charCodeAt(0);
+    }
+  
+
+    if (char >= '0' && char <= '9') {
+      return parseInt(char, 10);
+    }
+  
+    return -1;
+  }
+
+  navigateToPost(id: string) {
+    console.log("ceva")
+    this.router.navigate(['/full-post', id]);
+  }
+
+  ngOnInit(){
+    this.loadDataOnPageLoad();
+  }
 }
+
