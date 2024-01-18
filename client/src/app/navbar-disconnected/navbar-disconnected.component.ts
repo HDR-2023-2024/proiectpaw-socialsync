@@ -83,4 +83,8 @@ export class NavbarDisconnectedComponent implements OnInit {
   onNotifications(){
     this.router.navigate(['/notifications']);
   }
+
+  navigateToUser(){
+    this.router.navigate(['/profile' ]);
+  }
 }

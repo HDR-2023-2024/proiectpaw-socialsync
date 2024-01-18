@@ -1,7 +1,7 @@
 <div>
   <ul class="nav nav-tabs">
     <li class="nav-item" *ngFor="let tab of navComponents; let i = index">
-      <a class="nav-link" (click)="setActiveTab(i)" [class.active]="i === activeTab">{{ tab.label }}</a>
+      <a class="nav-link pointer-cursor" (click)="setActiveTab(i)" [class.active]="i === activeTab">{{ tab.label }}</a>
     </li>
   </ul>
 </div>

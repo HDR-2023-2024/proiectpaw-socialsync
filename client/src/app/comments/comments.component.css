@@ -41,3 +41,8 @@ input{
   background-color: #FF4433;
   border-color: #fff;
 }
+
+.pointer-cursor{
+  cursor: pointer;
+}
+

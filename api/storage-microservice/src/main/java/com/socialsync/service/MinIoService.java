@@ -49,9 +49,9 @@ public class MinIoService {
                             .build()
             );
 
-            System.out.println(fileName + " successfully uploaded to:");
-            System.out.println("   container: images");
-            System.out.println("   blob: " + fileName);
+            System.out.println(fileName + "successfully uploaded to:");
+            System.out.println("container: images");
+            System.out.println("blob: " + fileName);
             System.out.println();
         } catch (Exception e) {
             System.out.println("Error occurred: " + e);
@@ -98,9 +98,9 @@ public class MinIoService {
                                 .build()
                 );
 
-                System.out.println(fileName + " successfully deleted from MinIO");
+                System.out.println(fileName + "successfully deleted from MinIO");
             } else {
-                System.out.println(fileName + " does not exist in MinIO");
+                System.out.println(fileName + "does not exist in MinIO");
             }
         } catch (Exception e) {
             System.out.println("Error occurred: " + e);

@@ -159,9 +159,9 @@ public class UsersService implements UsersServiceMethods {
             sendMessage(new UserQueueMessage(QueueMessageType.CREATE, user));
         } catch (Exception ex) {
             if (ex.getMessage().contains("UK_ob8kqyqqgmefl0aco34akdtpe")) {
-                throw new NotAcceptableException("There is already a user with this email.");
+                throw new NotAcceptableException("Există deja un utilizator cu acest email.");
             } else if (ex.getMessage().contains("UK_sb8bbouer5wak8vyiiy4pf2bx")) {
-                throw new NotAcceptableException("There is already a user with this username.");
+                throw new NotAcceptableException("Există deja un utilizator cu acest nume de utilizator.");
             }
         }
     }
@@ -179,9 +179,9 @@ public class UsersService implements UsersServiceMethods {
                 sendMessage(new UserQueueMessage(QueueMessageType.UPDATE, new User(id, user.getUsername(), null, user.getEmail(), user.getGender(), user.getPhotoId(), user.getDescription(), user.getRole())));
             } catch (Exception ex) {
                 if (ex.getMessage().contains("uk_email")) {
-                    throw new NotAcceptableException("There is already a user with this email.");
+                    throw new NotAcceptableException("Există deja un utilizator cu acest email.");
                 } else if (ex.getMessage().contains("uk_username")) {
-                    throw new NotAcceptableException("There is already a user with this username.");
+                    throw new NotAcceptableException("Există deja un utilizator cu acest nume de utilizator.");
                 }
             }
         } else {

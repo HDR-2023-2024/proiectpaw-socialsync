@@ -15,7 +15,7 @@
                     <span class="pointer-cursor" *ngIf="data.tip == 2" (click)="navigateToPost(data.postId)">"{{
                         data.postTitle }}"</span>
                     <span class="" *ngIf="data.tip == 2"> a apărut comentariul:</span>
-                    <span class="" *ngIf="data.tip == 2"> "{{data.comm}}"</span>
+                    <span class="" *ngIf="data.tip == 2"> "{{data.comm}}..."</span>
                     <div class="d-flex justify-content-end mt-2 w-100">
                         <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="deleteNotification()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

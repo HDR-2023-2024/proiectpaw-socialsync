@@ -76,3 +76,7 @@ a {
     color: #000;
     text-decoration: none;
 }
+
+.pointer-cursor{
+    cursor: pointer;
+  }

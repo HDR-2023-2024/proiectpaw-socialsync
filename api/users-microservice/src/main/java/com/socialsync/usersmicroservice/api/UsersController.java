@@ -56,10 +56,10 @@ public class UsersController {
                 return new ResponseEntity<>("Adresa da email nu are un format valid!", HttpStatus.NOT_ACCEPTABLE);
             }
             if (!validateParameterService.isValidPassword(user.getPassword())) {
-                return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("Parola poate conține doar caractere alfanumerice și caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
             }
             if (!validateParameterService.isValidUsername(user.getUsername())) {
-                return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<>("Numele de utilizator poate conține doar caractere alfanumerice și caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
             }
             usersService.addUser(user);
             String token = authorizationService.getJwt(new AuthorizedInfo(user.getId(), user.getRole().name()));
@@ -77,7 +77,7 @@ public class UsersController {
             return new ResponseEntity<>("Adresa da email nu are un format valid!", HttpStatus.NOT_ACCEPTABLE);
         }
         if (!validateParameterService.isValidUsername(user.getUsername())) {
-            return new ResponseEntity<>("Numele de utilizator poate contine doar caractere alfanumerice si caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Numele de utilizator poate conține doar caractere alfanumerice și caracterul \".\"", HttpStatus.NOT_ACCEPTABLE);
         }
         try {
             System.out.println(user);
@@ -125,7 +125,7 @@ public class UsersController {
     public ResponseEntity<?> updatePassword(@RequestHeader("X-User-Id") String userId, @RequestHeader("X-User-Role") String userRole, @RequestBody Password password) {
         // autorizare
         if (!validateParameterService.isValidPassword(password.getPassword())) {
-            return new ResponseEntity<>("Parola poate contine doar caractere alfanumerice si caracterul \".\". Lungimea de minim 5 caractere", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Parola poate conține doar caractere alfanumerice și caracterul \".\". Lungimea este de minim 5 caractere", HttpStatus.NOT_ACCEPTABLE);
         }
         try {
             usersService.updatePassword(userId, password.getPassword());

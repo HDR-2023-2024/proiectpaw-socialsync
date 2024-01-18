@@ -7,7 +7,7 @@
         <div *ngFor="let item of myArr.slice(start-1, start+2)" class="d-flex m-0" (click)="navigateToPost(item.id)">
             <div class="image-container d-flex border mx-5 justify-content-center align-items-center" (click)="navigateToPost(item.id)" >
                 <a href={{item.url}} (click)="navigateToPost(item.id)" >
-                    <img src="{{item.photoId != null && item.photoId.length > 1 ? item.photoId : 'assets/images/posts/' + transformCharToNumber(item.id[item.id.length - 1]) + '.png'}}" alt="{{item.name}}" class="mx-5 img-user ">
+                    <img src="{{item.photoId != null && item.photoId.length > 1 ? item.photoId : 'assets/images/posts/' + transformCharToNumber(item.id[item.id.length - 1]) + '.png'}}" alt="{{item.name}}" class="mx-auto ">
                 </a>
                 <p class="image-text-author mx-auto pb-0 mb-0 pt-2" (click)="navigateToPost(item.id)" >{{item.title}}</p>
             </div>

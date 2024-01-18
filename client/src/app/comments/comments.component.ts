@@ -148,4 +148,9 @@ export class CommentsComponent {
   onContentChange(comm: any) {
     comm.isModified = true;
   }
+
+  navigateToUser(id: string) {
+    console.log("ceva")
+    this.router.navigate(['/user', id]);
+  }
 }

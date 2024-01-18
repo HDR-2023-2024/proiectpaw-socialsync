@@ -8,7 +8,7 @@
                     {{convertTimestampToDateTime(data.timestampCreated)}}</p>
                 <div class="butoane d-flex">
                     <div>
-                        <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="deletePost()"
+                        <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn pointer-cursor" (click)="deletePost()"
                             *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
@@ -17,7 +17,7 @@
                         </button>
                     </div>
                     <div>
-                        <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn" (click)="editPost()"
+                        <button type="button" class="btn px-3 mx-3 pt-2 create-post-btn pointer-cursor" (click)="editPost()"
                             *ngIf="authService.isUserLoggedIn() &&  authService.getId() == data.creator?.id">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -38,14 +38,14 @@
                 <div class="d-flex m-auto ms-1">
                     <div class="d-flex reaction-box-like my-auto">
                         <p class="my-auto reaction  " *ngIf="!authService.isUserLoggedIn()">&nbsp;Scor:&nbsp;&nbsp;</p>
-                        <p class="my-auto reaction  ms-2 pb-1"
+                        <p class="my-auto reaction pointer-cursor  ms-2 pb-1"
                             *ngIf="authService.isUserLoggedIn() && this.data.likedByUser == true" (click)="upvote()">
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                                 <path
                                     d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z" />
                             </svg>&nbsp;
                         </p>
-                        <p class="my-auto   ms-2 pb-1 reaction-neg"
+                        <p class="my-auto pointer-cursor  ms-2 pb-1 reaction-neg"
                             *ngIf="authService.isUserLoggedIn() && this.data.likedByUser == false" (click)="upvote()">
                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512">
                                 <path
@@ -53,15 +53,15 @@
                             </svg>&nbsp;
                         </p>
                         <p class="my-auto reaction-value reaction">{{data.score}}</p>
-                        <p class="my-auto reaction  " *ngIf="!authService.isUserLoggedIn()">&nbsp;</p>
-                        <p class="my-auto reaction  me-2 pb-1"
+                        <p class="my-auto reaction pointer-cursor " *ngIf="!authService.isUserLoggedIn()">&nbsp;</p>
+                        <p class="my-auto reaction pointer-cursor me-2 pb-1"
                             *ngIf="authService.isUserLoggedIn() && this.data.dislikedByUser == true"
                             (click)="downvote()">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" height="1em"
                                 viewBox="0 0 512 512">
                                 <path
                                     d="M313.4 479.1c26-5.2 42.9-30.5 37.7-56.5l-2.3-11.4c-5.3-26.7-15.1-52.1-28.8-75.2H464c26.5 0 48-21.5 48-48c0-18.5-10.5-34.6-25.9-42.6C497 236.6 504 223.1 504 208c0-23.4-16.8-42.9-38.9-47.1c4.4-7.3 6.9-15.8 6.9-24.9c0-21.3-13.9-39.4-33.1-45.6c.7-3.3 1.1-6.8 1.1-10.4c0-26.5-21.5-48-48-48H294.5c-19 0-37.5 5.6-53.3 16.1L202.7 73.8C176 91.6 160 121.6 160 153.7V192v48 24.9c0 29.2 13.3 56.7 36 75l7.4 5.9c26.5 21.2 44.6 51 51.2 84.2l2.3 11.4c5.2 26 30.5 42.9 56.5 37.7zM32 384H96c17.7 0 32-14.3 32-32V128c0-17.7-14.3-32-32-32H32C14.3 96 0 110.3 0 128V352c0 17.7 14.3 32 32 32z" />
                             </svg></p>
-                        <p class="my-auto   me-2 pb-1 reaction-neg "
+                        <p class="my-auto pointer-cursor  me-2 pb-1 reaction-neg "
                             *ngIf="authService.isUserLoggedIn() && this.data.dislikedByUser == false"
                             (click)="downvote()">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16"
                                 viewBox="0 0 512 512">
@@ -72,7 +72,7 @@
                     </div>
             
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                    <div class="d-flex reaction-box-like  my-auto" (click)="raportPost()">
+                    <div class="d-flex reaction-box-like pointer-cursor my-auto" (click)="raportPost()">
                         <p class="reaction my-auto mx-2 pb-1"><svg xmlns="http://www.w3.org/2000/svg" height="1em"
                                 viewBox="0 0 448 512">
                                 <path
